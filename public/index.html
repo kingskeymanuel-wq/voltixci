@@ -340,7 +340,7 @@ details.ocr pre{white-space:pre-wrap;font-family:var(--f-mono);font-size:12px;ma
 .hv-c b{display:block;font-size:13.5px}.hv-c span{color:#5a6878}.hv-c .mono{color:#c2410c;font-weight:700}
 .hv-c1{left:-18px;top:18%;animation:fl 6s ease-in-out infinite}.hv-c2{right:-10px;top:56%;animation:fl 7s ease-in-out infinite reverse}.hv-c3{left:6%;bottom:4px;animation:fl 8s ease-in-out infinite}
 .hv-i{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:#fff;font-weight:800;flex:none}.hv-i.red{background:#e03131}.hv-i.green{background:#2f9e44}.hv-i svg{width:18px;height:18px}
-.hv-a{width:30px;height:30px;border-radius:50%;border:2px solid #fff;background-size:cover;background-position:center;background-color:#c3ccd8;margin-left:-10px}.hv-a:first-child{margin-left:0}
+.hv-c3 .ava{margin-left:-12px;box-shadow:0 0 0 2px #fff}.hv-c3 .ava:first-child{margin-left:0}
 @media (max-width:980px){.hv{margin:0 auto}.hv-c1{left:0}.hv-c2{right:0}}
 .dom-ph{display:block;aspect-ratio:3/2;background-size:cover;background-position:center;position:relative}
 .dom-badge{position:absolute;left:12px;bottom:-18px;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;color:#fff;border:3px solid var(--panel);box-shadow:0 8px 18px rgba(0,0,0,.2)}.dom-badge svg{width:22px;height:22px}
@@ -1654,7 +1654,7 @@ function photoBg(k,w,overlay,fallback){const u=photo(k,w);return `background-ima
 function domGrad(k){const c=(typeof DART!=="undefined"&&DART[k])||["#1c2b44","#3d5a80"];return `linear-gradient(135deg,${c[0]},${c[1]})`}
 function bannerStyle(k){return photoBg(DOMPH[k]||"rdv",1100,"linear-gradient(100deg,rgba(8,15,27,.94) 0%,rgba(8,15,27,.78) 50%,rgba(8,15,27,.35) 100%)",domGrad(k))}
 /* portrait de personnage : photo recadrée sur le visage, ou initiales */
-function avatar(p,size=56){const u=(!IN_CLAUDE&&p.ph&&p.face&&PH[p.ph])?`https://images.unsplash.com/photo-${PH[p.ph]}?w=${size*3}&h=${size*3}&q=75&auto=format&fit=crop&crop=focalpoint&fp-x=${p.face[0]}&fp-y=${p.face[1]}&fp-z=${p.face[2]}`:"";const grad=`linear-gradient(145deg,${p.col||"#d9480f"},#0e1a2b)`;const ini=p.name.split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase();
+function avatar(p,size=56){const fk=p.fph||p.ph;const u=(!IN_CLAUDE&&fk&&p.face&&PH[fk])?`https://images.unsplash.com/photo-${PH[fk]}?w=${size*3}&h=${size*3}&q=75&auto=format&fit=crop&crop=focalpoint&fp-x=${p.face[0]}&fp-y=${p.face[1]}&fp-z=${p.face[2]}`:"";const grad=`linear-gradient(145deg,${p.col||"#d9480f"},#0e1a2b)`;const ini=p.name.split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase();
  return `<span class="ava" style="width:${size}px;height:${size}px;background:${grad};font-size:${Math.round(size*.36)}px"><span>${esc(ini)}</span>${u?`<img src="${u}" alt="" loading="lazy" onerror="this.remove()">`:""}</span>`}
 
 /* =========================================================
@@ -2126,13 +2126,13 @@ function domArt(k){const c=DART[k]||["#334","#889"];return `<svg class="dom-art"
    ACADÉMIE — contenu des parcours, leçons et missions
    ========================================================= */
 const PEOPLE={
- aicha:{name:"Aïcha Traoré",role:"Agente, service client",ph:"hero",face:[.8,.42,3.2],col:"#c2410c"},
- koffi:{name:"Koffi Yao",role:"Superviseur du plateau",ph:"agent",col:"#1c6dd0"},
- serge:{name:"Serge N'Guessan",role:"Agent, recouvrement",ph:"casque",col:"#0b7285"},
- fatou:{name:"Fatou Diallo",role:"Agente, service client",ph:"duo",col:"#9c36b5"},
- marc:{name:"Marc Kouassi",role:"Comptable",ph:"rdv",col:"#2b8a3e"},
- awa:{name:"Awa Koné",role:"Assistante de direction",ph:"portable",col:"#c92a2a"},
- paul:{name:"Paul Konan",role:"Agent, ventes",ph:"telip",col:"#5f3dc4"},
+ aicha:{name:"Aïcha Traoré",role:"Agente, service client",ph:"hero",face:[.68,.38,3],col:"#c2410c"},
+ koffi:{name:"Koffi Yao",role:"Superviseur du plateau",ph:"agent",face:[.62,.35,3.5],col:"#1c6dd0"},
+ serge:{name:"Serge N'Guessan",role:"Agent, recouvrement",ph:"casque",face:[.53,.33,4],col:"#0b7285"},
+ fatou:{name:"Fatou Diallo",role:"Agente, service client",ph:"duo",face:[.48,.55,2],col:"#9c36b5"},
+ marc:{name:"Marc Kouassi",role:"Comptable",ph:"rdv",face:[.52,.3,5],col:"#2b8a3e"},
+ awa:{name:"Awa Koné",role:"Assistante de direction",ph:"portable",face:[.2,.6,4],fph:"rdv",col:"#c92a2a"},
+ paul:{name:"Paul Konan",role:"Agent, ventes",ph:"telip",face:[.47,.42,3],col:"#5f3dc4"},
  coach:{name:"Coach Atelier",role:"Votre formateur",ph:"",col:"#d9480f"}
 };
 
@@ -2499,7 +2499,7 @@ function heroVisual(){const u=photo("hero",1000);if(!u)return heroArt();
  return `<div class="hv"><div class="hv-ph"><img src="${u}" alt="Agente de centre d'appels avec casque, souriante, devant son ordinateur" onerror="this.closest('.hero-r').innerHTML=heroArt()"></div>
  <div class="hv-c hv-c1"><span class="hv-i red">!</span><div><b>Erreur détectée</b><span class="mono">0x80040220</span></div></div>
  <div class="hv-c hv-c2"><span class="hv-i green">${svgI("check",3)}</span><div><b>Solution trouvée</b><span>Droits CRM · 4 étapes</span></div></div>
- <div class="hv-c hv-c3">${["casque","agent","duo"].map(k=>`<span class="hv-a" style="background-image:url('${photo(k,120,true)}')"></span>`).join("")}<div><b>Toute l'équipe</b><span>dépanne plus vite</span></div></div></div>`}
+ <div class="hv-c hv-c3">${["serge","koffi","fatou"].map(k=>avatar(PEOPLE[k],32).replace('class="ava"','class="ava hv-a"')).join("")}<div><b>Toute l'équipe</b><span>dépanne plus vite</span></div></div></div>`}
 function domTile(k){const u=photo(DOMPH[k],600);return u?`<span class="dom-ph" style="background-image:linear-gradient(160deg,rgba(8,15,27,.15),rgba(8,15,27,.55)),url('${u}'),${domGrad(k)}"><span class="dom-badge" style="background:${domGrad(k)}">${svgI(k,2)}</span></span>`:domArt(k)}
 
 /* =========================================================

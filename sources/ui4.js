@@ -33,5 +33,5 @@ function heroVisual(){const u=photo("hero",1000);if(!u)return heroArt();
  return `<div class="hv"><div class="hv-ph"><img src="${u}" alt="Agente de centre d'appels avec casque, souriante, devant son ordinateur" onerror="this.closest('.hero-r').innerHTML=heroArt()"></div>
  <div class="hv-c hv-c1"><span class="hv-i red">!</span><div><b>Erreur détectée</b><span class="mono">0x80040220</span></div></div>
  <div class="hv-c hv-c2"><span class="hv-i green">${svgI("check",3)}</span><div><b>Solution trouvée</b><span>Droits CRM · 4 étapes</span></div></div>
- <div class="hv-c hv-c3">${["casque","agent","duo"].map(k=>`<span class="hv-a" style="background-image:url('${photo(k,120,true)}')"></span>`).join("")}<div><b>Toute l'équipe</b><span>dépanne plus vite</span></div></div></div>`}
+ <div class="hv-c hv-c3">${["serge","koffi","fatou"].map(k=>avatar(PEOPLE[k],32).replace('class="ava"','class="ava hv-a"')).join("")}<div><b>Toute l'équipe</b><span>dépanne plus vite</span></div></div></div>`}
 function domTile(k){const u=photo(DOMPH[k],600);return u?`<span class="dom-ph" style="background-image:linear-gradient(160deg,rgba(8,15,27,.15),rgba(8,15,27,.55)),url('${u}'),${domGrad(k)}"><span class="dom-badge" style="background:${domGrad(k)}">${svgI(k,2)}</span></span>`:domArt(k)}

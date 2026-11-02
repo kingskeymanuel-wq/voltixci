@@ -2,13 +2,13 @@
    ACADÉMIE — contenu des parcours, leçons et missions
    ========================================================= */
 const PEOPLE={
- aicha:{name:"Aïcha Traoré",role:"Agente, service client",ph:"hero",face:[.8,.42,3.2],col:"#c2410c"},
- koffi:{name:"Koffi Yao",role:"Superviseur du plateau",ph:"agent",col:"#1c6dd0"},
- serge:{name:"Serge N'Guessan",role:"Agent, recouvrement",ph:"casque",col:"#0b7285"},
- fatou:{name:"Fatou Diallo",role:"Agente, service client",ph:"duo",col:"#9c36b5"},
- marc:{name:"Marc Kouassi",role:"Comptable",ph:"rdv",col:"#2b8a3e"},
- awa:{name:"Awa Koné",role:"Assistante de direction",ph:"portable",col:"#c92a2a"},
- paul:{name:"Paul Konan",role:"Agent, ventes",ph:"telip",col:"#5f3dc4"},
+ aicha:{name:"Aïcha Traoré",role:"Agente, service client",ph:"hero",face:[.68,.38,3],col:"#c2410c"},
+ koffi:{name:"Koffi Yao",role:"Superviseur du plateau",ph:"agent",face:[.62,.35,3.5],col:"#1c6dd0"},
+ serge:{name:"Serge N'Guessan",role:"Agent, recouvrement",ph:"casque",face:[.53,.33,4],col:"#0b7285"},
+ fatou:{name:"Fatou Diallo",role:"Agente, service client",ph:"duo",face:[.48,.55,2],col:"#9c36b5"},
+ marc:{name:"Marc Kouassi",role:"Comptable",ph:"rdv",face:[.52,.3,5],col:"#2b8a3e"},
+ awa:{name:"Awa Koné",role:"Assistante de direction",ph:"portable",face:[.2,.6,4],fph:"rdv",col:"#c92a2a"},
+ paul:{name:"Paul Konan",role:"Agent, ventes",ph:"telip",face:[.47,.42,3],col:"#5f3dc4"},
  coach:{name:"Coach Atelier",role:"Votre formateur",ph:"",col:"#d9480f"}
 };
 
