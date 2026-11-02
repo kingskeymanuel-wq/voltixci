@@ -1,0 +1,14 @@
+{
+  "name": "atelier-depannage-it",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Application de dépannage IT et Cisco pour centre d'appels : diagnostic par capture d'écran, fiches illustrées, codes d'erreur.",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "@tesseract.js-data/eng": "1.0.0",
+    "@tesseract.js-data/fra": "1.0.0",
+    "tesseract.js": "5.1.1"
+  }
+}
