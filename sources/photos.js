@@ -24,5 +24,5 @@ function photoBg(k,w,overlay,fallback){const u=photo(k,w);return `background-ima
 function domGrad(k){const c=(typeof DART!=="undefined"&&DART[k])||["#1c2b44","#3d5a80"];return `linear-gradient(135deg,${c[0]},${c[1]})`}
 function bannerStyle(k){return photoBg(DOMPH[k]||"rdv",1100,"linear-gradient(100deg,rgba(8,15,27,.94) 0%,rgba(8,15,27,.78) 50%,rgba(8,15,27,.35) 100%)",domGrad(k))}
 /* portrait de personnage : photo recadrée sur le visage, ou initiales */
-function avatar(p,size=56){const u=p.ph?photo(p.ph,size*3,true):"";const ini=p.name.split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase();
- return `<span class="ava" style="width:${size}px;height:${size}px;background:${p.col||"var(--accent)"}"><span>${esc(ini)}</span>${u?`<img src="${u}" alt="" loading="lazy" onerror="this.remove()">`:""}</span>`}
+function avatar(p,size=56){const u=(!IN_CLAUDE&&p.ph&&p.face&&PH[p.ph])?`https://images.unsplash.com/photo-${PH[p.ph]}?w=${size*3}&h=${size*3}&q=75&auto=format&fit=crop&crop=focalpoint&fp-x=${p.face[0]}&fp-y=${p.face[1]}&fp-z=${p.face[2]}`:"";const grad=`linear-gradient(145deg,${p.col||"#d9480f"},#0e1a2b)`;const ini=p.name.split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase();
+ return `<span class="ava" style="width:${size}px;height:${size}px;background:${grad};font-size:${Math.round(size*.36)}px"><span>${esc(ini)}</span>${u?`<img src="${u}" alt="" loading="lazy" onerror="this.remove()">`:""}</span>`}

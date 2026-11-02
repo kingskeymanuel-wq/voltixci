@@ -2,7 +2,7 @@
    ACADÉMIE — contenu des parcours, leçons et missions
    ========================================================= */
 const PEOPLE={
- aicha:{name:"Aïcha Traoré",role:"Agente, service client",ph:"hero",col:"#c2410c"},
+ aicha:{name:"Aïcha Traoré",role:"Agente, service client",ph:"hero",face:[.8,.42,3.2],col:"#c2410c"},
  koffi:{name:"Koffi Yao",role:"Superviseur du plateau",ph:"agent",col:"#1c6dd0"},
  serge:{name:"Serge N'Guessan",role:"Agent, recouvrement",ph:"casque",col:"#0b7285"},
  fatou:{name:"Fatou Diallo",role:"Agente, service client",ph:"duo",col:"#9c36b5"},

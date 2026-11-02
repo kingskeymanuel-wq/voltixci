@@ -349,7 +349,7 @@ details.ocr pre{white-space:pre-wrap;font-family:var(--f-mono);font-size:12px;ma
 /* ---------- Avatars ---------- */
 .ava{position:relative;display:inline-grid;place-items:center;border-radius:50%;overflow:hidden;flex:none;color:#fff;font-weight:800;font-family:var(--f-display);box-shadow:0 0 0 3px var(--panel),0 6px 16px rgba(0,0,0,.18)}
 .ava img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.ava>span{font-size:.9em}
+.ava>span{letter-spacing:.02em}
 
 /* ---------- Académie ---------- */
 .ac-hero{border-radius:22px;background-size:cover;background-position:center right;color:#fff;padding:clamp(22px,3.6vw,40px);display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:24px;align-items:center;min-height:300px}
@@ -455,7 +455,7 @@ table.j.skill{min-width:0;table-layout:auto}.ac-grid{align-items:start}.sk-dot{d
 .pl-type input{flex:1;background:transparent;border:0;color:var(--term-ink);font-family:var(--f-mono);font-size:17px;outline:none;min-width:0}
 .pl-type.ok{border-color:var(--min)}.pl-type.bad{border-color:var(--crit)}
 .pl-brief{display:grid;gap:14px}
-.pl-brief-ph{border-radius:20px;background-size:cover;background-position:center 25%;min-height:240px;padding:20px;display:grid;align-content:end;gap:6px;color:#fff}.pl-brief-ph h2{color:#fff;font-size:clamp(24px,3.2vw,32px)}
+.pl-brief-ph .pl-tag{justify-self:start}.pl-brief-ph{border-radius:20px;background-size:cover;background-position:center 25%;min-height:240px;padding:20px;display:grid;align-content:end;gap:6px;color:#fff}.pl-brief-ph h2{color:#fff;font-size:clamp(24px,3.2vw,32px)}
 .pl-brief-b{display:flex;gap:14px;align-items:center;margin-top:-46px;padding-left:16px}.pl-brief-b b{display:block;padding-top:30px}.pl-brief-b span{color:var(--muted);font-size:13.5px}
 .pl-foot{position:sticky;bottom:0;border-top:2px solid var(--line);background:var(--panel);padding-block:16px calc(16px + env(safe-area-inset-bottom,0px))}
 .pl-foot.good{background:var(--min-bg);border-color:transparent}.pl-foot.bad{background:var(--crit-bg);border-color:transparent}
@@ -1654,8 +1654,8 @@ function photoBg(k,w,overlay,fallback){const u=photo(k,w);return `background-ima
 function domGrad(k){const c=(typeof DART!=="undefined"&&DART[k])||["#1c2b44","#3d5a80"];return `linear-gradient(135deg,${c[0]},${c[1]})`}
 function bannerStyle(k){return photoBg(DOMPH[k]||"rdv",1100,"linear-gradient(100deg,rgba(8,15,27,.94) 0%,rgba(8,15,27,.78) 50%,rgba(8,15,27,.35) 100%)",domGrad(k))}
 /* portrait de personnage : photo recadrée sur le visage, ou initiales */
-function avatar(p,size=56){const u=p.ph?photo(p.ph,size*3,true):"";const ini=p.name.split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase();
- return `<span class="ava" style="width:${size}px;height:${size}px;background:${p.col||"var(--accent)"}"><span>${esc(ini)}</span>${u?`<img src="${u}" alt="" loading="lazy" onerror="this.remove()">`:""}</span>`}
+function avatar(p,size=56){const u=(!IN_CLAUDE&&p.ph&&p.face&&PH[p.ph])?`https://images.unsplash.com/photo-${PH[p.ph]}?w=${size*3}&h=${size*3}&q=75&auto=format&fit=crop&crop=focalpoint&fp-x=${p.face[0]}&fp-y=${p.face[1]}&fp-z=${p.face[2]}`:"";const grad=`linear-gradient(145deg,${p.col||"#d9480f"},#0e1a2b)`;const ini=p.name.split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase();
+ return `<span class="ava" style="width:${size}px;height:${size}px;background:${grad};font-size:${Math.round(size*.36)}px"><span>${esc(ini)}</span>${u?`<img src="${u}" alt="" loading="lazy" onerror="this.remove()">`:""}</span>`}
 
 /* =========================================================
    APPLICATION
@@ -2126,7 +2126,7 @@ function domArt(k){const c=DART[k]||["#334","#889"];return `<svg class="dom-art"
    ACADÉMIE — contenu des parcours, leçons et missions
    ========================================================= */
 const PEOPLE={
- aicha:{name:"Aïcha Traoré",role:"Agente, service client",ph:"hero",col:"#c2410c"},
+ aicha:{name:"Aïcha Traoré",role:"Agente, service client",ph:"hero",face:[.8,.42,3.2],col:"#c2410c"},
  koffi:{name:"Koffi Yao",role:"Superviseur du plateau",ph:"agent",col:"#1c6dd0"},
  serge:{name:"Serge N'Guessan",role:"Agent, recouvrement",ph:"casque",col:"#0b7285"},
  fatou:{name:"Fatou Diallo",role:"Agente, service client",ph:"duo",col:"#9c36b5"},

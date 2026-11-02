@@ -345,7 +345,7 @@ details.ocr pre{white-space:pre-wrap;font-family:var(--f-mono);font-size:12px;ma
 /* ---------- Avatars ---------- */
 .ava{position:relative;display:inline-grid;place-items:center;border-radius:50%;overflow:hidden;flex:none;color:#fff;font-weight:800;font-family:var(--f-display);box-shadow:0 0 0 3px var(--panel),0 6px 16px rgba(0,0,0,.18)}
 .ava img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.ava>span{font-size:.9em}
+.ava>span{letter-spacing:.02em}
 
 /* ---------- Académie ---------- */
 .ac-hero{border-radius:22px;background-size:cover;background-position:center right;color:#fff;padding:clamp(22px,3.6vw,40px);display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:24px;align-items:center;min-height:300px}
@@ -451,7 +451,7 @@ table.j.skill{min-width:0;table-layout:auto}.ac-grid{align-items:start}.sk-dot{d
 .pl-type input{flex:1;background:transparent;border:0;color:var(--term-ink);font-family:var(--f-mono);font-size:17px;outline:none;min-width:0}
 .pl-type.ok{border-color:var(--min)}.pl-type.bad{border-color:var(--crit)}
 .pl-brief{display:grid;gap:14px}
-.pl-brief-ph{border-radius:20px;background-size:cover;background-position:center 25%;min-height:240px;padding:20px;display:grid;align-content:end;gap:6px;color:#fff}.pl-brief-ph h2{color:#fff;font-size:clamp(24px,3.2vw,32px)}
+.pl-brief-ph .pl-tag{justify-self:start}.pl-brief-ph{border-radius:20px;background-size:cover;background-position:center 25%;min-height:240px;padding:20px;display:grid;align-content:end;gap:6px;color:#fff}.pl-brief-ph h2{color:#fff;font-size:clamp(24px,3.2vw,32px)}
 .pl-brief-b{display:flex;gap:14px;align-items:center;margin-top:-46px;padding-left:16px}.pl-brief-b b{display:block;padding-top:30px}.pl-brief-b span{color:var(--muted);font-size:13.5px}
 .pl-foot{position:sticky;bottom:0;border-top:2px solid var(--line);background:var(--panel);padding-block:16px calc(16px + env(safe-area-inset-bottom,0px))}
 .pl-foot.good{background:var(--min-bg);border-color:transparent}.pl-foot.bad{background:var(--crit-bg);border-color:transparent}
