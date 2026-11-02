@@ -4,16 +4,15 @@
    1. Claude (dans claude.ai)  2. IA du serveur (Render + clé)
    3. Lecture automatique OCR dans le navigateur + dictionnaire
    ========================================================= */
-const IN_CLAUDE=!!(window.claude&&window.claude.use);
 let sample=null,sampleImages=false,serverAI=false,serverCode=false,localOCR=false,shot=null,diagCtl=null,lastDiag=null;
 
 /* ---------- Accueil : contenus fixes ---------- */
 const EXAMPLES=["Outlook reste bloqué au chargement","Le client ne m'entend pas","Je reste en Non prêt","0x80040220","SIP 503","Teams : on ne m'entend pas","L'imprimante n'imprime plus","Écran bleu"];
-$("#heroart").innerHTML=heroArt();
+$("#heroart").innerHTML=heroVisual();
 $("#examples").innerHTML=EXAMPLES.map(e=>`<button type="button">${esc(e)}</button>`).join("");
 $("#examples").querySelectorAll("button").forEach(b=>b.onclick=()=>{$("#ask").value=b.textContent;runDiag()});
 $("#totals").textContent=`${FICHES.length} fiches · ${ERR.length} codes d'erreur · ${GUIDES.length} guides · ${SCRIPTS.length} réparations automatiques`;
-$("#domains").innerHTML=Object.entries(DOM).map(([k,v])=>`<button class="dom2" data-dom="${k}">${domArt(k)}<span class="dom2-b"><b>${esc(v.n)}</b><span>${esc(v.d)}</span><em>${FICHES.filter(p=>p.d===k).length} fiches</em></span></button>`).join("");
+$("#domains").innerHTML=Object.entries(DOM).map(([k,v])=>`<button class="dom2" data-dom="${k}">${domTile(k)}<span class="dom2-b"><b>${esc(v.n)}</b><span>${esc(v.d)}</span><em>${FICHES.filter(p=>p.d===k).length} fiches</em></span></button>`).join("");
 $("#domains").querySelectorAll(".dom2").forEach(b=>b.onclick=()=>{fdom=b.dataset.dom;$("#q").value="";renderDom();renderList();location.hash="pannes"});
 $("#quick").innerHTML=["W-02","N-01","OL-03","T-01","AG-01","E-03"].map(id=>byId(id)).filter(Boolean).map(p=>itemHTML(p,false)).join("");
 $("#quick").querySelectorAll(".item").forEach(b=>b.onclick=()=>openFiche(b.dataset.id));

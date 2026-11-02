@@ -289,6 +289,213 @@ details.ocr pre{white-space:pre-wrap;font-family:var(--f-mono);font-size:12px;ma
 .d-head .meta,.d-head h3,.d-head>p{padding-right:130px}
 @media (max-width:640px){.d-art{display:none}.d-head .meta,.d-head h3,.d-head>p{padding-right:0}}
 
+
+/* =================== v4 : bannières, modales, guidé =================== */
+.modal-box{width:min(980px,100%);border-radius:22px;box-shadow:0 40px 120px rgba(0,0,0,.45)}
+.modal-bar{position:absolute;top:12px;right:12px;left:12px;background:transparent;padding:0;z-index:5;pointer-events:none}
+.modal-bar .mt{display:none}.modal-bar .mbtn{pointer-events:auto;background:rgba(8,15,27,.55);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);color:#fff}
+.modal-bar #mback{margin-right:auto}
+@keyframes popIn{from{opacity:0;transform:translateY(24px) scale(.97)}}
+.d-head.banner{background-size:cover;background-position:center;color:#fff;padding:64px 28px 24px;border-bottom:0;min-height:190px;align-content:end}
+.d-head.banner h3{color:#fff;font-size:clamp(24px,3vw,32px);max-width:24ch;text-shadow:0 2px 18px rgba(0,0,0,.35)}
+.d-head.banner>p{color:rgba(255,255,255,.82);max-width:60ch;margin:0}
+.d-head.banner .pill.neutral,.pill.glass{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px)}
+.d-head.banner .lvl i{background:rgba(255,255,255,.3)}.d-head.banner .lvl i.on{background:#fff}
+.d-head.banner .progress{background:rgba(255,255,255,.18);border-color:transparent}
+.d-head.banner .mono{color:rgba(255,255,255,.75)!important}
+.d-head.banner .meta,.d-head.banner h3,.d-head.banner>p{padding-right:0}
+.mswitch{display:inline-flex;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:10px;padding:3px;gap:2px;justify-self:start;backdrop-filter:blur(6px)}
+.mswitch button{border:0;background:transparent;color:#fff;padding:6px 12px;border-radius:7px;font-weight:600;font-size:13px;cursor:pointer;opacity:.8}
+.mswitch button[aria-pressed="true"]{background:#fff;color:#12213a;opacity:1}
+.g-wrap{padding:22px 28px 28px;display:grid;gap:18px}
+.g-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.g-intro h5,.g-pre h5{margin:0 0 6px;font-family:var(--f-mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.g-intro ul,.g-pre ul{margin:0;padding-left:18px}
+@media (max-width:640px){.g-intro{grid-template-columns:minmax(0,1fr)}.g-wrap{padding:18px 16px 22px}.d-head.banner{padding:60px 16px 20px}}
+.g-dots{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.g-dot{width:36px;height:36px;border-radius:50%;border:2px solid var(--line);background:var(--panel);font-family:var(--f-mono);font-weight:600;font-size:13px;cursor:pointer;display:grid;place-items:center;color:var(--muted);transition:transform .15s}
+.g-dot:hover{transform:scale(1.08)}
+.g-dot.done{background:var(--min);border-color:var(--min);color:#fff}
+.g-dot.cur{border-color:var(--accent);background:var(--accent);color:var(--accent-ink);box-shadow:0 0 0 5px var(--accent-soft)}
+.g-dot.end svg{width:16px;height:16px}
+.g-step{border:1px solid var(--line);border-radius:18px;padding:22px;display:grid;gap:10px;background:linear-gradient(180deg,var(--soft),var(--panel) 120px);animation:stepIn .25s ease}
+@keyframes stepIn{from{opacity:0;transform:translateX(16px)}}
+.g-k{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.g-step h4{margin:0;font-family:var(--f-display);font-size:clamp(20px,2.4vw,26px);font-weight:800;line-height:1.2}
+.g-step p{margin:0;color:var(--muted);font-size:16px;max-width:66ch}
+.g-ill{background:var(--panel);box-shadow:0 10px 30px rgba(10,20,40,.08)}
+.g-ill svg.ill{max-width:640px}
+.g-nav{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center}
+.g-end{display:grid;gap:12px;justify-items:start;border:1px solid var(--line);border-radius:18px;padding:24px;background:var(--soft)}
+.g-end h4{margin:0;font-family:var(--f-display);font-size:24px;font-weight:800}.g-end p{margin:0;color:var(--muted)}
+.g-end-ic{width:56px;height:56px;border-radius:16px;background:var(--accent);color:#fff;display:grid;place-items:center}.g-end-ic svg{width:28px;height:28px}
+.g-pre{border-top:1px dashed var(--line);padding-top:12px;width:100%}
+.photo-credit{display:block;margin-bottom:6px;opacity:.8}
+
+/* ---------- Accueil photo ---------- */
+.hv{position:relative;max-width:520px;margin-left:auto;padding:14px 8px 30px}
+.hv-ph{border-radius:26px;overflow:hidden;aspect-ratio:4/4.3;box-shadow:0 30px 80px rgba(0,0,0,.45);transform:rotate(1.5deg);border:6px solid rgba(255,255,255,.08);background:linear-gradient(135deg,#1c3d8f,#d9480f)}
+.hv-ph img{width:100%;height:100%;object-fit:cover;display:block}
+.hv-c{position:absolute;display:flex;gap:10px;align-items:center;background:#fff;color:#14202f;border-radius:16px;padding:10px 14px;box-shadow:0 18px 40px rgba(0,0,0,.28);font-size:13px}
+.hv-c b{display:block;font-size:13.5px}.hv-c span{color:#5a6878}.hv-c .mono{color:#c2410c;font-weight:700}
+.hv-c1{left:-18px;top:18%;animation:fl 6s ease-in-out infinite}.hv-c2{right:-10px;top:56%;animation:fl 7s ease-in-out infinite reverse}.hv-c3{left:6%;bottom:4px;animation:fl 8s ease-in-out infinite}
+.hv-i{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:#fff;font-weight:800;flex:none}.hv-i.red{background:#e03131}.hv-i.green{background:#2f9e44}.hv-i svg{width:18px;height:18px}
+.hv-a{width:30px;height:30px;border-radius:50%;border:2px solid #fff;background-size:cover;background-position:center;background-color:#c3ccd8;margin-left:-10px}.hv-a:first-child{margin-left:0}
+@media (max-width:980px){.hv{margin:0 auto}.hv-c1{left:0}.hv-c2{right:0}}
+.dom-ph{display:block;aspect-ratio:3/2;background-size:cover;background-position:center;position:relative}
+.dom-badge{position:absolute;left:12px;bottom:-18px;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;color:#fff;border:3px solid var(--panel);box-shadow:0 8px 18px rgba(0,0,0,.2)}.dom-badge svg{width:22px;height:22px}
+.dom2 .dom-ph+.dom2-b{padding-top:24px}
+
+/* ---------- Avatars ---------- */
+.ava{position:relative;display:inline-grid;place-items:center;border-radius:50%;overflow:hidden;flex:none;color:#fff;font-weight:800;font-family:var(--f-display);box-shadow:0 0 0 3px var(--panel),0 6px 16px rgba(0,0,0,.18)}
+.ava img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ava>span{font-size:.9em}
+
+/* ---------- Académie ---------- */
+.ac-hero{border-radius:22px;background-size:cover;background-position:center right;color:#fff;padding:clamp(22px,3.6vw,40px);display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:24px;align-items:center;min-height:300px}
+@media (max-width:900px){.ac-hero{grid-template-columns:minmax(0,1fr)}}
+.ac-hero h2{color:#fff;font-size:clamp(26px,3.6vw,42px);font-weight:800;font-stretch:106%;line-height:1.08;margin:6px 0 10px;max-width:18ch}
+.ac-hero p{margin:0 0 18px;color:rgba(255,255,255,.8);max-width:52ch}
+.ac-cta{display:flex;flex-wrap:wrap;gap:10px}
+.btn.ghost{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.3)}.btn.ghost:hover{background:rgba(255,255,255,.2)}
+.btn svg{flex:none}
+.ac-stats{display:grid;gap:10px;background:rgba(8,15,27,.55);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:16px}
+.ac-stat{display:flex;gap:12px;align-items:center}.ac-stat b{display:block;font-size:17px;font-family:var(--f-display)}.ac-stat span{color:rgba(255,255,255,.7);font-size:13px}
+.ac-stat .ring{flex:none;width:52px;height:52px}
+.ac-ic{width:52px;height:52px;border-radius:14px;background:rgba(255,212,59,.18);color:#ffd43b;display:grid;place-items:center;flex:none}.ac-ic svg{width:26px;height:26px}.ac-ic.fl{background:rgba(255,122,61,.2);color:#ff922b}
+.ac-lvl{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;font-size:12px;color:rgba(255,255,255,.75);font-family:var(--f-mono)}
+.ac-lvl-bar{height:8px;border-radius:5px;background:rgba(255,255,255,.18);overflow:hidden}.ac-lvl-bar i{display:block;height:100%;background:linear-gradient(90deg,#ffd43b,#ff922b)}
+.ac-tabs{display:flex;gap:6px;margin:22px 0 18px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:5px;width:max-content;max-width:100%;overflow-x:auto}
+.ac-tab{border:0;background:transparent;padding:9px 18px;border-radius:10px;font-weight:700;cursor:pointer;color:var(--muted);white-space:nowrap}
+.ac-tab[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.units{display:grid;gap:30px}
+.unit{display:grid;gap:8px}
+.unit-h{border-radius:18px;background-size:cover;background-position:center;color:#fff;padding:20px 22px;display:flex;flex-wrap:wrap;gap:14px 24px;align-items:flex-end;justify-content:space-between;min-height:120px}
+.unit-h h3{color:#fff;font-size:22px;margin:4px 0}.unit-h p{margin:0;color:rgba(255,255,255,.85);max-width:56ch;font-size:14px}
+.unit-n{font-family:var(--f-mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;opacity:.85}
+.unit-p{min-width:150px;display:grid;gap:6px;justify-items:end}.unit-p b{font-family:var(--f-display);font-size:20px}
+.unit-bar{width:150px;height:8px;border-radius:5px;background:rgba(255,255,255,.25);overflow:hidden}.unit-bar i{display:block;height:100%;background:#fff;border-radius:5px}
+.unit-bar.dark{background:var(--soft);border:1px solid var(--line);width:100%}
+.path{display:flex;flex-direction:column;align-items:center;gap:12px;padding:18px 0 6px}
+.pnode{display:grid;justify-items:center;gap:4px;transform:translateX(var(--off));width:220px}
+@media (max-width:560px){.pnode{transform:translateX(calc(var(--off) * .45))}}
+.pbtn{position:relative;width:76px;height:70px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;color:#fff;background:linear-gradient(160deg,var(--c2),var(--c1));box-shadow:0 7px 0 color-mix(in srgb,var(--c1) 70%,#000),0 14px 24px rgba(10,20,40,.18);transition:transform .12s}
+.pbtn svg{width:30px;height:30px}
+.pbtn:hover:not(:disabled){transform:translateY(-2px)}.pbtn:active:not(:disabled){transform:translateY(5px);box-shadow:0 2px 0 color-mix(in srgb,var(--c1) 70%,#000)}
+.pbtn.done{background:linear-gradient(160deg,#ffd43b,#f59f00);box-shadow:0 7px 0 #c77700,0 14px 24px rgba(10,20,40,.18)}
+.pbtn.locked{background:var(--line);color:var(--muted);box-shadow:0 7px 0 color-mix(in srgb,var(--line) 70%,#000);cursor:not-allowed}
+.pbtn.cur::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:4px solid var(--c2);opacity:.5;animation:pulse 1.8s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.9);opacity:.7}100%{transform:scale(1.25);opacity:0}}
+.pstart{position:absolute;bottom:calc(100% + 14px);left:50%;transform:translateX(-50%);background:var(--panel);color:var(--c1);border:2px solid var(--line);font-weight:800;font-size:13px;padding:5px 12px;border-radius:10px;white-space:nowrap;box-shadow:0 6px 14px rgba(0,0,0,.1)}
+.pstars{display:flex;gap:3px}.pstars i{width:14px;height:14px;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);background:var(--line)}.pstars i.on{background:#f59f00}
+.plab{text-align:center;font-size:13px;font-weight:600;line-height:1.3;max-width:200px}.plab em{display:block;font-style:normal;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.missions{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:16px}
+.mcard{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:grid;grid-template-rows:auto 1fr;transition:transform .18s,box-shadow .18s}
+.mcard:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(10,20,40,.14)}
+.mcard-ph{aspect-ratio:16/9;background-size:cover;background-position:center 25%;position:relative;display:flex;align-items:flex-start;justify-content:space-between;padding:12px}
+.pl-tag{display:inline-block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--accent);margin-bottom:6px}
+.pl-tag.light{color:#fff;background:rgba(8,15,27,.5);backdrop-filter:blur(6px);padding:4px 9px;border-radius:7px;margin:0}
+.mdone{display:inline-flex;align-items:center;gap:5px;background:#2f9e44;color:#fff;font-size:12px;font-weight:700;padding:4px 9px;border-radius:7px}.mdone svg{width:13px;height:13px}
+.mcard-b{padding:0 18px 18px;display:grid;gap:8px;align-content:start}
+.mcard-who{display:flex;gap:10px;align-items:center;margin-top:-22px}.mcard-who b{display:block;font-size:14px;padding-top:18px}.mcard-who span{font-size:12.5px;color:var(--muted)}
+.mcard h3{font-size:18px}.mcard p{margin:0;color:var(--muted);font-size:14px}
+.mcard-f{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+.ac-k{margin-bottom:16px}
+.ac-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px}
+@media (max-width:980px){.ac-grid{grid-template-columns:minmax(0,1fr)}}
+table.j.skill{min-width:0;table-layout:auto}.ac-grid{align-items:start}.sk-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px}
+.actv{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:6px;height:150px;align-items:end;margin-top:14px}
+.actv-c{height:100%;display:grid;grid-template-rows:1fr auto;gap:4px;justify-items:center}
+.actv-c i{align-self:end;width:100%;background:var(--line);border-radius:6px 6px 2px 2px}.actv-c i.hit{background:linear-gradient(180deg,#ff922b,var(--accent))}
+.actv-c span{font-size:11px;color:var(--muted);font-family:var(--f-mono)}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));gap:10px;margin-top:12px}
+.badge{display:grid;justify-items:center;text-align:center;gap:4px;padding:14px 10px;border-radius:14px;border:1px solid var(--line);background:var(--soft);opacity:.5;filter:grayscale(1)}
+.badge.on{opacity:1;filter:none;background:var(--panel)}
+.badge b{font-size:13.5px}.badge span{font-size:12px;color:var(--muted)}
+.medal{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;color:#fff;background:radial-gradient(circle at 30% 30%,#ffe066,#f59f00 60%,#c77700);box-shadow:0 0 0 4px #fff3bf,0 8px 18px rgba(199,119,0,.35)}.medal svg{width:26px;height:26px}
+
+/* ---------- Lecteur d'exercices ---------- */
+.player{position:fixed;inset:0;z-index:70;background:var(--bg);overflow-y:auto;display:grid;grid-template-rows:1fr auto;padding-top:env(safe-area-inset-top,0px)}
+.pl-in{width:min(760px,100%);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.pl-top{display:flex;align-items:center;gap:16px;padding-block:20px 10px;position:sticky;top:0;background:var(--bg);z-index:2}
+.pl-x{border:0;background:transparent;color:var(--muted);width:40px;height:40px;border-radius:10px;cursor:pointer;display:grid;place-items:center}.pl-x:hover{background:var(--soft)}.pl-x svg{width:22px;height:22px}
+.pl-bar{flex:1;height:16px;border-radius:10px;background:var(--line);overflow:hidden}.pl-bar i{display:block;height:100%;border-radius:10px;background:linear-gradient(90deg,var(--u2),var(--u1));transition:width .35s;box-shadow:inset 0 -4px 0 rgba(0,0,0,.12)}
+.pl-hearts{display:flex;align-items:center;gap:5px;color:#e03131;font-weight:800;font-family:var(--f-display);font-size:18px}.pl-hearts svg{width:24px;height:24px;fill:#e03131}
+.pl-hearts.hit{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.pl-body{padding-block:18px 30px;display:grid;gap:16px;animation:stepIn .25s ease}
+.pl-h{font-size:clamp(21px,2.8vw,28px);font-weight:800;line-height:1.2}
+.pl-p{font-size:17px;line-height:1.6;margin:0;color:var(--ink)}
+.pl-card{display:grid;gap:14px}
+.pl-banner{border-radius:20px;background-size:cover;background-position:center;color:#fff;padding:60px 22px 22px;min-height:180px;display:grid;align-content:end}.pl-banner span{font-family:var(--f-mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;opacity:.85}.pl-banner h2{color:#fff;font-size:clamp(22px,3vw,30px);margin-top:6px}
+.pl-ill{border:1px solid var(--line);border-radius:16px;padding:14px;background:var(--soft);overflow-x:auto}
+.pl-coach{display:flex;gap:14px;align-items:flex-start}
+.pl-say,.pl-bubble{position:relative;background:var(--panel);border:2px solid var(--line);border-radius:18px;padding:14px 16px;font-size:16.5px;line-height:1.55}
+.pl-say::before,.pl-bubble::before{content:"";position:absolute;left:-10px;top:20px;width:16px;height:16px;background:var(--panel);border-left:2px solid var(--line);border-bottom:2px solid var(--line);transform:rotate(45deg)}
+.pl-bubble b{display:block;font-size:12px;font-family:var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.pl-chat{display:flex;gap:14px;align-items:flex-start}
+.pl-opts{display:grid;gap:10px}
+.pl-opt{display:flex;gap:14px;align-items:center;text-align:left;border:2px solid var(--line);border-bottom-width:4px;background:var(--panel);border-radius:14px;padding:14px 16px;font-size:16px;cursor:pointer;transition:transform .08s}
+.pl-opt kbd{border:1.5px solid var(--line);border-radius:7px;width:28px;height:28px;display:grid;place-items:center;font-size:13px;color:var(--muted);flex:none;background:var(--soft)}
+.pl-opt:hover:not(:disabled){background:var(--soft)}.pl-opt:active{transform:translateY(2px)}
+.pl-opt.sel{border-color:#4c7dff;background:color-mix(in srgb,#4c7dff 10%,var(--panel))}.pl-opt.sel kbd{border-color:#4c7dff;color:#4c7dff}
+.pl-opt.ok{border-color:var(--min);background:var(--min-bg)}.pl-opt.bad{border-color:var(--crit);background:var(--crit-bg)}
+.pl-opt:disabled{opacity:.45;cursor:not-allowed}
+.pl-line{list-style:none;margin:0;padding:12px;min-height:64px;border-radius:14px;border:2px dashed var(--line);display:grid;gap:8px;counter-reset:o}
+.pl-line li{counter-increment:o;display:flex;gap:8px;align-items:center}.pl-line li:not(.pl-ph)::before{content:counter(o);width:26px;height:26px;border-radius:8px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+.pl-line.ok{border-color:var(--min);background:var(--min-bg)}.pl-line.bad{border-color:var(--crit);background:var(--crit-bg)}
+.pl-ph{color:var(--muted);font-size:14px;padding:6px}
+.pl-bank{display:flex;flex-wrap:wrap;gap:8px}
+.pl-chip{border:2px solid var(--line);border-bottom-width:4px;background:var(--panel);border-radius:12px;padding:10px 14px;font-size:14.5px;font-weight:600;cursor:pointer;text-align:left}
+.pl-chip:disabled{opacity:.25;cursor:default}.pl-chip.on{flex:1}
+.pl-match{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}.pl-match>div{display:grid;gap:8px;align-content:start}
+.pl-m{border:2px solid var(--line);border-bottom-width:4px;background:var(--panel);border-radius:12px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;text-align:left;min-height:54px}
+.pl-m.sel{border-color:#4c7dff;background:color-mix(in srgb,#4c7dff 10%,var(--panel))}.pl-m.ok{border-color:var(--min);background:var(--min-bg);opacity:.7}.pl-m.bad{border-color:var(--crit);background:var(--crit-bg);animation:shake .3s}
+.pl-type{display:flex;align-items:center;gap:10px;background:var(--term);color:var(--term-ink);border-radius:14px;padding:14px 16px;border:3px solid transparent}
+.pl-type input{flex:1;background:transparent;border:0;color:var(--term-ink);font-family:var(--f-mono);font-size:17px;outline:none;min-width:0}
+.pl-type.ok{border-color:var(--min)}.pl-type.bad{border-color:var(--crit)}
+.pl-brief{display:grid;gap:14px}
+.pl-brief-ph{border-radius:20px;background-size:cover;background-position:center 25%;min-height:240px;padding:20px;display:grid;align-content:end;gap:6px;color:#fff}.pl-brief-ph h2{color:#fff;font-size:clamp(24px,3.2vw,32px)}
+.pl-brief-b{display:flex;gap:14px;align-items:center;margin-top:-46px;padding-left:16px}.pl-brief-b b{display:block;padding-top:30px}.pl-brief-b span{color:var(--muted);font-size:13.5px}
+.pl-foot{position:sticky;bottom:0;border-top:2px solid var(--line);background:var(--panel);padding-block:16px calc(16px + env(safe-area-inset-bottom,0px))}
+.pl-foot.good{background:var(--min-bg);border-color:transparent}.pl-foot.bad{background:var(--crit-bg);border-color:transparent}
+.pl-foot-in{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.pl-fb{display:flex;gap:12px;align-items:flex-start;flex:1;min-width:0;font-size:14.5px}
+.pl-fb b{display:block;font-family:var(--f-display);font-size:20px}.pl-fb span{display:block;color:var(--ink);opacity:.85}
+.pl-fb.warn{color:var(--maj)}
+.pl-fi{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;flex:none}.pl-fi svg{width:22px;height:22px}
+.good .pl-fi{background:var(--min)}.good .pl-fb b{color:var(--min)}.bad .pl-fi{background:var(--crit)}.bad .pl-fb b{color:var(--crit)}
+.pl-foot .btn.big{min-width:180px;justify-content:center}
+.good .btn.primary{background:var(--min);border-color:var(--min);color:#fff}.bad .btn.primary{background:var(--crit);border-color:var(--crit);color:#fff}
+.pl-end{display:grid;justify-items:center;text-align:center;gap:16px;padding-block:8vh 40px}
+.pl-end h2{font-size:clamp(28px,4vw,40px);font-weight:800}
+.pl-end-ic{width:96px;height:96px;border-radius:28px;display:grid;place-items:center;color:#fff;background:linear-gradient(160deg,#ffd43b,#f59f00);box-shadow:0 18px 40px rgba(245,159,0,.4);animation:popIn .4s}
+.pl-end-ic.bad{background:linear-gradient(160deg,#ff8787,#e03131);box-shadow:0 18px 40px rgba(224,49,49,.35)}.pl-end-ic svg{width:48px;height:48px}
+.pl-stars{display:flex;gap:8px}.pl-stars span{width:46px;height:46px;color:var(--line)}.pl-stars span.on{color:#f59f00}.pl-stars svg{width:100%;height:100%;fill:currentColor}
+.pl-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;width:100%}.pl-kpis div{border:2px solid var(--line);border-radius:14px;padding:12px 8px}.pl-kpis b{display:block;font-family:var(--f-display);font-size:22px}.pl-kpis span{font-size:12px;color:var(--muted)}
+@media (max-width:560px){.pl-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.pl-match{grid-template-columns:minmax(0,1fr)}}
+.pl-up{display:flex;gap:8px;align-items:center;background:var(--accent-soft);color:var(--accent);padding:10px 16px;border-radius:12px;font-weight:600}.pl-up svg{width:18px;height:18px}
+.pl-newb{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.pl-newb .badge{min-width:150px}
+.pl-end-b{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:80}
+
+
+/* ---------- v4 correctifs ---------- */
+.modal-box .modal-bar{position:absolute;top:12px;left:12px;right:12px;background:transparent;padding:0;justify-content:flex-end;pointer-events:none}
+.modal-box .modal-bar #mback{margin-right:auto}
+.modal-box #mbody{padding-top:0}
+.pl-fb .pl-fi{display:grid}
+.pl-end{align-content:start}
+.pl-kpis div,.pl-newb .badge{align-self:start}
+.pl-card.plain{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:28px 28px 24px;position:relative;overflow:hidden;box-shadow:0 18px 40px rgba(10,20,40,.06)}
+.pl-card.plain::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(180deg,var(--u2),var(--u1))}
+.pl-card.plain .pl-deco{position:absolute;right:-18px;top:-18px;width:120px;height:120px;border-radius:30px;background:linear-gradient(160deg,var(--u2),var(--u1));opacity:.12;transform:rotate(12deg)}
+.pl-card.plain .pl-num{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:14px;background:linear-gradient(160deg,var(--u2),var(--u1));color:#fff;font-family:var(--f-display);font-weight:800;font-size:20px}
+@media (min-width:1000px){.unit{grid-template-columns:minmax(0,340px) minmax(0,1fr);align-items:start;gap:20px}.unit-h{position:sticky;top:20px;min-height:250px;flex-direction:column;align-items:flex-start;justify-content:flex-end}.unit-p{justify-items:start}}
+.path{padding:44px 0 10px}
+.pnode{gap:8px;width:240px}
+.plab{margin-top:6px}
+
 /* ---------- Cartes ---------- */
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px;margin-top:4px}
 .cards .item{height:100%}
@@ -398,7 +605,7 @@ table.j{border-collapse:collapse;width:100%;min-width:760px;font-size:13.5px}
   <div class="brand"><div class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.2L3.5 17.3a1.8 1.8 0 0 0 2.5 2.5l5.8-5.8a4 4 0 0 0 5.2-5.4l-2.4 2.4-2.1-.4-.4-2.1z"/></svg></div>
     <div><b>Atelier Dépannage</b><small>Maintenance IT · Cisco</small></div></div>
   <nav class="nav" aria-label="Sections" id="nav"></nav>
-  <div class="rail-foot">Les étapes marquées « Avancé » sont réservées aux administrateurs. En cas de doute, prévenez le support avant d'agir.</div>
+  <div class="rail-foot"><span class="photo-credit">Photos : Unsplash (licence libre).</span> Les étapes marquées « Avancé » sont réservées aux administrateurs. En cas de doute, prévenez le support avant d'agir.</div>
 </aside>
 <main class="main"><div class="wrap">
 
@@ -439,6 +646,12 @@ table.j{border-collapse:collapse;width:100%;min-width:760px;font-size:13.5px}
     <div class="card"><h3 style="font-size:18px">Les blocages les plus fréquents</h3><p class="note" style="margin:4px 0 12px">Un clic ouvre la fiche avec la résolution pas à pas.</p><div class="quick" id="quick"></div></div>
     <div class="card"><h3 style="font-size:18px">Journal</h3><p class="note" style="margin:4px 0 12px">Derniers incidents notés.</p><div id="homejournal" class="quick"></div><button class="btn" style="margin-top:12px" data-goto="journal">Ouvrir le journal</button></div>
   </div>
+</section>
+
+<section id="v-academie" data-view hidden>
+  <div id="ac-hero"></div>
+  <div class="ac-tabs" id="ac-tabs" role="group" aria-label="Académie"></div>
+  <div id="ac-body"></div>
 </section>
 
 <section id="v-pannes" data-view hidden>
@@ -535,6 +748,7 @@ table.j{border-collapse:collapse;width:100%;min-width:760px;font-size:13.5px}
     <div id="mbody"></div>
   </div>
 </div>
+<div class="player" id="player" hidden role="dialog" aria-modal="true" aria-label="Exercice"></div>
 <div class="toast" id="toast" role="status"></div>
 <script>
 /* =========================================================
@@ -1415,6 +1629,35 @@ P.push(
 );
 
 /* =========================================================
+   PHOTOS — vraies photos (Unsplash, licence libre)
+   Dans claude.ai les images externes sont bloquées :
+   l'application affiche alors ses illustrations à la place.
+   ========================================================= */
+const IN_CLAUDE=!!(window.claude&&window.claude.use);
+const PH={
+ hero:"1766066014237-00645c74e9c6",   // agente souriante avec casque devant l'ordinateur
+ duo:"1626863905121-3b0c0ed7b94c",    // deux agentes avec casques, bureau lumineux
+ casque:"1714079761488-e0c9b9ac4138", // homme avec casque devant un portable
+ agent:"1712159018726-4564d92f3ec2",  // homme avec casque devant l'ordinateur
+ materiel:"1553775282-20af80779df7",  // casque posé près d'un portable
+ plateau:"1560264280-88b68371db39",   // open space, personnes aux bureaux
+ bureau:"1504384308090-c894fdcc538d", // équipe au travail
+ telip:"1525182008055-f88b95ff7980",  // homme au téléphone IP
+ poste:"1587560699334-bea93391dcef",  // téléphone IP de bureau
+ portable:"1454165804606-c3d57bc86b40",// mains, crayon, portable
+ rdv:"1560264418-c4445382edbc",       // homme à son bureau
+ accord:"1521791136064-7986c2920216"  // poignée de main
+};
+const DOMPH={cisco:"telip",crm:"duo",teams:"casque",outlook:"portable",office:"bureau",win:"rdv",net:"plateau",print:"bureau",web:"portable",acc:"agent",sec:"materiel",hw:"materiel",guide:"rdv"};
+function photo(k,w=900,face){if(IN_CLAUDE||!PH[k])return "";return `https://images.unsplash.com/photo-${PH[k]}?w=${w}&q=72&auto=format&fit=crop${face?`&h=${w}&crop=faces`:""}`}
+function photoBg(k,w,overlay,fallback){const u=photo(k,w);return `background-image:${overlay?overlay+",":""}${u?`url('${u}'),`:""}${fallback}`}
+function domGrad(k){const c=(typeof DART!=="undefined"&&DART[k])||["#1c2b44","#3d5a80"];return `linear-gradient(135deg,${c[0]},${c[1]})`}
+function bannerStyle(k){return photoBg(DOMPH[k]||"rdv",1100,"linear-gradient(100deg,rgba(8,15,27,.94) 0%,rgba(8,15,27,.78) 50%,rgba(8,15,27,.35) 100%)",domGrad(k))}
+/* portrait de personnage : photo recadrée sur le visage, ou initiales */
+function avatar(p,size=56){const u=p.ph?photo(p.ph,size*3,true):"";const ini=p.name.split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase();
+ return `<span class="ava" style="width:${size}px;height:${size}px;background:${p.col||"var(--accent)"}"><span>${esc(ini)}</span>${u?`<img src="${u}" alt="" loading="lazy" onerror="this.remove()">`:""}</span>`}
+
+/* =========================================================
    APPLICATION
    ========================================================= */
 const $=s=>document.querySelector(s);
@@ -1571,11 +1814,11 @@ function ill(o){try{return ILL[o.k](o)}catch(e){return ""}}
 /* =========================================================
    NAVIGATION
    ========================================================= */
-const VIEWS=[["accueil","Diagnostic"],["pannes","Pannes"],["erreurs","Codes d'erreur"],["guides","Guides Windows"],["scripts","Boîte à scripts"],["commandes","Commandes"],["journal","Journal"],["check","Check du matin"]];
-$("#nav").innerHTML=VIEWS.map(([k,n],i)=>`${i===1?'<div class="nav-label">Dépanner</div>':i===5?'<div class="nav-label">Outils</div>':""}<button data-v="${k}">${svgI(k)}<span>${n}</span>${k==="journal"?'<span class="count" id="jcount" hidden>0</span>':""}</button>`).join("");
+const VIEWS=[["accueil","Diagnostic"],["academie","Académie"],["pannes","Pannes"],["erreurs","Codes d'erreur"],["guides","Guides Windows"],["scripts","Boîte à scripts"],["commandes","Commandes"],["journal","Journal"],["check","Check du matin"]];
+$("#nav").innerHTML=VIEWS.map(([k,n],i)=>`${i===1?'<div class="nav-label">Apprendre</div>':i===2?'<div class="nav-label">Dépanner</div>':i===6?'<div class="nav-label">Outils</div>':""}<button data-v="${k}">${svgI(k)}<span>${n}</span>${k==="journal"?'<span class="count" id="jcount" hidden>0</span>':""}</button>`).join("");
 $("#nav").querySelectorAll("button").forEach(b=>b.onclick=()=>{location.hash=b.dataset.v});
 function show(v){if(!VIEWS.some(x=>x[0]===v))v="accueil";document.querySelectorAll("[data-view]").forEach(s=>s.hidden=s.id!=="v-"+v);
- document.querySelectorAll("#nav button").forEach(t=>{if(t.dataset.v===v)t.setAttribute("aria-current","page");else t.removeAttribute("aria-current")});window.scrollTo(0,0)}
+ document.querySelectorAll("#nav button").forEach(t=>{if(t.dataset.v===v)t.setAttribute("aria-current","page");else t.removeAttribute("aria-current")});window.scrollTo(0,0);if(v==="academie"&&typeof renderAcad==="function")renderAcad()}
 addEventListener("hashchange",()=>show(location.hash.slice(1)));
 /* ---------- Fenêtre modale ---------- */
 let mcur=null,mstack=[],mlast=null;
@@ -1618,9 +1861,9 @@ $("#q").addEventListener("input",renderList);$("#flvl").addEventListener("change
 function renderGuides(){$("#glist").innerHTML=GUIDES.map(p=>itemHTML(p,false)).join("");
  $("#glist").querySelectorAll(".item").forEach(b=>b.onclick=()=>openFiche(b.dataset.id))}
 
-function renderDetail(sel,id){const p=byId(id),box=$(sel);if(!p){box.innerHTML="";return}
+function renderDetailFull(sel,id){const p=byId(id),box=$(sel);if(!p){box.innerHTML="";return}
  const guide=p.d==="guide",d=doneSteps[p.id]||[],n=p.st?p.st.length:0,pct=n?Math.round(d.length/n*100):0;
- let h=`<div class="d-head"><div class="d-art">${typeof domArt==="function"?domArt(guide?"guide":p.d):""}</div><div class="meta">${guide?'<span class="pill info">Guide</span>':`<span class="pill ${p.s}">${SEV[p.s]}</span>`}<span class="pill neutral">${p.id}</span>${guide?"":`<span class="pill neutral">${esc(DOM[p.d].n)}</span>`}<span class="pill neutral">${lvlHTML(p.lvl)}&nbsp;${LVL[p.lvl]}</span><span class="pill neutral">⏱ ${esc(p.tm)}</span></div>
+ let h=`<div class="d-head banner" style="${bannerStyle(guide?"guide":p.d)}"><div class="meta">${guide?'<span class="pill info">Guide</span>':`<span class="pill ${p.s}">${SEV[p.s]}</span>`}<span class="pill neutral">${p.id}</span>${guide?"":`<span class="pill neutral">${esc(DOM[p.d].n)}</span>`}<span class="pill neutral">${lvlHTML(p.lvl)}&nbsp;${LVL[p.lvl]}</span><span class="pill neutral">⏱ ${esc(p.tm)}</span></div>
  <h3>${esc(p.t)}</h3>${p.intro?`<p style="margin:0;color:var(--muted);max-width:66ch">${esc(p.intro)}</p>`:""}
  ${n?`<div style="display:flex;align-items:center;gap:10px"><div class="progress" style="flex:1"><i style="width:${pct}%"></i></div><span class="mono" style="color:var(--muted);font-size:12px">${d.length}/${n} étapes</span></div>`:""}</div><div class="d-body">`;
  if(p.lvl===3)h+=`<div class="admin-note">${alertHTML("warn","<b>Fiche avancée.</b> Les étapes avec commandes serveur ou réseau sont réservées à l'administrateur. Vous pouvez faire les vérifications simples et lui transmettre le résultat.")}</div>`;
@@ -1647,7 +1890,8 @@ function errMatch(q,max=4){if(!q)return[];const full=ck2(q);const toks=norm(q).s
  return res.sort((a,b)=>b[1]-a[1]).slice(0,max).map(x=>x[0])}
 let etool="",eopen=null;
 function errHTML(e){return `<button type="button" class="erow sev-${e.s}" data-err="${e.i}"><span class="sb"></span><span class="ecode">${esc(e.c)}</span><span class="ename">${esc(e.n)}<small>${esc(ETOOLS[e.t])}</small></span><span style="display:flex;gap:8px;align-items:center"><span class="pill ${e.s} err-tool">${SEV[e.s]}</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></span></button>`}
-function errBody(e){const f=e.ref&&byId(e.ref);return `<div class="d-head"><div class="meta"><span class="pill ${e.s}">${SEV[e.s]}</span><span class="pill neutral">${esc(ETOOLS[e.t])}</span></div><div class="mono" style="font-size:clamp(17px,2.4vw,22px);font-weight:600;overflow-wrap:anywhere">${esc(e.c)}</div><h3>${esc(e.n)}</h3></div>
+const ERRDOM={bsod:"win",wu:"win",win:"win",net:"net",http:"web",office:"outlook",print:"print",crm:"crm",sip:"cisco",rc:"cisco",cph:"cisco"};
+function errBody(e){const f=e.ref&&byId(e.ref);return `<div class="d-head banner" style="${bannerStyle(ERRDOM[e.t]||"win")}"><div class="meta"><span class="pill ${e.s}">${SEV[e.s]}</span><span class="pill neutral">${esc(ETOOLS[e.t])}</span></div><div class="mono" style="font-size:clamp(17px,2.4vw,22px);font-weight:600;overflow-wrap:anywhere">${esc(e.c)}</div><h3>${esc(e.n)}</h3></div>
  <div class="d-body"><div class="err-b"><div><h5>Ce que ça veut dire</h5><p>${esc(e.m)}</p></div>
  <div class="two"><div><h5>Causes fréquentes</h5><ul>${e.cau.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div><div><h5>Que faire</h5><ol>${e.fx.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div></div>
  ${e.who?alertHTML("info",`<b>Qui prévenir :</b> ${esc(e.who)}. Donnez-lui le code exact, l'heure et ce que vous faisiez.`):""}
@@ -1763,7 +2007,7 @@ async function initCaps(){
  claude.use("sample").then(async s=>{sample=s;if(!s){$("#aimode").textContent="Recherche instantanée";return}try{const lim=await s.limits();sampleImages=!!(lim&&lim.images)}catch(_){}}).catch(()=>{});
  claude.use("downloads").then(d=>{downloads=d;if(d){$("#jcsv").hidden=false;$("#scdl").hidden=false}}).catch(()=>{});
  try{[db,user]=await Promise.all([claude.use("db"),claude.use("user")])}catch(e){db=null}
- dbLoading=false;
+ dbLoading=false;if(typeof acadSync==="function")acadSync();
  if(user&&user.can){try{const c=await user.can("data.write");if(c===false){canWrite=false;$("#j-submit").disabled=true;const m=$("#j-msg");m.hidden=false;m.textContent="Accès en lecture seule : vous pouvez consulter le journal mais pas y écrire."}}catch(_){}}
  renderJournal();if(!db)return;
  const timer=setTimeout(()=>{if(!rows.length)$("#jbody").innerHTML=`<tr><td colspan="6" class="empty">Le journal ne répond pas encore. Les données s'afficheront dès que la connexion sera rétablie.</td></tr>`},10000);
@@ -1879,21 +2123,400 @@ function domArt(k){const c=DART[k]||["#334","#889"];return `<svg class="dom-art"
 <g transform="translate(40 18) scale(1.85)" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${IC[k]||IC.guide}</g></svg>`}
 
 /* =========================================================
+   ACADÉMIE — contenu des parcours, leçons et missions
+   ========================================================= */
+const PEOPLE={
+ aicha:{name:"Aïcha Traoré",role:"Agente, service client",ph:"hero",col:"#c2410c"},
+ koffi:{name:"Koffi Yao",role:"Superviseur du plateau",ph:"agent",col:"#1c6dd0"},
+ serge:{name:"Serge N'Guessan",role:"Agent, recouvrement",ph:"casque",col:"#0b7285"},
+ fatou:{name:"Fatou Diallo",role:"Agente, service client",ph:"duo",col:"#9c36b5"},
+ marc:{name:"Marc Kouassi",role:"Comptable",ph:"rdv",col:"#2b8a3e"},
+ awa:{name:"Awa Koné",role:"Assistante de direction",ph:"portable",col:"#c92a2a"},
+ paul:{name:"Paul Konan",role:"Agent, ventes",ph:"telip",col:"#5f3dc4"},
+ coach:{name:"Coach Atelier",role:"Votre formateur",ph:"",col:"#d9480f"}
+};
+
+const UNITS=[
+{id:"u1",t:"La méthode du dépanneur",d:"Écouter, isoler, chercher, réparer, vérifier : la démarche qui marche partout.",col:["#c2410c","#ff922b"],ph:"bureau",
+ lesson:{cards:[
+  {t:"Bienvenue dans l'Atelier",txt:"Un bon dépanneur ne connaît pas toutes les pannes par cœur : il applique toujours la même méthode. Vous allez l'apprendre en 5 étapes, puis la pratiquer sur de vraies situations.",who:"coach"},
+  {t:"1. Écouter et faire préciser",txt:"Demandez : qu'est-ce qui ne marche pas exactement ? Depuis quand ? Qu'est-ce qui s'affiche à l'écran ? Notez l'heure et le message d'erreur mot pour mot."},
+  {t:"2. Mesurer l'étendue",txt:"Une personne touchée : le problème vient souvent de son poste. Tout un plateau : le réseau. Tout le centre : un serveur ou un service. Cette seule question vous fait gagner un temps énorme."},
+  {t:"3. Chercher le code et la fiche",txt:"Un code d'erreur (0x…, SIP 503, 32767…) vous donne la cause presque à coup sûr. Cherchez-le dans le Dictionnaire, ou collez une capture dans le Diagnostic.",ill:{k:"keys",v:["Win","Maj","S"],cap:"Capture d'écran d'une zone"}},
+  {t:"4. Réparer du plus simple au plus lourd",txt:"Commencez par ce qui est rapide et sans risque (rebrancher, se reconnecter, vider un cache), puis allez vers le plus lourd (redémarrer, réinstaller). Une étape à la fois, en vérifiant après chacune."},
+  {t:"5. Vérifier, noter, escalader",txt:"Faites tester par la personne. Notez l'incident dans le journal. Si rien ne marche ou si plusieurs personnes sont touchées, escaladez avec l'heure, le message et ce que vous avez déjà essayé."}],
+  qs:[{type:"qcm",q:"Tout le plateau n'a plus internet en même temps. Que concluez-vous d'abord ?",o:["C'est probablement le réseau, pas les postes","Chaque PC a un virus","Il faut réinstaller Windows partout"],a:0,x:"Quand plusieurs personnes sont touchées en même temps, la cause est commune : réseau, serveur ou service."},
+   {type:"qcm",q:"Quelle information est la plus utile à noter dès le début ?",o:["L'heure exacte et le message d'erreur mot pour mot","La couleur du fond d'écran","Le nombre de fenêtres ouvertes"],a:0,x:"L'heure et le message permettent de retrouver la cause dans les journaux et dans le Dictionnaire."},
+   {type:"order",q:"Remettez la méthode dans l'ordre",items:["Écouter et faire préciser","Mesurer l'étendue","Chercher le code et la fiche","Réparer du plus simple au plus lourd","Vérifier, noter, escalader"],x:"Toujours dans cet ordre : on comprend avant d'agir."}]},
+ nodes:[{t:"lesson"},{t:"form",f:"G-05"},{t:"match",set:"keys"},{t:"form",f:"G-09"},{t:"mission",m:"m1"}]},
+
+{id:"u2",t:"Windows & poste de travail",d:"Programmes figés, lenteurs, écrans bleus, disque plein, mises à jour.",col:["#1864ab","#4dabf7"],ph:"rdv",
+ lesson:{cards:[
+  {t:"Votre boîte à outils Windows",txt:"Trois raccourcis suffisent pour dépanner 80 % des problèmes de poste : le Gestionnaire des tâches, la fenêtre Exécuter et les Paramètres.",ill:{k:"keys",v:["Ctrl","Maj","Échap"],cap:"Gestionnaire des tâches"}},
+  {t:"Le Gestionnaire des tâches",txt:"Il montre ce qui tourne et ce qui consomme. Triez par Processeur ou Mémoire, sélectionnez un programme bloqué, puis « Fin de tâche ».",ill:{k:"taskmgr",mode:"hang"}},
+  {t:"La fenêtre Exécuter",txt:"Windows + R ouvre une petite fenêtre où l'on tape le nom d'un outil : services.msc, devmgmt.msc, appwiz.cpl, %temp%…",ill:{k:"run",v:"services.msc"}},
+  {t:"Redémarrer, vraiment",txt:"« Arrêter » garde une partie de la mémoire avec le démarrage rapide. Pour repartir de zéro, choisissez « Redémarrer »."}],
+  qs:[{type:"qcm",q:"Quel raccourci ouvre directement le Gestionnaire des tâches ?",o:["Ctrl + Maj + Échap","Alt + F4","Windows + D"],a:0,x:"Ctrl + Maj + Échap ouvre directement le Gestionnaire des tâches."},
+   {type:"qcm",q:"Pour repartir de zéro, il vaut mieux…",o:["Redémarrer","Arrêter puis rallumer","Fermer le capot"],a:0,x:"« Redémarrer » vide vraiment la mémoire ; « Arrêter » peut garder un état avec le démarrage rapide."}]},
+ nodes:[{t:"lesson"},{t:"form",f:"W-02"},{t:"codes",tools:["bsod","wu","win"]},{t:"form",f:"W-01"},{t:"cmd",set:"win"},{t:"steps",doms:["win","hw"]},{t:"mission",m:"m2"}]},
+
+{id:"u3",t:"Réseau & Internet",d:"Adresse IP, DNS, Wi-Fi, VPN, lecteurs réseau et imprimantes.",col:["#5f3dc4","#9775fa"],ph:"plateau",
+ lesson:{cards:[
+  {t:"Une adresse pour chaque PC",txt:"Chaque poste reçoit automatiquement une adresse IP du réseau. Une adresse qui commence par 169.254 veut dire : « je n'ai rien reçu ». Le PC est isolé.",ill:{k:"term",v:["ipconfig","   Adresse IPv4. . . . . . : 169.254.12.40   ← problème"]}},
+  {t:"Le DNS, l'annuaire d'internet",txt:"Le DNS traduit un nom de site en adresse. Quand il garde une vieille réponse, un site ne s'ouvre plus : on vide le cache avec ipconfig /flushdns."},
+  {t:"Câble, Wi-Fi, VPN",txt:"Au bureau, le câble est plus stable. En télétravail, le VPN relie le PC à l'entreprise : sans internet ou avec une heure fausse, il échoue."},
+  {t:"L'imprimante bloquée",txt:"Un document en erreur bloque toute la file. On annule tout, puis on redémarre le spouleur d'impression."}],
+  qs:[{type:"qcm",q:"Le PC affiche l'adresse 169.254.10.3. Cela signifie…",o:["Le PC n'a pas reçu d'adresse du réseau","Tout fonctionne normalement","Le PC a un virus"],a:0,x:"169.254 = adresse automatique de secours : rien n'a été reçu du réseau (câble, port, DHCP)."},
+   {type:"type",q:"Tapez la commande qui vide le cache DNS",a:["ipconfig /flushdns"],x:"ipconfig /flushdns efface les vieilles réponses DNS."}]},
+ nodes:[{t:"lesson"},{t:"form",f:"N-01"},{t:"codes",tools:["net","http"]},{t:"cmd",set:"net"},{t:"form",f:"I-01"},{t:"steps",doms:["net","print","web"]},{t:"mission",m:"m3"}]},
+
+{id:"u4",t:"Outlook & Teams",d:"Mails bloqués, mots de passe, réunions sans son, caméras, statuts.",col:["#4b4fb5","#3fa0ff"],ph:"casque",
+ lesson:{cards:[
+  {t:"Outlook : lire la barre du bas",txt:"« Travail hors connexion », « Besoin d'un mot de passe », « Déconnecté » : la barre en bas d'Outlook dit presque toujours ce qui ne va pas.",ill:{k:"outlook",focus:"offline"}},
+  {t:"Le mode sans échec d'Outlook",txt:"Si Outlook ne s'ouvre pas, lancez outlook.exe /safe : s'il s'ouvre ainsi, un complément est en cause.",ill:{k:"run",v:"outlook.exe /safe"}},
+  {t:"Teams : le bon casque",txt:"La plupart des problèmes de son viennent d'un mauvais périphérique choisi. Paramètres de l'appareil : même casque pour le haut-parleur et le micro.",ill:{k:"teams",focus:"devices"}},
+  {t:"Le webmail, votre témoin",txt:"Si le webmail fonctionne, le compte va bien : c'est Outlook sur le PC qui est en cause. S'il échoue aussi, c'est le compte ou le service."}],
+  qs:[{type:"qcm",q:"Outlook ne démarre plus. Quel test fait en premier ?",o:["Lancer outlook.exe /safe","Réinstaller Windows","Supprimer la boîte aux lettres"],a:0,x:"Le mode sans échec montre si un complément bloque Outlook."},
+   {type:"qcm",q:"En réunion Teams, personne ne vous entend. Premier réflexe ?",o:["Vérifier que le micro n'est pas coupé","Redémarrer le PC","Changer de navigateur"],a:0,x:"Le micro coupé (dans Teams ou sur le casque) est la cause numéro 1."}]},
+ nodes:[{t:"lesson"},{t:"form",f:"O-01"},{t:"codes",tools:["office"]},{t:"form",f:"T-01"},{t:"steps",doms:["outlook","teams","office"]},{t:"mission",m:"m4"}]},
+
+{id:"u5",t:"Microsoft Engage (CRM)",d:"Fiches clients, erreurs, droits, doublons et lien avec la téléphonie.",col:["#1c3d8f","#4c7dff"],ph:"duo",
+ lesson:{cards:[
+  {t:"Le CRM, la mémoire du client",txt:"Microsoft Engage garde l'historique de chaque client. Quand il bloque, l'agent perd le fil de l'appel : il faut aller vite et bien noter."},
+  {t:"Lire une erreur Engage",txt:"Les erreurs ont souvent un code en 0x8004… et un bouton « Télécharger le fichier journal ». Ce fichier est précieux pour l'administrateur.",ill:{k:"engage",focus:"error"}},
+  {t:"Les champs obligatoires",txt:"Un astérisque rouge * signale un champ obligatoire. Le bandeau en haut du formulaire liste ce qu'il manque.",ill:{k:"engage",focus:"required"}},
+  {t:"Les doublons",txt:"Toujours rechercher le client (par téléphone puis par nom) avant de créer une fiche. Si un doublon existe, on utilise la fiche existante ou on fusionne.",ill:{k:"engage",focus:"dup"}}],
+  qs:[{type:"qcm",q:"Le code 0x80040220 apparaît. Qu'est-ce que cela signifie ?",o:["Droits insuffisants dans le CRM","Pas d'internet","Imprimante hors ligne"],a:0,x:"0x80040220 : votre rôle ne permet pas l'action. L'administrateur CRM doit ajuster les droits."},
+   {type:"qcm",q:"Avant de créer une fiche client, vous…",o:["Recherchez le client par téléphone puis par nom","Créez directement la fiche","Demandez au client de rappeler"],a:0,x:"La recherche préalable évite les doublons."}]},
+ nodes:[{t:"lesson"},{t:"form",f:"E-02"},{t:"codes",tools:["crm"]},{t:"form",f:"E-04"},{t:"steps",doms:["crm"]},{t:"mission",m:"m5"}]},
+
+{id:"u6",t:"Cisco — poste de l'agent",d:"Finesse, états Prêt / Non prêt, téléphone IP, casque, codes de raison.",col:["#0b7285","#15aabf"],ph:"telip",
+ lesson:{cards:[
+  {t:"Finesse, le bureau de l'agent",txt:"L'agent se met Prêt pour recevoir des appels, Non prêt pour une pause. Le téléphone doit être enregistré, sinon Finesse refuse l'état Prêt.",ill:{k:"finesse"}},
+  {t:"Le téléphone IP",txt:"« Enregistrement… » à l'écran : le téléphone ne trouve pas le serveur. On compare avec le voisin, on change le câble et la prise.",ill:{k:"phone"}},
+  {t:"Les codes de raison",txt:"Quand le système change l'état d'un agent, il laisse un code : 32767 = appel non répondu, 50010 = plusieurs appels manqués, 50003 = téléphone hors service."},
+  {t:"Un agent ou plusieurs ?",txt:"Un seul agent bloqué : son poste. Plusieurs en même temps : prévenez l'administrateur, c'est le serveur ou le réseau."}],
+  qs:[{type:"qcm",q:"Le téléphone affiche « Enregistrement… ». Première action ?",o:["Comparer avec le poste voisin","Redémarrer le serveur CUCM","Changer de casque"],a:0,x:"Si le voisin fonctionne, le problème est local : câble, prise, port."},
+   {type:"qcm",q:"Le code de raison 32767 signifie…",o:["Appel non répondu, redirigé vers un autre agent","Pause déjeuner","Téléphone neuf"],a:0,x:"32767 (RONA) : l'appel a sonné sans réponse et l'agent est passé en Non prêt."}]},
+ nodes:[{t:"lesson"},{t:"form",f:"AG-01"},{t:"match",set:"rc"},{t:"form",f:"AG-03"},{t:"steps",doms:["cisco"]},{t:"mission",m:"m6"}]},
+
+{id:"u7",t:"Cisco — niveau expert",d:"Codes SIP, audio à sens unique, coupures, trunk opérateur, serveurs.",col:["#0b4f91","#15aabf"],ph:"poste",
+ lesson:{cards:[
+  {t:"Les codes SIP",txt:"Chaque appel échange des messages SIP. Les codes 4xx viennent souvent du numéro ou du destinataire, les 5xx d'un serveur ou de l'opérateur."},
+  {t:"Le chronomètre, votre allié",txt:"Un appel coupé toujours vers 32 secondes signale un message perdu (ACK). À 15 ou 30 minutes : une temporisation ou un pare-feu."},
+  {t:"Audio à sens unique",txt:"Si un seul des deux entend l'autre, la signalisation passe mais pas le son : pare-feu, NAT ou route manquante."},
+  {t:"Les certificats",txt:"Des déconnexions générales du jour au lendemain viennent très souvent d'un certificat expiré.",ill:{k:"term",admin:true,v:["show cert list own"]}}],
+  qs:[{type:"qcm",q:"Les clients entendent « occupé » et SIP 503 apparaît. Cause probable ?",o:["Trunk opérateur saturé ou hors service","Casque débranché","Mot de passe expiré"],a:0,x:"503 = service indisponible : canaux saturés ou trunk tombé."},
+   {type:"type",q:"Tapez la commande qui liste les appels actifs sur la passerelle",a:["show call active voice brief"],x:"show call active voice brief montre les appels en cours et leur état."}]},
+ nodes:[{t:"lesson"},{t:"form",f:"AU-04"},{t:"match",set:"sip"},{t:"codes",tools:["sip","cph"]},{t:"form",f:"OP-01"},{t:"cmd",set:"cisco"},{t:"mission",m:"m7"}]},
+
+{id:"u8",t:"Sécurité",d:"E-mails piégés, virus, rançongiciels : les bons réflexes.",col:["#a61e4d","#ff6b6b"],ph:"materiel",
+ lesson:{cards:[
+  {t:"L'e-mail piégé",txt:"Urgence, demande de mot de passe ou de paiement, expéditeur bizarre, lien inattendu : ce sont les signes de l'hameçonnage. On ne clique pas, on signale."},
+  {t:"Le rançongiciel",txt:"Message de rançon ou fichiers illisibles : on débranche le PC du réseau immédiatement, on ne l'éteint pas, et on appelle la sécurité."},
+  {t:"Jamais de mot de passe",txt:"Le support ne vous demandera jamais votre mot de passe, ni par téléphone ni par e-mail."}],
+  qs:[{type:"qcm",q:"Un message de rançon s'affiche. Première action ?",o:["Débrancher le PC du réseau","Payer la rançon","Éteindre et rallumer"],a:0,x:"Isoler le poste évite que d'autres machines soient touchées. On ne l'éteint pas : les traces aident les spécialistes."}]},
+ nodes:[{t:"lesson"},{t:"form",f:"S-03"},{t:"form",f:"S-02"},{t:"steps",doms:["sec","acc"]},{t:"mission",m:"m8"}]}
+];
+
+const CMDX={
+ win:[{q:"Ouvrir la liste des services Windows (Win + R)",a:["services.msc"]},{q:"Ouvrir le Gestionnaire de périphériques (Win + R)",a:["devmgmt.msc"]},{q:"Ouvrir la liste des programmes installés (Win + R)",a:["appwiz.cpl"]},{q:"Ouvrir le dossier des fichiers temporaires (Win + R)",a:["%temp%"]},{q:"Vérifier et réparer les fichiers système",a:["sfc /scannow"]},{q:"Lancer le test de la mémoire (Win + R)",a:["mdsched.exe","mdsched"]}],
+ net:[{q:"Afficher l'adresse IP du PC",a:["ipconfig"]},{q:"Redemander une adresse IP au réseau",a:["ipconfig /renew"]},{q:"Vider le cache DNS",a:["ipconfig /flushdns"]},{q:"Tester si l'adresse 8.8.8.8 répond",a:["ping 8.8.8.8"]},{q:"Appliquer les règles de l'entreprise",a:["gpupdate /force"]},{q:"Resynchroniser l'heure du PC",a:["w32tm /resync"]}],
+ cisco:[{q:"Passerelle : lister les appels actifs",a:["show call active voice brief"]},{q:"Passerelle : lister les appels SIP",a:["show sip-ua calls"]},{q:"CUCM : voir l'état de la réplication",a:["utils dbreplication runtimestate"]},{q:"CUCM : lister les services",a:["utils service list"]},{q:"Switch : voir l'alimentation PoE des ports",a:["show power inline"]}]
+};
+
+const MISSIONS={
+ m1:{t:"« Mon ordinateur ne marche pas »",who:"marc",brief:"Marc, à la comptabilité, vous appelle paniqué : « Mon ordinateur ne marche pas ! » C'est tout ce qu'il dit.",
+  steps:[{say:"Mon ordinateur ne marche pas, il faut venir tout de suite !",q:"Que lui répondez-vous ?",c:[["Qu'est-ce qui s'affiche à l'écran, exactement ?",1,"Parfait : on fait préciser avant d'agir."],["Redémarrez-le, ça va passer.",0,"Trop tôt : sans savoir ce qui se passe, on risque de perdre son travail et l'indice."],["Je préviens le support de niveau 2.",0,"On n'escalade pas un problème qu'on n'a pas encore compris."]]},
+   {say:"Excel est tout blanc et le titre dit « Ne répond pas ».",q:"Que demandez-vous ensuite ?",c:[["Depuis quand ? Avez-vous un fichier non enregistré ?",1,"Bien vu : on protège son travail avant de forcer quoi que ce soit."],["Avez-vous un antivirus ?",0,"Pas le sujet ici : c'est un programme figé."],["Quelle est la marque du PC ?",0,"Cela n'aide pas à débloquer Excel."]]},
+   {say:"Ça fait 1 minute. J'ai enregistré il y a 10 minutes.",q:"Votre action ?",c:[["Patienter 30 s, puis Fin de tâche sur Excel dans le Gestionnaire des tâches",1,"Exactement la méthode de la fiche W-02."],["Débrancher le PC",0,"Beaucoup trop brutal : tout le reste serait perdu."],["Désinstaller Excel",0,"Inutile : il suffit de fermer le programme figé."]]},
+   {say:"Excel s'est rouvert et a récupéré mon fichier, merci !",q:"Pour finir ?",c:[["Noter l'incident dans le journal",1,"Le journal permet de repérer si le problème revient."],["Ne rien faire, c'est réglé",0,"Sans trace, impossible de voir si Excel se fige souvent."],["Lui dire de ne plus utiliser Excel",0,"Ce n'est pas une solution."]]}],
+  end:"Mission réussie : vous avez fait préciser, protégé le travail de Marc et appliqué la bonne fiche."},
+ m2:{t:"PC trop lent avant une réunion",who:"awa",brief:"Awa doit présenter en réunion dans 15 minutes. Son PC est devenu très lent ce matin.",
+  steps:[{say:"Tout rame, la souris saccade, je dois présenter dans 15 minutes !",q:"Premier geste ?",c:[["Ouvrir le Gestionnaire des tâches et trier par Processeur",1,"On voit tout de suite ce qui consomme."],["Lancer une défragmentation du disque",0,"Bien trop long, et rarement la cause."],["Réinstaller Windows",0,"Disproportionné et impossible en 15 minutes."]]},
+   {say:"Il y a « Logiciel de mise à jour » à 78 % de processeur.",q:"Que faites-vous ?",c:[["Le laisser finir s'il s'agit d'une mise à jour Windows, sinon Fin de tâche si ce n'est pas un outil de l'entreprise",1,"Prudent : on ne coupe pas une mise à jour Windows en cours, mais un logiciel inutile, oui."],["Supprimer le dossier Windows",0,"Surtout pas !"],["Débrancher le chargeur",0,"Cela n'a aucun effet sur le processeur."]]},
+   {say:"C'est mieux. Mais il y a plein de programmes au démarrage.",q:"Pour éviter que ça revienne ?",c:[["Désactiver les applications inutiles au démarrage",1,"Moins de programmes au démarrage = PC plus rapide."],["Désactiver l'antivirus au démarrage",0,"Jamais : l'antivirus protège le PC."],["Rien, c'est normal",0,"On peut améliorer facilement la situation."]]},
+   {say:"Et le disque C: est rouge dans l'Explorateur.",q:"Que proposez-vous après la réunion ?",c:[["Nettoyage de disque et vider %temp%",1,"La fiche W-06 libère de l'espace sans risque."],["Supprimer ses documents",0,"On ne supprime jamais les documents de quelqu'un."],["Acheter un nouveau PC",0,"Un nettoyage suffit souvent."]]}],
+  end:"Mission réussie : Awa présente à l'heure et son PC repart sur de bonnes bases."},
+ m3:{t:"Plus d'internet sur le plateau",who:"koffi",brief:"Koffi, superviseur, signale qu'un agent n'a plus internet ni accès au CRM.",
+  steps:[{say:"Serge n'a plus rien : pas d'internet, pas de CRM.",q:"Votre première question ?",c:[["Les autres agents sont-ils touchés ?",1,"La question qui oriente tout : un poste ou tout le réseau ?"],["Serge a-t-il changé son mot de passe ?",0,"Cela n'explique pas la perte d'internet."],["Quelle version de Windows ?",0,"Pas prioritaire."]]},
+   {say:"Non, seulement Serge. Ses voisins vont bien.",q:"Que vérifiez-vous ?",c:[["Le câble réseau et les voyants du port",1,"Un poste isolé : on commence par le physique."],["Le serveur DNS de l'entreprise",0,"Les voisins vont bien : le serveur fonctionne."],["Le trunk opérateur",0,"Rien à voir avec internet sur un seul poste."]]},
+   {say:"Le câble semble branché. ipconfig affiche 169.254.12.40.",q:"Qu'en déduisez-vous ?",c:[["Le PC ne reçoit pas d'adresse : câble, prise ou port du switch",1,"169.254 = aucune adresse reçue."],["Tout est normal",0,"169.254 n'est jamais normal sur un réseau d'entreprise."],["Le PC a un virus",0,"Rien ne l'indique."]]},
+   {say:"J'ai changé de câble et de prise. Que faire maintenant ?",q:"Commande suivante ?",c:[["ipconfig /renew",1,"On redemande une adresse au réseau."],["sfc /scannow",0,"Utile pour les fichiers système, pas pour le réseau."],["shutdown /s",0,"Éteindre ne règle rien."]]}],
+  end:"Mission réussie : Serge a une adresse et retrouve internet et le CRM."},
+ m4:{t:"Réunion Teams sans son",who:"fatou",brief:"Fatou anime une réunion d'équipe sur Teams : personne ne l'entend.",
+  steps:[{say:"Ils me disent tous qu'ils ne m'entendent pas !",q:"Premier réflexe ?",c:[["Vérifier que le micro n'est pas barré dans la barre de réunion",1,"Cause numéro 1, et ça se règle en une seconde."],["Quitter Teams et le désinstaller",0,"Beaucoup trop lourd."],["Redémarrer la box",0,"Le son des autres arrive : la connexion fonctionne."]]},
+   {say:"Le micro n'est pas barré. Mais j'ai branché mon casque après le début.",q:"Que faites-vous ?",c:[["Paramètres de l'appareil : choisir le casque pour le micro et le haut-parleur",1,"Teams a gardé l'ancien périphérique."],["Parler plus fort",0,"Le micro sélectionné n'est pas le bon."],["Changer de navigateur",0,"Ce n'est pas lié au navigateur."]]},
+   {say:"Le casque est choisi, la barre du micro ne bouge pas quand je parle.",q:"Ensuite ?",c:[["Vérifier le bouton muet sur le fil du casque",1,"Beaucoup de casques ont un muet physique."],["Changer son mot de passe",0,"Aucun rapport."],["Vider le cache DNS",0,"Aucun rapport avec le micro."]]},
+   {say:"Il était sur muet ! Tout le monde m'entend.",q:"Pour la prochaine fois ?",c:[["Brancher le casque avant d'ouvrir Teams et faire un appel de test",1,"Le bon réflexe avant une réunion importante."],["Ne plus utiliser de casque",0,"Le casque est indispensable au centre d'appels."],["Rien",0,"Un petit test évite le stress la prochaine fois."]]}],
+  end:"Mission réussie : la réunion de Fatou reprend avec le son."},
+ m5:{t:"Impossible d'enregistrer la fiche",who:"aicha",brief:"Aïcha est en ligne avec un client et Microsoft Engage refuse d'enregistrer la fiche.",
+  steps:[{say:"J'appuie sur Enregistrer et il y a un bandeau rouge en haut !",q:"Que lui demandez-vous ?",c:[["Que dit le bandeau rouge ?",1,"Le bandeau liste précisément ce qui bloque."],["Fermez Engage et rouvrez-le",0,"Elle perdrait sa saisie."],["Rappelez le client plus tard",0,"On peut sûrement régler ça tout de suite."]]},
+   {say:"« 1 champ obligatoire est vide : Téléphone ».",q:"Solution ?",c:[["Cliquer sur le lien du bandeau et remplir le téléphone",1,"Le lien amène directement au champ concerné."],["Appeler l'administrateur CRM",0,"Inutile : c'est une simple saisie manquante."],["Supprimer la fiche",0,"Surtout pas."]]},
+   {say:"Enregistré ! Mais un autre message : « Doublons détectés ».",q:"Que conseillez-vous ?",c:[["Utiliser la fiche existante du client",1,"On évite de créer un doublon."],["Ignorer et enregistrer quand même",0,"Cela crée un doublon et éparpille l'historique."],["Créer une troisième fiche",0,"Encore pire."]]},
+   {say:"Plus tard, une erreur 0x80040220 en voulant affecter le dossier.",q:"Que faites-vous ?",c:[["Télécharger le fichier journal et prévenir l'administrateur CRM : c'est un problème de droits",1,"0x80040220 = droits insuffisants : seul l'administrateur peut corriger."],["Réessayer 20 fois",0,"Les droits ne changeront pas tout seuls."],["Vider le cache DNS",0,"Ce n'est pas un problème réseau."]]}],
+  end:"Mission réussie : la fiche est enregistrée sans doublon et le problème de droits est remonté."},
+ m6:{t:"Agente bloquée en Non prêt",who:"aicha",brief:"Aïcha est bloquée en « Non prêt » depuis 10 minutes. Des clients attendent dans la file.",
+  steps:[{say:"Je clique sur Prêt mais ça revient tout seul en Non prêt !",q:"Votre première vérification ?",c:[["Que voit-elle sur l'écran de son téléphone ?",1,"Un téléphone non enregistré empêche de passer Prêt."],["Redémarrer son PC tout de suite",0,"Trop tôt : on cherche d'abord la cause simple."],["Appeler le support Cisco",0,"On escalade après les vérifications de base."]]},
+   {say:"Le téléphone affiche normalement mon numéro.",q:"Et ensuite ?",c:[["Vérifier qu'aucun appel n'est resté en attente sur la ligne",1,"Un appel fantôme bloque souvent l'état."],["Changer le câble du téléphone",0,"Le téléphone est enregistré : le câble va bien."],["Vider le cache du navigateur",0,"Pas encore : il y a plus simple."]]},
+   {say:"Rien en attente… toujours bloquée.",q:"Que faites-vous ?",c:[["Se déconnecter de Finesse puis se reconnecter avec la bonne extension",1,"Cela resynchronise l'agent avec le serveur."],["Changer son mot de passe",0,"Aucun rapport avec l'état de l'agent."],["Attendre la fin de journée",0,"Des clients attendent !"]]},
+   {say:"Ça marche ! Mais Paul, à côté, a le même souci.",q:"Votre réaction ?",c:[["Noter l'incident et prévenir l'administrateur : plusieurs agents = problème serveur",1,"Le bon réflexe : un problème collectif doit être signalé."],["Faire la même manipulation à tous sans rien dire",0,"Le problème reviendra sans que personne ne cherche la cause."],["Dire à Paul d'attendre",0,"Les clients attendent aussi."]]}],
+  end:"Mission réussie : Aïcha est de nouveau Prête et le problème collectif est signalé."},
+ m7:{t:"Les clients entendent « occupé »",who:"koffi",brief:"Koffi : « Les files sont vides, mais des clients nous disent qu'ils entendent occupé ! »",
+  steps:[{say:"Plus aucun appel n'arrive depuis 10 h 05.",q:"Premier test ?",c:[["Appeler le centre depuis un portable externe",1,"On vit ce que vit le client."],["Redémarrer tous les PC",0,"Les PC ne reçoivent pas les appels de l'extérieur."],["Vider les caches des navigateurs",0,"Aucun rapport."]]},
+   {say:"Depuis mon portable : tonalité d'occupation immédiate.",q:"Où regardez-vous ?",c:[["L'état du trunk SIP et de la passerelle",1,"L'entrée des appels passe par le trunk opérateur."],["Les certificats Finesse",0,"Finesse n'empêche pas les appels d'arriver."],["Les imprimantes",0,"Aucun rapport."]]},
+   {say:"Les traces montrent « SIP 503 Service Unavailable ».",q:"Votre conclusion ?",c:[["Le trunk est saturé ou hors service : prévenir l'administrateur voix et l'opérateur en urgence",1,"503 = service indisponible côté voix."],["Un agent a mal tapé un numéro",0,"Cela ne bloquerait pas tous les appels entrants."],["Un client a raccroché",0,"Ce serait un 487, pas un 503."]]},
+   {say:"L'opérateur confirme un incident. Que faites-vous pendant ce temps ?",q:"Action ?",c:[["Noter l'heure de début et prévenir les superviseurs",1,"Tout le monde est informé et l'incident est tracé."],["Couper la passerelle",0,"Cela empêcherait le retour du service."],["Ne rien dire",0,"Les équipes doivent savoir."]]}],
+  end:"Mission réussie : l'incident opérateur est identifié et suivi."},
+ m8:{t:"Un e-mail suspect",who:"paul",brief:"Paul reçoit un e-mail « urgent » lui demandant de confirmer son mot de passe.",
+  steps:[{say:"Un mail du « support » me demande de cliquer pour garder mon compte actif.",q:"Votre conseil ?",c:[["Ne pas cliquer et vérifier l'adresse de l'expéditeur",1,"L'urgence et la demande d'identifiants sont des signaux d'alarme."],["Cliquer pour voir",0,"C'est exactement ce que veut l'escroc."],["Répondre pour demander si c'est vrai",0,"On ne répond jamais à un message suspect."]]},
+   {say:"L'adresse est support@micr0soft-securite.co.",q:"Que faites-vous ?",c:[["Signaler le message avec le bouton Signaler",1,"Le signalement protège aussi les collègues."],["Le transférer à toute l'équipe",0,"On risque que quelqu'un clique."],["Le garder au cas où",0,"On le signale puis on le supprime."]]},
+   {say:"Oups… j'avais déjà cliqué et tapé mon mot de passe.",q:"Action immédiate ?",c:[["Changer le mot de passe tout de suite et prévenir le support",1,"Plus c'est rapide, moins c'est grave. Ce n'est pas une faute."],["Ne rien dire par honte",0,"Le silence aide l'attaquant."],["Éteindre le PC",0,"Le problème, c'est le mot de passe volé."]]}],
+  end:"Mission réussie : le compte de Paul est protégé et l'attaque signalée."}
+};
+
+const LEVELS=["Stagiaire","Dépanneur débutant","Dépanneur","Dépanneur confirmé","Technicien support","Expert support","Maître du dépannage"];
+const BADGES=[
+ {id:"first",t:"Premier pas",d:"Terminer une première étape",},
+ {id:"mission1",t:"En mission",d:"Réussir une mission",},
+ {id:"missions4",t:"Pompier du plateau",d:"Réussir 4 missions",},
+ {id:"perfect",t:"Sans faute",d:"Terminer une étape sans erreur",},
+ {id:"streak3",t:"Régulier",d:"3 jours d'affilée",},
+ {id:"streak7",t:"Assidu",d:"7 jours d'affilée",},
+ {id:"cisco",t:"Expert Cisco",d:"Terminer les deux parcours Cisco",},
+ {id:"q100",t:"Encyclopédie",d:"100 bonnes réponses",},
+ {id:"all",t:"Diplômé de l'Atelier",d:"Terminer tous les parcours",}
+];
+
+/* =========================================================
+   ACADÉMIE — moteur : parcours, leçons, exercices, missions
+   ========================================================= */
+Object.assign(IC,{
+ academie:'<path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5M22 9v6"/>',
+ flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+ list:'<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.2"/><circle cx="4.5" cy="12" r="1.2"/><circle cx="4.5" cy="18" r="1.2"/>',
+ link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+ star:'<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+ flame:'<path d="M12 22c4 0 7-2.8 7-6.8 0-3.6-2.4-5.6-3.6-8.2-.6 2-1.6 3-2.8 3.4C13 7 11.6 4.4 9 2c.4 3.6-1.6 5.6-3 7.4C4.8 11 5 13 5 15.2 5 19.2 8 22 12 22z"/>',
+ heart:'<path d="M12 20s-7-4.4-9.2-8.6C1.2 8.2 3 4.5 6.6 4.5c2.1 0 3.5 1.2 5.4 3.2 1.9-2 3.3-3.2 5.4-3.2 3.6 0 5.4 3.7 3.8 6.9C19 15.6 12 20 12 20z"/>',
+ lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+ bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
+ trophy:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/>'
+});
+const NODEINFO={lesson:["guides","Leçon"],form:["academie","Formation"],codes:["erreurs","Codes d'erreur"],steps:["list","Bons réflexes"],match:["link","Associer"],cmd:["scripts","Commandes"],mission:["flag","Mission"]};
+const BADGE_IC={first:"check",mission1:"pannes",missions4:"sec",perfect:"star",streak3:"flame",streak7:"bolt",cisco:"cisco",q100:"guides",all:"academie"};
+
+/* ---------- Progression ---------- */
+const AC_KEY="academie-v1";
+let AC=Object.assign({xp:0,days:{},done:{},badges:[],correct:0,missions:{},last:null},store.get(AC_KEY,{}));
+let acDocRef=null,acPushT=null;
+function dayKey(d=new Date()){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
+function acSave(){store.set(AC_KEY,AC);if(acDocRef){clearTimeout(acPushT);acPushT=setTimeout(()=>{acDocRef.set(JSON.parse(JSON.stringify(AC))).catch(()=>{})},1500)}}
+async function acadSync(){try{if(!db||!user)return;const id=await user.id();if(!id)return;acDocRef=db.doc("data/users/"+id+"/academie");const s=await acDocRef.get();
+ if(s.exists){const r=s.data();if((r.xp||0)>AC.xp){AC=Object.assign({xp:0,days:{},done:{},badges:[],correct:0,missions:{}},JSON.parse(JSON.stringify(r)));store.set(AC_KEY,AC);renderAcad()}else if(AC.xp>(r.xp||0))acSave()}else if(AC.xp)acSave()}catch(e){acDocRef=null}}
+function streak(){let n=0;const d=new Date();if(!(AC.days[dayKey(d)]>0))d.setDate(d.getDate()-1);while(AC.days[dayKey(d)]>0){n++;d.setDate(d.getDate()-1)}return n}
+function lvl(){const per=150,i=Math.min(Math.floor(AC.xp/per),LEVELS.length-1);return {i,name:LEVELS[i],into:i===LEVELS.length-1?per:AC.xp-i*per,per}}
+const GOAL=50;
+const nodeId=(u,i)=>u.id+"-"+i;
+function unlocked(u,i){return i===0||!!AC.done[nodeId(u,i-1)]}
+function unitDone(u){return u.nodes.filter((_,i)=>AC.done[nodeId(u,i)]).length}
+function nextNode(){for(const u of UNITS)for(let i=0;i<u.nodes.length;i++)if(!AC.done[nodeId(u,i)]&&unlocked(u,i))return [u,i];return null}
+
+/* ---------- Fabrique d'exercices ---------- */
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=(a,n)=>shuffle(a).slice(0,n);
+function qcm(q,good,bad,x){const o=shuffle([good,...pick(bad.filter(b=>b&&b!==good),3)]);return {type:"qcm",q,o,a:o.indexOf(good),x}}
+function codeQs(tools,n=6){const pool=ERR.filter(e=>tools.includes(e.t));return pick(pool,n).map((e,i)=>{const others=ERR.filter(x=>x!==e&&(x.t===e.t||tools.includes(x.t)));
+ return i%2===0?qcm(`Que signifie « ${e.c} » ?`,e.n,others.map(x=>x.n),e.m):qcm(`Quel code correspond à : « ${e.n} » ?`,e.c,others.map(x=>x.c),e.m)})}
+function firstStepQ(p){const bad=FICHES.filter(x=>x!==p&&x.st&&x.st[0]).map(x=>x.st[0].t);return qcm(`« ${p.t} » : que faites-vous en premier ?`,p.st[0].t,bad,p.st[0].d||"C'est la première étape de la fiche "+p.id+".")}
+function causeQ(p){if(!p.cau||!p.cau.length)return null;const bad=FICHES.filter(x=>x.d!==p.d&&x.cau).flatMap(x=>x.cau);return qcm(`Quelle est une cause probable de : « ${p.t} » ?`,p.cau[0],bad,"Causes fréquentes : "+p.cau.slice(0,3).join(" ; ")+".")}
+function orderQ(p){const it=p.st.slice(0,Math.min(5,p.st.length)).map(s=>s.t);return it.length>=3?{type:"order",q:`Remettez dans l'ordre les étapes : « ${p.t} »`,items:it,x:"C'est l'ordre de la fiche "+p.id+" : du plus simple au plus lourd."}:null}
+function buildEx(u,node){const t=node.t;
+ if(t==="lesson")return [...u.lesson.cards.map(c=>({type:"card",...c})),...u.lesson.qs.map(q=>({...q}))];
+ if(t==="form"){const p=byId(node.f);const cards=[{type:"card",t:p.t,txt:(p.intro||(p.sym?"Ce que l'on voit : "+p.sym.join(" · ")+".":"")),banner:p.d==="guide"?"guide":p.d,tag:`Formation · ${p.id}`},
+   ...p.st.map((s,i)=>({type:"card",t:`Étape ${i+1} : ${s.t}`,txt:s.d||"",ill:s.ill,cmd:s.cmd,tag:`${p.id} · étape ${i+1}/${p.st.length}`}))];
+  return [...cards,orderQ(p),causeQ(p),p.st[0]?firstStepQ(p):null].filter(Boolean)}
+ if(t==="codes")return codeQs(node.tools,6);
+ if(t==="steps"){const fs=pick(FICHES.filter(p=>node.doms.includes(p.d)&&p.st&&p.st.length>=3),4);const out=[];fs.forEach((p,i)=>{const q=i===0?orderQ(p):i%2?firstStepQ(p):causeQ(p)||firstStepQ(p);if(q)out.push(q)});return out}
+ if(t==="match"){let pairs;if(node.set==="keys")pairs=pick(byId("G-10").table,5).map(r=>[r[0],r[1]]);else pairs=pick(ERR.filter(e=>e.t===node.set),5).map(e=>[e.c,e.n]);
+  return [{type:"match",q:node.set==="keys"?"Associez chaque raccourci à son action":"Associez chaque code à sa signification",pairs,x:"Bien joué !"},...(node.set==="keys"?[]:codeQs([node.set],3))]}
+ if(t==="cmd")return pick(CMDX[node.set],5).map(c=>({type:"type",q:c.q,a:c.a,x:"Réponse : "+c.a[0]}));
+ if(t==="mission"){const m=MISSIONS[node.m];return [{type:"brief",m:node.m},...m.steps.map(s=>({type:"mstep",m:node.m,...s}))]}
+ return []}
+function dailyEx(){const out=[...codeQs(Object.keys(ETOOLS),3)];pick(FICHES.filter(p=>p.st&&p.st.length>=3),3).forEach((p,i)=>{const q=i?firstStepQ(p):orderQ(p);if(q)out.push(q)});pick([...CMDX.win,...CMDX.net],2).forEach(c=>out.push({type:"type",q:c.q,a:c.a,x:"Réponse : "+c.a[0]}));return shuffle(out)}
+
+/* ---------- Lecteur d'exercices ---------- */
+let PL=null;
+function startNode(ui,i){const u=UNITS[ui];const ex=buildEx(u,u.nodes[i]);PL={key:nodeId(u,i),title:u.t,kind:u.nodes[i].t,mission:u.nodes[i].m,col:u.col,q:ex,i:0,hearts:5,ok:0,ko:0,xp:0,start:Date.now()};openPL()}
+function startDaily(){PL={key:"daily-"+dayKey(),title:"Défi du jour",kind:"daily",col:["#d9480f","#f59f00"],q:dailyEx(),i:0,hearts:5,ok:0,ko:0,xp:0,start:Date.now()};openPL()}
+function startMission(id){const ui=UNITS.findIndex(u=>u.nodes.some(n=>n.m===id));const i=UNITS[ui].nodes.findIndex(n=>n.m===id);startNode(ui,i)}
+function openPL(){const el=$("#player");el.hidden=false;el.style.setProperty("--u1",PL.col[0]);el.style.setProperty("--u2",PL.col[1]);document.documentElement.classList.add("noscroll");renderPL()}
+function closePL(){$("#player").hidden=true;document.documentElement.classList.remove("noscroll");PL=null;renderAcad()}
+function plHead(){const pct=Math.round(PL.i/PL.q.length*100);return `<div class="pl-top"><button class="pl-x" id="plx" aria-label="Quitter">${svgI("x",2.4)}</button><div class="pl-bar"><i style="width:${pct}%"></i></div><span class="pl-hearts">${svgI("heart",2)}<b>${PL.hearts}</b></span></div>`}
+IC.x='<path d="M6 6l12 12M18 6 6 18"/>';
+function renderPL(){const it=PL.q[PL.i];PL.sel=null;PL.done=false;PL.order=[];PL.mt={l:null,ok:new Set()};
+ let body="";const t=it.type;
+ if(t==="card"){const numM=/^(\d)\. /.exec(it.t);body=`<div class="pl-card ${it.banner?"":"plain"}">${it.banner?"":`<span class="pl-deco"></span>`}${it.banner?`<div class="pl-banner" style="${bannerStyle(it.banner)}"><span>${esc(it.tag||"")}</span><h2>${esc(it.t)}</h2></div>`:`${it.tag?`<div class="pl-tag">${esc(it.tag)}</div>`:""}${it.who?`<div class="pl-coach">${avatar(PEOPLE[it.who],64)}<div class="pl-say">${esc(it.txt)}</div></div>`:""}${numM?`<span class="pl-num">${numM[1]}</span>`:""}<h2 class="pl-h">${esc(numM?it.t.slice(3):it.t)}</h2>`}
+  ${it.who?"":`<p class="pl-p">${esc(it.txt)}</p>`}${it.ill?`<div class="pl-ill">${ill(it.ill)}</div>`:""}${it.cmd?cmdHTML(it.cmd):""}</div>`}
+ else if(t==="brief"){const m=MISSIONS[it.m],p=PEOPLE[m.who];body=`<div class="pl-brief"><div class="pl-brief-ph" style="${photoBg(p.ph,900,"linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(8,15,27,.9))",`linear-gradient(135deg,${p.col},#0e1a2b)`)}"><span class="pl-tag light">Mission</span><h2>${esc(m.t)}</h2></div>
+  <div class="pl-brief-b">${avatar(p,72)}<div><b>${esc(p.name)}</b><span>${esc(p.role)}</span></div></div><p class="pl-p">${esc(m.brief)}</p><p class="note">Choisissez la bonne réaction à chaque étape. Une erreur coûte une vie, mais vous pouvez réessayer.</p></div>`}
+ else if(t==="mstep"){const m=MISSIONS[it.m],p=PEOPLE[m.who];PL.opts=PL.opts&&PL.opts.key===PL.i?PL.opts:{key:PL.i,list:shuffle(it.c.map((c,k)=>({t:c[0],ok:!!c[1],fb:c[2],k}))),off:new Set()};
+  body=`<div class="pl-chat">${avatar(p,60)}<div class="pl-bubble"><b>${esc(p.name)}</b>${esc(it.say)}</div></div><h2 class="pl-h">${esc(it.q)}</h2><div class="pl-opts">${PL.opts.list.map((o,k)=>`<button class="pl-opt" data-k="${k}" ${PL.opts.off.has(k)?"disabled":""}><kbd>${k+1}</kbd><span>${esc(o.t)}</span></button>`).join("")}</div>`}
+ else if(t==="qcm"){body=`<h2 class="pl-h">${esc(it.q)}</h2><div class="pl-opts">${it.o.map((o,k)=>`<button class="pl-opt" data-k="${k}"><kbd>${k+1}</kbd><span>${esc(o)}</span></button>`).join("")}</div>`}
+ else if(t==="order"){PL.bank=PL.bank&&PL.bank.key===PL.i?PL.bank:{key:PL.i,list:shuffle(it.items)};body=`<h2 class="pl-h">${esc(it.q)}</h2><p class="note">Touchez les étapes dans le bon ordre. Touchez une étape placée pour la retirer.</p><ol class="pl-line" id="plline"></ol><div class="pl-bank" id="plbank"></div>`}
+ else if(t==="match"){PL.right=shuffle(it.pairs.map((p,k)=>k));body=`<h2 class="pl-h">${esc(it.q)}</h2><div class="pl-match"><div id="mL">${it.pairs.map((p,k)=>`<button class="pl-m" data-l="${k}">${esc(p[0])}</button>`).join("")}</div><div id="mR">${PL.right.map(k=>`<button class="pl-m" data-r="${k}">${esc(it.pairs[k][1])}</button>`).join("")}</div></div>`}
+ else if(t==="type"){body=`<h2 class="pl-h">${esc(it.q)}</h2><div class="pl-type"><span class="mono">C:\\&gt;</span><input id="pltype" autocomplete="off" spellcheck="false" placeholder="Tapez la commande…"></div><p class="note">Majuscules et espaces en trop ne comptent pas.</p>`}
+ const cta=t==="card"||t==="brief"?(t==="brief"?"Commencer la mission":"Continuer"):"Vérifier";
+ $("#player").innerHTML=`<div class="pl-in">${plHead()}<div class="pl-body" data-t="${t}">${body}</div></div><div class="pl-foot" id="plfoot"><div class="pl-in pl-foot-in"><div class="pl-fb" id="plfb"></div><button class="btn primary big" id="plgo" ${t==="card"||t==="brief"?"":"disabled"}>${cta}</button></div></div>`;
+ $("#plx").onclick=()=>{if(PL.i===0||confirmQuit())closePL()};
+ const go=$("#plgo");
+ if(t==="card"||t==="brief"){go.onclick=next;go.focus();return}
+ if(t==="qcm"||t==="mstep"){$("#player").querySelectorAll(".pl-opt").forEach(b=>b.onclick=()=>{if(PL.done)return;$("#player").querySelectorAll(".pl-opt").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");PL.sel=+b.dataset.k;go.disabled=false})}
+ if(t==="order")renderOrder();
+ if(t==="match")bindMatch(it);
+ if(t==="type"){const inp=$("#pltype");inp.focus();inp.oninput=()=>{go.disabled=!inp.value.trim()}}
+ go.onclick=check}
+function confirmQuit(){const f=$("#plfb");if(f.dataset.q){return true}f.dataset.q="1";f.innerHTML=`<b>Quitter ?</b> Votre progression dans cette étape sera perdue. Recliquez sur la croix pour confirmer.`;f.className="pl-fb warn";return false}
+function renderOrder(){const it=PL.q[PL.i];const go=$("#plgo");$("#plline").innerHTML=PL.order.map((s,k)=>`<li><button class="pl-chip on" data-o="${k}">${esc(s)}</button></li>`).join("")||`<li class="pl-ph">Les étapes choisies s'affichent ici</li>`;
+ $("#plbank").innerHTML=PL.bank.list.map((s,k)=>`<button class="pl-chip" data-b="${k}" ${PL.order.includes(s)?"disabled":""}>${esc(s)}</button>`).join("");
+ $("#plline").querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>{if(PL.done)return;PL.order.splice(+b.dataset.o,1);renderOrder()});
+ $("#plbank").querySelectorAll("[data-b]").forEach(b=>b.onclick=()=>{if(PL.done)return;PL.order.push(PL.bank.list[+b.dataset.b]);renderOrder()});
+ go.disabled=PL.order.length!==it.items.length}
+function bindMatch(it){const root=$("#player");root.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{if(PL.mt.ok.has(+b.dataset.l))return;root.querySelectorAll("[data-l]").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");PL.mt.l=+b.dataset.l});
+ root.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{const r=+b.dataset.r;if(PL.mt.l===null||PL.mt.ok.has(r))return;const L=root.querySelector(`[data-l="${PL.mt.l}"]`);
+  if(r===PL.mt.l){PL.mt.ok.add(r);L.classList.remove("sel");L.classList.add("ok");b.classList.add("ok");L.disabled=b.disabled=true;PL.mt.l=null;
+   if(PL.mt.ok.size===it.pairs.length){PL.ok++;PL.xp+=10;feedback(true,it.x||"Toutes les paires sont correctes.")}}
+  else{b.classList.add("bad");L.classList.add("bad");setTimeout(()=>{b.classList.remove("bad");L.classList.remove("bad")},500);loseHeart()}})}
+function loseHeart(){PL.hearts--;PL.ko++;const h=$("#player .pl-hearts b");if(h){h.textContent=PL.hearts;h.parentElement.classList.remove("hit");void h.offsetWidth;h.parentElement.classList.add("hit")}if(PL.hearts<=0)setTimeout(failPL,600)}
+const normCmd=s=>norm(s).replace(/\s+/g," ").trim();
+function check(){const it=PL.q[PL.i];let good=false,x=it.x||"",ans="";
+ if(it.type==="qcm"){good=PL.sel===it.a;ans=it.o[it.a];$("#player").querySelectorAll(".pl-opt").forEach((b,k)=>{if(k===it.a)b.classList.add("ok");else if(k===PL.sel)b.classList.add("bad")})}
+ if(it.type==="mstep"){const o=PL.opts.list[PL.sel];good=o.ok;x=o.fb;const b=$("#player").querySelectorAll(".pl-opt")[PL.sel];b.classList.add(good?"ok":"bad");if(!good)PL.opts.off.add(PL.sel)}
+ if(it.type==="order"){good=PL.order.every((s,k)=>s===it.items[k]);ans=it.items.map((s,k)=>`${k+1}. ${s}`).join("  ·  ");$("#plline").classList.add(good?"ok":"bad")}
+ if(it.type==="type"){const v=normCmd($("#pltype").value);good=it.a.some(a=>normCmd(a)===v);ans=it.a[0];$("#pltype").disabled=true;$("#player .pl-type").classList.add(good?"ok":"bad")}
+ if(good){PL.ok++;PL.xp+=10}else{loseHeart();if(it.type!=="mstep")PL.q.push({...it,retry:true})}
+ feedback(good,x,good?"":ans)}
+function feedback(good,x,ans){PL.done=true;const f=$("#plfoot");f.className="pl-foot "+(good?"good":"bad");const praise=["Bravo !","Excellent !","Parfait !","Bien joué !","Exact !"];
+ $("#plfb").className="pl-fb";$("#plfb").innerHTML=`<span class="pl-fi">${svgI(good?"check":"x",3)}</span><div><b>${good?praise[Math.floor(Math.random()*praise.length)]:"Pas tout à fait"}</b>${ans?`<span>Bonne réponse : ${esc(ans)}</span>`:""}${x?`<span>${esc(x)}</span>`:""}</div>`;
+ const go=$("#plgo");go.disabled=false;const it=PL.q[PL.i];const again=!good&&it.type==="mstep";go.textContent=again?"Réessayer":"Continuer";go.onclick=again?()=>renderPL():next;go.focus()}
+function next(){if(PL.hearts<=0)return failPL();PL.i++;if(PL.i>=PL.q.length)return finishPL();renderPL()}
+function failPL(){$("#player").innerHTML=`<div class="pl-in pl-end"><div class="pl-end-ic bad">${svgI("heart",2)}</div><h2>Plus de vies</h2><p class="pl-p">Pas d'inquiétude : relisez la leçon ou la fiche, puis recommencez. C'est en se trompant qu'on apprend.</p><div class="pl-end-b"><button class="btn primary big" id="plre">Recommencer</button><button class="btn big" id="plq">Revenir au parcours</button></div></div>`;
+ const k=PL.key;$("#plq").onclick=closePL;$("#plre").onclick=()=>{if(k.startsWith("daily"))startDaily();else{const[uid,i]=k.split("-");startNode(UNITS.findIndex(u=>u.id===uid),+i)}}}
+function finishPL(){const perfect=PL.ko===0;const bonus=(PL.kind==="mission"?20:10)+(perfect?10:0);PL.xp+=bonus;const stars=perfect?3:PL.ko<=2?2:1;
+ const before=lvl().i;const dk=dayKey();AC.days[dk]=(AC.days[dk]||0)+PL.xp;AC.xp+=PL.xp;AC.correct+=PL.ok;AC.last=dk;
+ AC.done[PL.key]=Math.max(AC.done[PL.key]||0,stars);if(PL.kind==="mission")AC.missions[PL.mission]=Math.max(AC.missions[PL.mission]||0,stars);
+ const nb=checkBadges(perfect);acSave();const up=lvl().i>before;const secs=Math.round((Date.now()-PL.start)/1000);const acc=Math.round(PL.ok/Math.max(1,PL.ok+PL.ko)*100);
+ const m=PL.kind==="mission"?MISSIONS[PL.mission]:null;
+ $("#player").innerHTML=`<canvas id="confetti" aria-hidden="true"></canvas><div class="pl-in pl-end"><div class="pl-end-ic">${svgI("trophy",2)}</div><h2>${m?"Mission réussie !":PL.kind==="daily"?"Défi du jour réussi !":"Étape terminée !"}</h2>
+  ${m?`<p class="pl-p">${esc(m.end)}</p>`:""}<div class="pl-stars">${[1,2,3].map(s=>`<span class="${s<=stars?"on":""}">${svgI("star",1.6)}</span>`).join("")}</div>
+  <div class="pl-kpis"><div><b>+${PL.xp}</b><span>XP</span></div><div><b>${acc} %</b><span>précision</span></div><div><b>${Math.floor(secs/60)}:${pad(secs%60)}</b><span>temps</span></div><div><b>${streak()}</b><span>jour${streak()>1?"s":""} de suite</span></div></div>
+  ${up?`<div class="pl-up">${svgI("bolt",2)} Niveau supérieur : <b>${esc(lvl().name)}</b></div>`:""}
+  ${nb.length?`<div class="pl-newb">${nb.map(b=>`<div class="badge on">${badgeSVG(b)}<b>${esc(b.t)}</b><span>Nouveau badge</span></div>`).join("")}</div>`:""}
+  <div class="pl-end-b"><button class="btn primary big" id="plnext">Continuer</button></div></div>`;
+ $("#plnext").onclick=closePL;$("#plnext").focus();confetti()}
+function checkBadges(perfect){const has=new Set(AC.badges),add=id=>{if(!has.has(id)){AC.badges.push(id);has.add(id);got.push(BADGES.find(b=>b.id===id))}},got=[];
+ if(Object.keys(AC.done).length)add("first");const ms=Object.keys(AC.missions).length;if(ms>=1)add("mission1");if(ms>=4)add("missions4");if(perfect)add("perfect");
+ const s=streak();if(s>=3)add("streak3");if(s>=7)add("streak7");const cis=UNITS.filter(u=>u.id==="u6"||u.id==="u7");if(cis.every(u=>unitDone(u)===u.nodes.length))add("cisco");
+ if(AC.correct>=100)add("q100");if(UNITS.every(u=>unitDone(u)===u.nodes.length))add("all");return got}
+function badgeSVG(b){return `<span class="medal">${svgI(BADGE_IC[b.id]||"star",2)}</span>`}
+function confetti(){if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;const c=$("#confetti");if(!c)return;const x=c.getContext("2d");c.width=innerWidth;c.height=innerHeight;
+ const cols=["#d9480f","#ff922b","#4c7dff","#2f9e44","#f59f00","#9775fa"];const P2=Array.from({length:140},()=>({x:c.width/2,y:c.height*.35,vx:(Math.random()-.5)*14,vy:Math.random()*-12-4,s:4+Math.random()*6,c:cols[Math.floor(Math.random()*cols.length)],r:Math.random()*6}));let f=0;
+ (function step(){if(!document.body.contains(c))return;x.clearRect(0,0,c.width,c.height);P2.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.r+=.1;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);x.restore()});if(++f<160)requestAnimationFrame(step);else x.clearRect(0,0,c.width,c.height)})()}
+document.addEventListener("keydown",e=>{if(!PL||$("#player").hidden)return;if(e.target&&e.target.id==="pltype"&&e.key!=="Enter")return;
+ if(/^[1-4]$/.test(e.key)){const b=$("#player").querySelectorAll(".pl-opt")[+e.key-1];if(b&&!b.disabled)b.click()}
+ if(e.key==="Enter"){const g=$("#plgo");if(g&&!g.disabled){e.preventDefault();g.click()}}
+ if(e.key==="Escape"){$("#plx")?.click()}});
+
+/* ---------- Vue Académie ---------- */
+let acTab=store.get("actab","parcours");
+function ring(v,max,size=64){const r=size/2-6,c=2*Math.PI*r,p=Math.min(1,v/max);return `<svg class="ring" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="6"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="#ffd43b" stroke-width="6" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-p)}" transform="rotate(-90 ${size/2} ${size/2})"/></svg>`}
+function renderAcad(){if(!$("#v-academie"))return;const L=lvl(),s=streak(),today=AC.days[dayKey()]||0,nx=nextNode(),dailyDone=!!AC.done["daily-"+dayKey()];
+ $("#ac-hero").innerHTML=`<div class="ac-hero" style="${photoBg("duo",1400,"linear-gradient(100deg,rgba(9,16,30,.95) 0%,rgba(9,16,30,.82) 48%,rgba(9,16,30,.25) 100%)","linear-gradient(135deg,#12213a,#1c3d8f)")}">
+  <div class="ac-hero-l"><div class="eyebrow">Académie du dépannage</div><h2>Devenez la personne qui débloque tout le monde.</h2><p>Des leçons courtes, des formations sur les vraies réparations et des missions où vous dépannez des collègues. Cinq minutes par jour suffisent.</p>
+   <div class="ac-cta">${nx?`<button class="btn primary big" id="ac-go">${svgI("bolt",2.2)}${AC.xp?"Continuer":"Commencer"} : ${esc(NODEINFO[nx[0].nodes[nx[1]].t][1])}</button>`:""}<button class="btn big ghost" id="ac-daily" ${dailyDone?"disabled":""}>${svgI("flame",2)}${dailyDone?"Défi du jour réussi":"Défi du jour"}</button></div></div>
+  <div class="ac-stats"><div class="ac-stat">${ring(today,GOAL)}<div><b>${today}/${GOAL} XP</b><span>objectif du jour</span></div></div>
+   <div class="ac-stat"><span class="ac-ic fl">${svgI("flame",2)}</span><div><b>${s} jour${s>1?"s":""}</b><span>série en cours</span></div></div>
+   <div class="ac-stat"><span class="ac-ic">${svgI("star",2)}</span><div><b>${AC.xp} XP</b><span>${esc(L.name)}</span></div></div>
+   <div class="ac-lvl"><span>Niveau ${L.i+1}</span><div class="ac-lvl-bar"><i style="width:${Math.round(L.into/L.per*100)}%"></i></div><span>${L.i<LEVELS.length-1?esc(LEVELS[L.i+1]):"Niveau max"}</span></div></div></div>`;
+ $("#ac-go")&&($("#ac-go").onclick=()=>startNode(UNITS.indexOf(nx[0]),nx[1]));$("#ac-daily").onclick=startDaily;
+ $("#ac-tabs").innerHTML=[["parcours","Parcours"],["missions","Missions"],["tableau","Mon tableau"]].map(([k,n])=>`<button class="ac-tab" aria-pressed="${k===acTab}" data-t="${k}">${n}</button>`).join("");
+ $("#ac-tabs").querySelectorAll(".ac-tab").forEach(b=>b.onclick=()=>{acTab=b.dataset.t;store.set("actab",acTab);renderAcad()});
+ const B=$("#ac-body");
+ if(acTab==="parcours"){const OFF=[0,70,105,70,0,-70,-105,-70];
+  B.innerHTML=`<div class="units">${UNITS.map((u,ui)=>{const dn=unitDone(u);return `<section class="unit"><div class="unit-h" style="${photoBg(u.ph,1200,`linear-gradient(100deg,${u.col[0]}f2 0%,${u.col[0]}cc 45%,${u.col[1]}66 100%)`,`linear-gradient(135deg,${u.col[0]},${u.col[1]})`)}">
+   <div><span class="unit-n">Parcours ${ui+1}</span><h3>${esc(u.t)}</h3><p>${esc(u.d)}</p></div><div class="unit-p"><b>${dn}/${u.nodes.length}</b><div class="unit-bar"><i style="width:${dn/u.nodes.length*100}%"></i></div></div></div>
+   <div class="path">${u.nodes.map((n,i)=>{const k=nodeId(u,i),st=AC.done[k]||0,open=unlocked(u,i),cur=open&&!st&&(i===0||AC.done[nodeId(u,i-1)]);const inf=NODEINFO[n.t];const lab=n.t==="form"?byId(n.f).t:n.t==="mission"?MISSIONS[n.m].t:inf[1];
+    return `<div class="pnode" style="--off:${OFF[i%OFF.length]}px"><button class="pbtn ${st?"done":open?"open":"locked"} ${cur?"cur":""}" data-u="${ui}" data-i="${i}" ${open?"":"disabled"} style="--c1:${u.col[0]};--c2:${u.col[1]}" aria-label="${esc(inf[1]+" : "+lab)}">${svgI(open?inf[0]:"lock",2)}${cur?`<span class="pstart">${st?"Refaire":"Commencer"}</span>`:""}</button>
+    ${st?`<span class="pstars">${[1,2,3].map(s=>`<i class="${s<=st?"on":""}"></i>`).join("")}</span>`:""}<span class="plab"><em>${esc(inf[1])}</em>${lab===inf[1]?"":esc(lab)}</span></div>`}).join("")}</div></section>`}).join("")}</div>`;
+  B.querySelectorAll(".pbtn").forEach(b=>b.onclick=()=>startNode(+b.dataset.u,+b.dataset.i))}
+ else if(acTab==="missions"){B.innerHTML=`<div class="missions">${Object.entries(MISSIONS).map(([id,m])=>{const p=PEOPLE[m.who],st=AC.missions[id]||0,u=UNITS.find(u=>u.nodes.some(n=>n.m===id));return `<article class="mcard"><div class="mcard-ph" style="${photoBg(p.ph,700,"linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(8,15,27,.85))",`linear-gradient(135deg,${u.col[0]},${u.col[1]})`)}"><span class="pl-tag light">${esc(u.t)}</span>${st?`<span class="mdone">${svgI("check",3)} Réussie</span>`:""}</div>
+   <div class="mcard-b"><div class="mcard-who">${avatar(p,44)}<div><b>${esc(p.name)}</b><span>${esc(p.role)}</span></div></div><h3>${esc(m.t)}</h3><p>${esc(m.brief)}</p><div class="mcard-f"><span class="pstars">${[1,2,3].map(s=>`<i class="${s<=st?"on":""}"></i>`).join("")}</span><button class="btn primary" data-m="${id}">${st?"Rejouer":"Lancer la mission"}</button></div></div></article>`}).join("")}</div>`;
+  B.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>startMission(b.dataset.m))}
+ else{const days=[...Array(14)].map((_,k)=>{const d=new Date();d.setDate(d.getDate()-13+k);return [d,AC.days[dayKey(d)]||0]});const mx=Math.max(GOAL,...days.map(d=>d[1]));
+  const totalNodes=UNITS.reduce((a,u)=>a+u.nodes.length,0),doneNodes=UNITS.reduce((a,u)=>a+unitDone(u),0);
+  B.innerHTML=`<div class="kpis ac-k"><div><b>${AC.xp}</b><span>XP au total</span></div><div><b>${doneNodes}/${totalNodes}</b><span>étapes terminées</span></div><div><b>${Object.keys(AC.missions).length}/${Object.keys(MISSIONS).length}</b><span>missions réussies</span></div><div><b>${AC.correct}</b><span>bonnes réponses</span></div></div>
+  <div class="ac-grid"><div class="card"><h3 class="res-sub">Mes compétences par parcours</h3><div class="tbl-wrap" style="margin-top:10px;border:0"><table class="j skill"><thead><tr><th>Parcours</th><th>Étapes</th><th>Étoiles</th><th>Maîtrise</th></tr></thead><tbody>
+   ${UNITS.map(u=>{const dn=unitDone(u),stars=u.nodes.reduce((a,_,i)=>a+(AC.done[nodeId(u,i)]||0),0),pct=Math.round(stars/(u.nodes.length*3)*100);return `<tr><td><span class="sk-dot" style="background:${u.col[0]}"></span><b>${esc(u.t)}</b></td><td class="num">${dn}/${u.nodes.length}</td><td class="num">${stars}/${u.nodes.length*3}</td><td style="min-width:140px"><div class="unit-bar dark"><i style="width:${pct}%;background:${u.col[0]}"></i></div><span class="note">${pct} %</span></td></tr>`}).join("")}
+   </tbody></table></div></div>
+   <div class="card"><h3 class="res-sub">Activité des 14 derniers jours</h3><div class="actv">${days.map(([d,v])=>`<div class="actv-c" title="${dayKey(d)} : ${v} XP"><i style="height:${Math.max(3,v/mx*100)}%" class="${v>=GOAL?"hit":""}"></i><span>${["D","L","M","M","J","V","S"][d.getDay()]}</span></div>`).join("")}</div><p class="note" style="margin-top:8px">Les barres orange atteignent l'objectif de ${GOAL} XP.</p></div></div>
+  <div class="card" style="margin-top:16px"><h3 class="res-sub">Badges</h3><div class="badges">${BADGES.map(b=>`<div class="badge ${AC.badges.includes(b.id)?"on":""}">${badgeSVG(b)}<b>${esc(b.t)}</b><span>${esc(b.d)}</span></div>`).join("")}</div></div>
+  <div style="margin-top:16px"><button class="btn" id="ac-reset">Remettre ma progression à zéro</button> <span class="note" id="ac-reset-n"></span></div>`;
+  $("#ac-reset").onclick=e=>{const b=e.currentTarget;if(!b.dataset.c){b.dataset.c="1";b.textContent="Confirmer la remise à zéro";$("#ac-reset-n").textContent="Toute la progression sera effacée.";return}AC={xp:0,days:{},done:{},badges:[],correct:0,missions:{},last:null};acSave();renderAcad();toast("Progression remise à zéro")}}}
+(()=>{const nb=document.querySelector('#nav [data-v="academie"] svg');if(nb)nb.innerHTML=IC.academie})();
+
+/* =========================================================
+   INTERFACE v4 — mode guidé des fiches, photos, vignettes
+   ========================================================= */
+let ficheMode=store.get("fichemode","guided"),gIdx={};
+function renderDetail(sel,id){const p=byId(id);if(!p)return;
+ if(ficheMode==="guided"&&p.st&&p.st.length&&!p.table)return renderGuided(sel,p);
+ renderDetailFull(sel,id);addModeSwitch(sel,p)}
+function modeSwitch(p){return p.st&&p.st.length&&!p.table?`<div class="mswitch" role="group" aria-label="Affichage"><button data-mode="guided" aria-pressed="${ficheMode==="guided"}">Pas à pas</button><button data-mode="full" aria-pressed="${ficheMode==="full"}">Toutes les étapes</button></div>`:""}
+function addModeSwitch(sel,p){const h=$(sel+" .d-head");if(!h)return;h.insertAdjacentHTML("beforeend",modeSwitch(p));bindModeSwitch(sel,p)}
+function bindModeSwitch(sel,p){$(sel).querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{ficheMode=b.dataset.mode;store.set("fichemode",ficheMode);renderDetail(sel,p.id);$("#mbox").scrollTop=0})}
+function ficheHead(p){const guide=p.d==="guide";return `<div class="d-head banner" style="${bannerStyle(guide?"guide":p.d)}"><div class="meta">${guide?'<span class="pill info">Guide</span>':`<span class="pill ${p.s}">${SEV[p.s]}</span>`}<span class="pill glass">${p.id}</span>${guide?"":`<span class="pill glass">${esc(DOM[p.d].n)}</span>`}<span class="pill glass">${LVL[p.lvl]}</span><span class="pill glass">${esc(p.tm)}</span></div><h3>${esc(p.t)}</h3>${p.intro?`<p>${esc(p.intro)}</p>`:""}${modeSwitch(p)}</div>`}
+function renderGuided(sel,p){const box=$(sel),n=p.st.length,d=doneSteps[p.id]||[];let i=gIdx[p.id]??Math.min(d.length?Math.max(...d)+1:0,n);gIdx[p.id]=i;
+ let h=ficheHead(p)+`<div class="g-wrap">`;
+ if(i===0&&p.sym)h+=`<div class="g-intro"><div><h5>Ce que vous voyez</h5><ul>${p.sym.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div><div><h5>Causes probables</h5><ul>${p.cau.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div></div>`;
+ if(p.lvl===3&&i<n)h+=alertHTML("warn","<b>Fiche avancée.</b> Les commandes serveur ou réseau sont réservées à l'administrateur : faites les vérifications simples et transmettez le résultat.");
+ h+=`<div class="g-dots">${p.st.map((s,k)=>`<button class="g-dot ${k===i?"cur":d.includes(k)?"done":""}" data-g="${k}" aria-label="Étape ${k+1}">${d.includes(k)?"✓":k+1}</button>`).join("")}<button class="g-dot end ${i===n?"cur":""}" data-g="${n}" aria-label="Résultat">${svgI("flag",2)}</button></div>`;
+ if(i<n){const s=p.st[i],lk=s.link&&byId(s.link);h+=`<div class="g-step"><div class="g-k">Étape ${i+1} sur ${n}</div><h4>${esc(s.t)}</h4>${s.d?`<p>${esc(s.d)}</p>`:""}${s.ill?`<div class="ill-wrap g-ill">${ill(s.ill)}${s.ill.cap&&s.ill.k!=="keys"?`<div class="ill-cap">${esc(s.ill.cap)}</div>`:""}</div>`:""}${s.cmd?cmdHTML(s.cmd):""}${lk?`<div class="st-link"><button class="link" data-open="${lk.id}">${lk.d==="guide"?"Guide":"Fiche"} ${lk.id} : ${esc(lk.t)} →</button></div>`:""}</div>
+  <div class="g-nav"><button class="btn" id="gprev" ${i===0?"disabled":""}>← Précédent</button><button class="btn primary big" id="gnext">${i===n-1?"C'est fait : voir le résultat":"C'est fait, étape suivante →"}</button></div>`}
+ else{const guide=p.d==="guide";h+=`<div class="g-end"><div class="g-end-ic">${svgI("flag",2)}</div><h4>${guide?"Guide terminé":"Le problème est-il réglé ?"}</h4><p>${guide?"Vous connaissez maintenant ce geste. Il revient dans de nombreuses fiches.":`Vous avez suivi ${d.length} étape${d.length>1?"s":""} sur ${n}. Indiquez le résultat : l'incident est noté dans le journal.`}</p>
+  ${guide?`<div class="g-nav"><button class="btn" id="gback">← Revoir les étapes</button><button class="btn primary big" data-goto="academie">Continuer à apprendre</button></div>`:`<div class="g-nav"><button class="btn ok big" data-res="ok">✓ C'est réglé</button><button class="btn big" data-res="ko">Toujours bloqué</button></div>
+  <div class="esc-box" hidden>${alertHTML("info",`<b>Qui contacter :</b> ${esc(p.esc)}<br>Donnez l'heure du début, le message d'erreur exact et les étapes déjà faites (${d.length}/${n}).`)}</div><button class="link" id="gback">← Revoir les étapes</button>`}
+  ${p.pre&&p.pre.length?`<div class="g-pre"><h5>Pour que ça ne revienne pas</h5><ul>${p.pre.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`:""}</div>`}
+ box.innerHTML=h+"</div>";bindModeSwitch(sel,p);
+ const go=k=>{gIdx[p.id]=Math.max(0,Math.min(n,k));renderGuided(sel,p);$("#mbox").scrollTo({top:0,behavior:"smooth"})};
+ box.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>go(+b.dataset.g));
+ $("#gprev")&&($("#gprev").onclick=()=>go(i-1));
+ $("#gnext")&&($("#gnext").onclick=()=>{const a=new Set(doneSteps[p.id]||[]);a.add(i);doneSteps[p.id]=[...a].sort((x,y)=>x-y);store.set("steps",doneSteps);go(i+1)});
+ $("#gback")&&($("#gback").onclick=()=>go(0));
+ box.querySelectorAll("[data-res]").forEach(b=>b.onclick=()=>{if(b.dataset.res==="ko")box.querySelector(".esc-box").hidden=false;quickLog(p,b.dataset.res==="ok"?"Résolu":"Ouvert");if(b.dataset.res==="ok"){delete gIdx[p.id];b.textContent="✓ Noté comme réglé"}})}
+
+/* ---------- Accueil : photo d'agent + cartes flottantes ---------- */
+function heroVisual(){const u=photo("hero",1000);if(!u)return heroArt();
+ return `<div class="hv"><div class="hv-ph"><img src="${u}" alt="Agente de centre d'appels avec casque, souriante, devant son ordinateur" onerror="this.closest('.hero-r').innerHTML=heroArt()"></div>
+ <div class="hv-c hv-c1"><span class="hv-i red">!</span><div><b>Erreur détectée</b><span class="mono">0x80040220</span></div></div>
+ <div class="hv-c hv-c2"><span class="hv-i green">${svgI("check",3)}</span><div><b>Solution trouvée</b><span>Droits CRM · 4 étapes</span></div></div>
+ <div class="hv-c hv-c3">${["casque","agent","duo"].map(k=>`<span class="hv-a" style="background-image:url('${photo(k,120,true)}')"></span>`).join("")}<div><b>Toute l'équipe</b><span>dépanne plus vite</span></div></div></div>`}
+function domTile(k){const u=photo(DOMPH[k],600);return u?`<span class="dom-ph" style="background-image:linear-gradient(160deg,rgba(8,15,27,.15),rgba(8,15,27,.55)),url('${u}'),${domGrad(k)}"><span class="dom-badge" style="background:${domGrad(k)}">${svgI(k,2)}</span></span>`:domArt(k)}
+
+/* =========================================================
    DIAGNOSTIC — capture d'écran → erreur → solutions
    Trois moteurs, du plus fort au plus simple :
    1. Claude (dans claude.ai)  2. IA du serveur (Render + clé)
    3. Lecture automatique OCR dans le navigateur + dictionnaire
    ========================================================= */
-const IN_CLAUDE=!!(window.claude&&window.claude.use);
 let sample=null,sampleImages=false,serverAI=false,serverCode=false,localOCR=false,shot=null,diagCtl=null,lastDiag=null;
 
 /* ---------- Accueil : contenus fixes ---------- */
 const EXAMPLES=["Outlook reste bloqué au chargement","Le client ne m'entend pas","Je reste en Non prêt","0x80040220","SIP 503","Teams : on ne m'entend pas","L'imprimante n'imprime plus","Écran bleu"];
-$("#heroart").innerHTML=heroArt();
+$("#heroart").innerHTML=heroVisual();
 $("#examples").innerHTML=EXAMPLES.map(e=>`<button type="button">${esc(e)}</button>`).join("");
 $("#examples").querySelectorAll("button").forEach(b=>b.onclick=()=>{$("#ask").value=b.textContent;runDiag()});
 $("#totals").textContent=`${FICHES.length} fiches · ${ERR.length} codes d'erreur · ${GUIDES.length} guides · ${SCRIPTS.length} réparations automatiques`;
-$("#domains").innerHTML=Object.entries(DOM).map(([k,v])=>`<button class="dom2" data-dom="${k}">${domArt(k)}<span class="dom2-b"><b>${esc(v.n)}</b><span>${esc(v.d)}</span><em>${FICHES.filter(p=>p.d===k).length} fiches</em></span></button>`).join("");
+$("#domains").innerHTML=Object.entries(DOM).map(([k,v])=>`<button class="dom2" data-dom="${k}">${domTile(k)}<span class="dom2-b"><b>${esc(v.n)}</b><span>${esc(v.d)}</span><em>${FICHES.filter(p=>p.d===k).length} fiches</em></span></button>`).join("");
 $("#domains").querySelectorAll(".dom2").forEach(b=>b.onclick=()=>{fdom=b.dataset.dom;$("#q").value="";renderDom();renderList();location.hash="pannes"});
 $("#quick").innerHTML=["W-02","N-01","OL-03","T-01","AG-01","E-03"].map(id=>byId(id)).filter(Boolean).map(p=>itemHTML(p,false)).join("");
 $("#quick").querySelectorAll(".item").forEach(b=>b.onclick=()=>openFiche(b.dataset.id));

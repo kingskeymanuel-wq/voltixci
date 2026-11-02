@@ -6,6 +6,9 @@ Application web de dépannage pour centre d'appels, pensée pour les débutants.
 
 ## Ce que contient l'application
 
+- **Académie** : 8 parcours façon application d'apprentissage (leçons, formations sur les réparations, exercices, missions de dépannage avec des collègues fictifs), XP, séries, badges et tableau de progression
+- **Fiches en mode pas à pas** : une étape à la fois, avec l'écran à cliquer
+
 - **Diagnostic** : capture d'écran ou description → erreur expliquée, gestes immédiats, fiches à suivre
 - **64 fiches illustrées pas à pas** : Cisco (Finesse, téléphones IP, files, audio, SIP), Microsoft Teams, Outlook, Microsoft Engage (CRM), Office, Windows, réseau, imprimantes, navigateur, comptes, sécurité, matériel
 - **93 codes d'erreur expliqués** : écrans bleus, Windows Update, HTTP, Office, Microsoft Engage / Dynamics 365, codes SIP, codes de raison agent Cisco, messages des téléphones, Jabber et Finesse
@@ -36,7 +39,9 @@ Sans clé, l'application fonctionne entièrement avec la lecture automatique.
 
 - `public/index.html` : l'application (un seul fichier)
 - `server.js` : serveur (application, moteur OCR, API d'analyse)
-- `sources/` : le code découpé (mise en page, fiches, codes d'erreur, illustrations, diagnostic)
+- `sources/` : le code découpé (mise en page, fiches, codes d'erreur, illustrations, académie, diagnostic)
+
+Photos : [Unsplash](https://unsplash.com), licence Unsplash (usage libre). Elles sont chargées depuis images.unsplash.com ; si elles ne se chargent pas, l'application affiche ses illustrations.
 
 ## Lancer en local
 

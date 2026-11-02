@@ -155,11 +155,11 @@ function ill(o){try{return ILL[o.k](o)}catch(e){return ""}}
 /* =========================================================
    NAVIGATION
    ========================================================= */
-const VIEWS=[["accueil","Diagnostic"],["pannes","Pannes"],["erreurs","Codes d'erreur"],["guides","Guides Windows"],["scripts","Boîte à scripts"],["commandes","Commandes"],["journal","Journal"],["check","Check du matin"]];
-$("#nav").innerHTML=VIEWS.map(([k,n],i)=>`${i===1?'<div class="nav-label">Dépanner</div>':i===5?'<div class="nav-label">Outils</div>':""}<button data-v="${k}">${svgI(k)}<span>${n}</span>${k==="journal"?'<span class="count" id="jcount" hidden>0</span>':""}</button>`).join("");
+const VIEWS=[["accueil","Diagnostic"],["academie","Académie"],["pannes","Pannes"],["erreurs","Codes d'erreur"],["guides","Guides Windows"],["scripts","Boîte à scripts"],["commandes","Commandes"],["journal","Journal"],["check","Check du matin"]];
+$("#nav").innerHTML=VIEWS.map(([k,n],i)=>`${i===1?'<div class="nav-label">Apprendre</div>':i===2?'<div class="nav-label">Dépanner</div>':i===6?'<div class="nav-label">Outils</div>':""}<button data-v="${k}">${svgI(k)}<span>${n}</span>${k==="journal"?'<span class="count" id="jcount" hidden>0</span>':""}</button>`).join("");
 $("#nav").querySelectorAll("button").forEach(b=>b.onclick=()=>{location.hash=b.dataset.v});
 function show(v){if(!VIEWS.some(x=>x[0]===v))v="accueil";document.querySelectorAll("[data-view]").forEach(s=>s.hidden=s.id!=="v-"+v);
- document.querySelectorAll("#nav button").forEach(t=>{if(t.dataset.v===v)t.setAttribute("aria-current","page");else t.removeAttribute("aria-current")});window.scrollTo(0,0)}
+ document.querySelectorAll("#nav button").forEach(t=>{if(t.dataset.v===v)t.setAttribute("aria-current","page");else t.removeAttribute("aria-current")});window.scrollTo(0,0);if(v==="academie"&&typeof renderAcad==="function")renderAcad()}
 addEventListener("hashchange",()=>show(location.hash.slice(1)));
 /* ---------- Fenêtre modale ---------- */
 let mcur=null,mstack=[],mlast=null;
@@ -202,9 +202,9 @@ $("#q").addEventListener("input",renderList);$("#flvl").addEventListener("change
 function renderGuides(){$("#glist").innerHTML=GUIDES.map(p=>itemHTML(p,false)).join("");
  $("#glist").querySelectorAll(".item").forEach(b=>b.onclick=()=>openFiche(b.dataset.id))}
 
-function renderDetail(sel,id){const p=byId(id),box=$(sel);if(!p){box.innerHTML="";return}
+function renderDetailFull(sel,id){const p=byId(id),box=$(sel);if(!p){box.innerHTML="";return}
  const guide=p.d==="guide",d=doneSteps[p.id]||[],n=p.st?p.st.length:0,pct=n?Math.round(d.length/n*100):0;
- let h=`<div class="d-head"><div class="d-art">${typeof domArt==="function"?domArt(guide?"guide":p.d):""}</div><div class="meta">${guide?'<span class="pill info">Guide</span>':`<span class="pill ${p.s}">${SEV[p.s]}</span>`}<span class="pill neutral">${p.id}</span>${guide?"":`<span class="pill neutral">${esc(DOM[p.d].n)}</span>`}<span class="pill neutral">${lvlHTML(p.lvl)}&nbsp;${LVL[p.lvl]}</span><span class="pill neutral">⏱ ${esc(p.tm)}</span></div>
+ let h=`<div class="d-head banner" style="${bannerStyle(guide?"guide":p.d)}"><div class="meta">${guide?'<span class="pill info">Guide</span>':`<span class="pill ${p.s}">${SEV[p.s]}</span>`}<span class="pill neutral">${p.id}</span>${guide?"":`<span class="pill neutral">${esc(DOM[p.d].n)}</span>`}<span class="pill neutral">${lvlHTML(p.lvl)}&nbsp;${LVL[p.lvl]}</span><span class="pill neutral">⏱ ${esc(p.tm)}</span></div>
  <h3>${esc(p.t)}</h3>${p.intro?`<p style="margin:0;color:var(--muted);max-width:66ch">${esc(p.intro)}</p>`:""}
  ${n?`<div style="display:flex;align-items:center;gap:10px"><div class="progress" style="flex:1"><i style="width:${pct}%"></i></div><span class="mono" style="color:var(--muted);font-size:12px">${d.length}/${n} étapes</span></div>`:""}</div><div class="d-body">`;
  if(p.lvl===3)h+=`<div class="admin-note">${alertHTML("warn","<b>Fiche avancée.</b> Les étapes avec commandes serveur ou réseau sont réservées à l'administrateur. Vous pouvez faire les vérifications simples et lui transmettre le résultat.")}</div>`;
@@ -231,7 +231,8 @@ function errMatch(q,max=4){if(!q)return[];const full=ck2(q);const toks=norm(q).s
  return res.sort((a,b)=>b[1]-a[1]).slice(0,max).map(x=>x[0])}
 let etool="",eopen=null;
 function errHTML(e){return `<button type="button" class="erow sev-${e.s}" data-err="${e.i}"><span class="sb"></span><span class="ecode">${esc(e.c)}</span><span class="ename">${esc(e.n)}<small>${esc(ETOOLS[e.t])}</small></span><span style="display:flex;gap:8px;align-items:center"><span class="pill ${e.s} err-tool">${SEV[e.s]}</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></span></button>`}
-function errBody(e){const f=e.ref&&byId(e.ref);return `<div class="d-head"><div class="meta"><span class="pill ${e.s}">${SEV[e.s]}</span><span class="pill neutral">${esc(ETOOLS[e.t])}</span></div><div class="mono" style="font-size:clamp(17px,2.4vw,22px);font-weight:600;overflow-wrap:anywhere">${esc(e.c)}</div><h3>${esc(e.n)}</h3></div>
+const ERRDOM={bsod:"win",wu:"win",win:"win",net:"net",http:"web",office:"outlook",print:"print",crm:"crm",sip:"cisco",rc:"cisco",cph:"cisco"};
+function errBody(e){const f=e.ref&&byId(e.ref);return `<div class="d-head banner" style="${bannerStyle(ERRDOM[e.t]||"win")}"><div class="meta"><span class="pill ${e.s}">${SEV[e.s]}</span><span class="pill neutral">${esc(ETOOLS[e.t])}</span></div><div class="mono" style="font-size:clamp(17px,2.4vw,22px);font-weight:600;overflow-wrap:anywhere">${esc(e.c)}</div><h3>${esc(e.n)}</h3></div>
  <div class="d-body"><div class="err-b"><div><h5>Ce que ça veut dire</h5><p>${esc(e.m)}</p></div>
  <div class="two"><div><h5>Causes fréquentes</h5><ul>${e.cau.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div><div><h5>Que faire</h5><ol>${e.fx.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div></div>
  ${e.who?alertHTML("info",`<b>Qui prévenir :</b> ${esc(e.who)}. Donnez-lui le code exact, l'heure et ce que vous faisiez.`):""}
@@ -347,7 +348,7 @@ async function initCaps(){
  claude.use("sample").then(async s=>{sample=s;if(!s){$("#aimode").textContent="Recherche instantanée";return}try{const lim=await s.limits();sampleImages=!!(lim&&lim.images)}catch(_){}}).catch(()=>{});
  claude.use("downloads").then(d=>{downloads=d;if(d){$("#jcsv").hidden=false;$("#scdl").hidden=false}}).catch(()=>{});
  try{[db,user]=await Promise.all([claude.use("db"),claude.use("user")])}catch(e){db=null}
- dbLoading=false;
+ dbLoading=false;if(typeof acadSync==="function")acadSync();
  if(user&&user.can){try{const c=await user.can("data.write");if(c===false){canWrite=false;$("#j-submit").disabled=true;const m=$("#j-msg");m.hidden=false;m.textContent="Accès en lecture seule : vous pouvez consulter le journal mais pas y écrire."}}catch(_){}}
  renderJournal();if(!db)return;
  const timer=setTimeout(()=>{if(!rows.length)$("#jbody").innerHTML=`<tr><td colspan="6" class="empty">Le journal ne répond pas encore. Les données s'afficheront dès que la connexion sera rétablie.</td></tr>`},10000);

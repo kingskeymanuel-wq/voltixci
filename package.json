@@ -1,6 +1,6 @@
 {
   "name": "atelier-depannage-it",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "private": true,
   "description": "Application de dépannage IT et Cisco pour centre d'appels : diagnostic par capture d'écran, fiches illustrées, codes d'erreur.",
   "main": "server.js",
