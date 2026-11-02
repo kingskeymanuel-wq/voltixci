@@ -1,0 +1,24 @@
+ATELIER DÉPANNAGE IT — version 3
+================================
+
+OUVRIR L'APPLICATION SUR LE PC
+------------------------------
+Double-cliquez sur public/index.html (Chrome ou Edge).
+Fonctionnent : fiches illustrées, codes d'erreur, guides, scripts,
+commandes, check du matin, journal (enregistré sur le PC), recherche.
+La lecture automatique des captures a besoin d'internet dans ce mode.
+
+LA VERSION EN LIGNE (RENDER)
+----------------------------
+Le dossier complet se publie tel quel sur Render (voir README.md) :
+- diagnostic par capture d'écran (Ctrl + V, glisser-déposer, fichier)
+- lecture automatique du texte de la capture, sans compte ni clé
+- analyse IA en plus si la variable ANTHROPIC_API_KEY est définie
+
+CONTENU
+-------
+public/index.html  : l'application
+server.js          : le serveur Render
+package.json       : les dépendances (moteur de lecture des captures)
+render.yaml        : la configuration Render
+sources/           : le code découpé, pour modifier l'application
