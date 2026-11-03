@@ -15,7 +15,7 @@ function setPeriod(from,to){RC.from=from;RC.to=to;store.set("rcc-period",[from,t
 function rccLocalSave(){store.set("rcc-v1",{tickets:RC.tickets,people:RC.people})}
 async function rccInit(){if(RC.mode)return;
  if(IN_CLAUDE&&db){RC.mode="db";try{
-  RC.unsub.push(db.collection("rcc").onSnapshot(s=>{RC.tickets=s.docs.map(d=>({...d.data(),_id:d.id}));RC.ready=true;renderRCC()},()=>{RC.ready=true;renderRCC()}));
+  RC.unsub.push(db.collection("rcc").onSnapshot(s=>{RC.tickets=s.docs.map(d=>({...d.data(),_id:d.id}));RC.ready=true;renderRCC();if(!$("#modal").hidden&&mcur&&/^rcc(list|dim)$/.test(mcur.type))renderModal()},()=>{RC.ready=true;renderRCC()}));
   RC.unsub.push(db.doc("rccmeta/people").onSnapshot(s=>{RC.people=(s.exists&&s.data().list)||[];renderRCC()},()=>{}));
   setTimeout(()=>{if(!RC.ready){RC.ready=true;renderRCC()}},10000)}catch(e){RC.mode=""}}
  if(!RC.mode){RC.mode="local";const v=store.get("rcc-v1",{tickets:[],people:[]});RC.tickets=v.tickets||[];RC.people=v.people||[];RC.ready=true}
@@ -35,8 +35,6 @@ const fmtP=v=>(Math.round(v*10)/10).toString().replace(".",",")+" %";
 function personTeam(a){const p=RC.people.find(x=>x.alias===a);return p&&p.equipe}
 function teamsOf(t){const s=new Set(t.equipes||[]);(t.personnes||[]).forEach(a=>{const e=personTeam(a);if(e)s.add(e)});return [...s]}
 function delayDays(t){if(!t.resolu||!t.date)return null;const d=(new Date(t.resolu)-new Date(t.date))/864e5;return d>=0?d:null}
-function bars(rows,total,opt={}){const max=Math.max(1,...rows.map(r=>r[1]));const lim=opt.limit||rows.length;
- return `<div class="hb">${rows.slice(0,lim).map(([k,v])=>{const na=k==="Non renseigné";return `<div class="hb-r ${na?"na":""}" title="${esc(k)} : ${v} incident${v>1?"s":""} (${fmtP(pct(v,total))})"><span class="hb-l">${esc(k)}</span><span class="hb-t"><i style="width:${v/max*100}%"></i></span><span class="hb-v"><b>${fmtP(pct(v,total))}</b><em>${v}</em></span></div>`}).join("")}${rows.length>lim?`<div class="note">+ ${rows.length-lim} autres</div>`:""}</div>`}
 function monthCols(list){if(!RC.from||!RC.to)return"";const s=new Date(RC.from),e=new Date(RC.to);const ms=[];let d=new Date(s.getFullYear(),s.getMonth(),1);while(d<=e&&ms.length<24){ms.push([d.getFullYear(),d.getMonth()]);d=new Date(d.getFullYear(),d.getMonth()+1,1)}
  const c=ms.map(([y,m])=>list.filter(t=>{const x=new Date(t.date);return x.getFullYear()===y&&x.getMonth()===m}).length);const max=Math.max(1,...c);
  return `<div class="mc">${ms.map(([y,m],i)=>`<div class="mc-c" title="${MOISF[m]} ${y} : ${c[i]} incident${c[i]>1?"s":""}"><span class="mc-a"><span class="mc-v">${c[i]||""}</span><i style="height:${Math.max(c[i]?3:0,c[i]/max*100)}%"></i></span><span class="mc-l">${MOISF[m]}</span></div>`).join("")}</div>`}
@@ -52,11 +50,9 @@ function synthText(L){if(!L.length)return `Aucun incident enregistré pour ${per
 function renderRCC(){const root=$("#v-rcc");if(!root||root.hidden&&RC._r)return;RC._r=true;
  const years=[...new Set(RC.tickets.map(t=>t.date&&+t.date.slice(0,4)).filter(Boolean))].sort();const Y=+(RC.from||String(new Date().getFullYear())).slice(0,4);if(!years.includes(Y))years.push(Y);years.sort();
  const qs=[1,2,3,4].map(q=>{const[a,b]=qRange(Y,q);return `<button class="chip" aria-pressed="${a===RC.from&&b===RC.to}" data-pf="${a}" data-pt="${b}">T${q} ${Y}</button>`}).join("")+`<button class="chip" aria-pressed="${RC.from===Y+"-01-01"&&RC.to===Y+"-12-31"}" data-pf="${Y}-01-01" data-pt="${Y}-12-31">Année ${Y}</button><button class="chip" data-pf="" data-pt="">Tout</button>`;
- $("#rcc-hero").innerHTML=`<div class="rcc-hero" style="${photoBg("plateau",1400,"linear-gradient(100deg,rgba(9,16,30,.95) 0%,rgba(9,16,30,.85) 55%,rgba(9,16,30,.4) 100%)","linear-gradient(135deg,#12213a,#0b7285)")}">
-  <div><div class="eyebrow">Pilotage du contact center</div><h2>Incidents RCC</h2><p>Traçabilité de chaque incident, du signalement à la résolution, et rapport par période : outils, équipes et personnes les plus touchés.</p></div>
-  <div class="rcc-period"><span class="mono">Période du rapport</span><div class="chips">${qs}</div>
-   <div class="rcc-dates"><label>Du<input class="f dark" type="date" id="rc-from" value="${RC.from}"></label><label>Au (fin de période)<input class="f dark" type="date" id="rc-to" value="${RC.to}"></label>${years.length>1?`<label>Année<select class="f dark" id="rc-year">${years.map(y=>`<option ${y===Y?"selected":""}>${y}</option>`).join("")}</select></label>`:""}</div>
-   <div class="rcc-store">${RC.mode==="db"?"Base partagée avec l'équipe":"Données enregistrées sur cet appareil"} · ${RC.tickets.filter(t=>!t.doublon).length} incidents au total</div></div></div>`;
+ $("#rcc-hero").innerHTML=`<div class="rcc-hero2" style="${photoBg("plateau",1400,"linear-gradient(100deg,rgba(9,16,30,.96) 0%,rgba(9,16,30,.88) 60%,rgba(9,16,30,.55) 100%)","linear-gradient(135deg,#12213a,#0b7285)")}">
+  <div class="rh-t"><div class="eyebrow">Pilotage du contact center</div><h2>Incidents RCC</h2><p>${RC.tickets.filter(t=>!t.doublon).length} incidents suivis · ${RC.mode==="db"?"base partagée avec l'équipe":"enregistrés sur cet appareil"}</p></div>
+  <div class="rh-p"><div class="chips">${qs}</div><div class="rcc-dates"><label>Du<input class="f dark" type="date" id="rc-from" value="${RC.from}"></label><label>Au<input class="f dark" type="date" id="rc-to" value="${RC.to}"></label>${years.length>1?`<label>Année<select class="f dark" id="rc-year">${years.map(y=>`<option ${y===Y?"selected":""}>${y}</option>`).join("")}</select></label>`:""}</div></div></div>`;
  $("#rcc-hero").querySelectorAll("[data-pf]").forEach(b=>b.onclick=()=>setPeriod(b.dataset.pf,b.dataset.pt));
  $("#rc-from").onchange=e=>setPeriod(e.target.value,RC.to);$("#rc-to").onchange=e=>setPeriod(RC.from,e.target.value);
  $("#rc-year")&&($("#rc-year").onchange=e=>{const y=e.target.value;const q=RC.from?Math.floor((+RC.from.slice(5,7)-1)/3)+1:1;const[a,b]=qRange(+y,q);setPeriod(a,b)});
@@ -71,29 +67,65 @@ function renderRCC(){const root=$("#v-rcc");if(!root||root.hidden&&RC._r)return;
  if(RC.tab==="personnes")return renderPeople(B);
  renderImport(B)}
 
+/* ---------- Rapport : tuiles, faits marquants, détail en fenêtre ---------- */
+const DIM={outil:["Outil",t=>t.outil],cat:["Type d'incident",t=>t.cat],app:["Application",t=>t.app],team:["Équipe",teamsOf],person:["Personne",t=>t.personnes||[]]};
+function drill(k,v){return `data-dk="${esc(k)}" data-dv="${esc(v)}"`}
+function bars(rows,total,opt={}){const max=Math.max(1,...rows.map(r=>r[1]));const lim=opt.limit||rows.length;
+ return `<div class="hb">${rows.slice(0,lim).map(([k,v])=>{const na=k==="Non renseigné";return `<button type="button" class="hb-r ${na?"na":""}" ${opt.dim?drill(opt.dim,k):""} title="Voir les ${v} incident${v>1?"s":""} : ${esc(k)}"><span class="hb-l">${esc(k)}</span><span class="hb-t"><i style="width:${v/max*100}%"></i></span><span class="hb-v"><b>${fmtP(pct(v,total))}</b><em>${v}</em></span></button>`}).join("")}${rows.length>lim?`<button type="button" class="link hb-more" ${opt.dim?`data-dall="${opt.dim}"`:""}>Voir les ${rows.length-lim} autres</button>`:""}</div>`}
+function kpiTile(ic,val,lab,sub,tone,dk){return `<button type="button" class="kt ${tone||""}" ${dk?drill("kpi",dk):""}><span class="kt-ic">${svgI(ic,2)}</span><span class="kt-b"><b>${val}</b><span>${lab}</span>${sub?`<em>${sub}</em>`:""}</span></button>`}
+function filterDrill(L,k,v){if(k==="kpi"){if(v==="all")return L;if(v==="maj")return L.filter(t=>t.majeur);if(v==="tk")return L.filter(t=>t.num);if(v==="notk")return L.filter(t=>!t.num);if(v==="res")return L.filter(t=>t.statut==="Résolu");if(v==="open")return L.filter(t=>t.statut!=="Résolu");if(v.startsWith("grp:")){const[a,c]=v.slice(4).split("||");return L.filter(t=>t.app===a&&t.cat===c)}return L}
+ const fn=DIM[k][1];return L.filter(t=>{const ks=[].concat(fn(t));return v==="Non renseigné"?!ks.length:ks.includes(v)})}
+const KPIT={all:"Tous les incidents",maj:"Incidents majeurs",tk:"Incidents avec un ticket",notk:"Incidents sans ticket",res:"Incidents résolus",open:"Incidents non résolus"};
+function openDrill(k,v){openModal({type:"rcclist",k,v})}
+function drillHTML(k,v){const L=filterDrill(periodTickets(),k,v).sort((a,b)=>(b.date||"").localeCompare(a.date||""));const all=periodTickets().length;
+ const title=k==="kpi"?(v.startsWith("grp:")?v.slice(4).replace("||"," · "):KPIT[v]):`${DIM[k][0]} : ${v}`;const o=L[0]?L[0].outil:"Réseau";
+ const tk=L.filter(t=>t.num).length,res=L.filter(t=>t.statut==="Résolu").length,maj=L.filter(t=>t.majeur).length;
+ const apps=countBy(L,t=>t.app).slice(0,4);
+ return `<div class="d-head banner" style="${bannerStyle(OUT2DOM[k==="outil"?v:o]||"net")}"><div class="meta"><span class="pill glass">${esc(periodLabel())}</span></div><h3>${esc(title)}</h3><p>${L.length} incident${L.length>1?"s":""} · ${fmtP(pct(L.length,all))} des incidents de la période</p></div>
+ <div class="g-wrap"><div class="dr-k"><div><b>${L.length}</b><span>incidents</span></div><div><b>${maj}</b><span>majeurs</span></div><div><b>${tk}</b><span>avec ticket</span></div><div><b>${res}</b><span>résolus</span></div></div>
+ ${k!=="app"&&apps.length>1?`<div class="dr-apps">${apps.map(([a,c])=>`<span class="pill neutral">${esc(a)} · ${c}</span>`).join("")}</div>`:""}
+ <div class="dr-list">${L.map(t=>`<button type="button" class="dr-i" data-rid="${t._id}"><span class="dr-d"><b>${t.date?t.date.slice(8,10):"—"}</b><span>${t.date?MOISF[+t.date.slice(5,7)-1]:""}</span></span><span class="dr-b"><b>${esc(t.desc)}</b><span>${esc(t.app)} · ${esc(t.cat)}${t.num?` · ticket ${esc(t.num)}`:""}</span></span><span class="dr-s">${t.majeur?`<span class="pill crit">Majeur</span>`:""}<span class="pill ${RCSTAT[t.statut]||"neutral"}">${esc(t.statut)}</span></span></button>`).join("")||`<p class="empty">Aucun incident.</p>`}</div>
+ <p class="note">Cliquez sur un incident pour le compléter (statut, résolution, équipes, personnes). Le bouton Retour ramène à cette liste.</p></div>`}
 function renderReport(B){const L=periodTickets();const n=L.length;
  if(!n){B.innerHTML=`<div class="card rcc-empty"><h3>Aucun incident sur ${esc(periodLabel())}</h3><p>Choisissez une autre période ci-dessus.</p></div>`;return}
  const tk=L.filter(t=>t.num).length,res=L.filter(t=>t.statut==="Résolu").length,maj=L.filter(t=>t.majeur).length,dl=L.map(delayDays).filter(x=>x!==null);
- const tm=countBy(L,teamsOf),pp=countBy(L,t=>t.personnes||[]);const naT=(tm.find(x=>x[0]==="Non renseigné")||[0,0])[1],naP=(pp.find(x=>x[0]==="Non renseigné")||[0,0])[1];
- const G=groups(L);const big=G.filter(g=>g.list.length>=2).slice(0,6);
- B.innerHTML=`<div class="rcc-sum"><div><h3>Rapport · ${esc(periodLabel())}</h3><p class="note">Les doublons du fichier sont exclus. Un incident peut concerner plusieurs équipes ou personnes : leurs pourcentages peuvent dépasser 100 % au total.</p></div><div class="ac-cta"><button class="btn primary" id="rc-xls">${svgI("guides",2)}Exporter le rapport (Excel)</button><button class="btn" id="rc-copy">Copier la synthèse</button></div></div>
- <div class="kpis rcc-k"><div><b>${n}</b><span>incidents</span></div><div><b>${maj}</b><span>incidents majeurs</span></div><div><b>${fmtP(pct(tk,n))}</b><span>avec un ticket (${tk})</span></div><div><b>${fmtP(pct(res,n))}</b><span>résolus (${res})</span></div><div><b>${dl.length?(dl.reduce((a,b)=>a+b,0)/dl.length).toFixed(1).replace(".",",")+" j":"—"}</b><span>délai moyen de résolution</span></div></div>
- ${res===0?alertHTML("info","Aucun incident de la période n'a encore de date de résolution. Ouvrez les tickets dans l'onglet « Tickets & traçabilité » pour renseigner le statut et la date de résolution : le taux de résolution et le délai moyen se calculeront tout seuls."):""}
- <div class="rcc-grid">
-  <div class="card"><h4 class="res-sub">Par outil</h4><p class="note">Part des incidents de la période</p>${bars(countBy(L,t=>t.outil),n)}</div>
-  <div class="card"><h4 class="res-sub">Par type d'incident</h4><p class="note">Part des incidents de la période</p>${bars(countBy(L,t=>t.cat),n)}</div>
-  <div class="card"><h4 class="res-sub">Par équipe concernée</h4><p class="note">${naT?`${naT} incident${naT>1?"s":""} sans équipe renseignée`:"Toutes les équipes sont renseignées"}</p>${bars(tm,n)}</div>
-  <div class="card"><h4 class="res-sub">Par personne concernée</h4><p class="note">${naP?`${naP} incident${naP>1?"s":""} sans personne renseignée`:"Toutes les personnes sont renseignées"}</p>${bars(pp,n,{limit:10})}</div>
-  <div class="card"><h4 class="res-sub">Applications les plus touchées</h4><p class="note">Nombre et part des incidents</p>${bars(countBy(L,t=>t.app),n,{limit:10})}</div>
-  <div class="card"><h4 class="res-sub">Évolution par mois</h4><p class="note">Nombre d'incidents</p>${monthCols(L)}</div>
+ const O=countBy(L,t=>t.outil),C=countBy(L,t=>t.cat),A=countBy(L,t=>t.app),TM=countBy(L,teamsOf),PP=countBy(L,t=>t.personnes||[]);
+ const naT=(TM.find(x=>x[0]==="Non renseigné")||[0,0])[1],naP=(PP.find(x=>x[0]==="Non renseigné")||[0,0])[1];
+ const G=groups(L);const big=G.filter(g=>g.list.length>=2).slice(0,6);const tmTop=TM.find(x=>x[0]!=="Non renseigné");
+ B.innerHTML=`<div class="rp-head"><div><div class="eyebrow">Rapport</div><h3>${esc(periodLabel())}</h3></div><div class="ac-cta"><button class="btn primary" id="rc-xls">${svgI("guides",2)}Exporter le rapport (Excel)</button><button class="btn" id="rc-copy">Copier la synthèse</button></div></div>
+ <div class="kts">
+  ${kpiTile("rcc",n,"incidents","doublons exclus","",'all')}
+  ${kpiTile("sec",maj,"incidents majeurs",fmtP(pct(maj,n))+" du total","crit",'maj')}
+  ${kpiTile("journal",fmtP(pct(tk,n)),"avec un ticket",`${tk} ticket${tk>1?"s":""} · ${n-tk} sans`,"info",'tk')}
+  ${kpiTile("check",fmtP(pct(res,n)),"résolus",res?`${res} sur ${n}`:"à renseigner dans les tickets","ok",res?'res':'open')}
+  ${kpiTile("flame",dl.length?(dl.reduce((a,b)=>a+b,0)/dl.length).toFixed(1).replace(".",",")+" j":"—","délai moyen",dl.length?"de résolution":"dates de résolution à saisir","warn",'open')}
  </div>
- <div class="card" style="margin-top:16px"><h4 class="res-sub">Grands incidents de la période</h4><p class="note">Incidents qui reviennent sur la même application, et incidents majeurs.</p>
-  <div class="tbl-wrap" style="margin-top:10px"><table class="j"><thead><tr><th>Application</th><th>Type</th><th>Fois</th><th>Part</th><th>Dates</th></tr></thead><tbody>
-  ${big.map(g=>`<tr><td><b>${esc(g.app)}</b><div class="sub">${esc(g.outil)}</div></td><td>${esc(g.cat)}</td><td class="num">${g.list.length}</td><td class="num">${fmtP(pct(g.list.length,n))}</td><td>${g.list.map(t=>`<button class="link" data-rid="${t._id}">${fmtD(t.date)}</button>`).join(" · ")}</td></tr>`).join("")||`<tr><td colspan="5" class="empty">Aucun incident récurrent sur cette période.</td></tr>`}
-  </tbody></table></div>
-  ${maj?`<h5 class="rs-h" style="margin-top:14px">Incidents majeurs</h5><div class="rcc-maj">${L.filter(t=>t.majeur).sort((a,b)=>a.date<b.date?-1:1).map(t=>`<button class="rcc-chip" data-rid="${t._id}"><span class="mono">${fmtD(t.date)}</span>${esc(t.desc)}</button>`).join("")}</div>`:""}
- </div>`;
- B.querySelectorAll("[data-rid]").forEach(b=>b.onclick=()=>openRcc(b.dataset.rid));
+ <div class="facts">
+  <button type="button" class="fact" ${drill("outil",O[0][0])}><span class="fact-k">Outil le plus touché</span><b>${esc(O[0][0])}</b><span class="fact-v">${fmtP(pct(O[0][1],n))} · ${O[0][1]} incident${O[0][1]>1?"s":""}</span></button>
+  <button type="button" class="fact" ${big[0]?drill("kpi","grp:"+big[0].app+"||"+big[0].cat):drill("app",A[0][0])}><span class="fact-k">Incident le plus récurrent</span><b>${esc(big[0]?big[0].app:A[0][0])}</b><span class="fact-v">${big[0]?`${esc(big[0].cat)} · ${big[0].list.length} fois`:`${A[0][1]} incident${A[0][1]>1?"s":""}`}</span></button>
+  <button type="button" class="fact" ${drill("cat",C[0][0])}><span class="fact-k">Type le plus fréquent</span><b>${esc(C[0][0])}</b><span class="fact-v">${fmtP(pct(C[0][1],n))} des incidents</span></button>
+  ${tmTop?`<button type="button" class="fact" ${drill("team",tmTop[0])}><span class="fact-k">Équipe la plus concernée</span><b>${esc(tmTop[0])}</b><span class="fact-v">${fmtP(pct(tmTop[1],n))} des incidents</span></button>`:`<button type="button" class="fact todo-f" data-rt="tickets"><span class="fact-k">Équipes concernées</span><b>À renseigner</b><span class="fact-v">Ajoutez les équipes dans les tickets</span></button>`}
+ </div>
+ <div class="rp-grid g21">
+  <section class="card rp"><header><h4>Répartition par outil</h4><span class="note">Cliquez sur une barre pour voir les incidents</span></header>${bars(O,n,{dim:"outil"})}</section>
+  <section class="card rp"><header><h4>Évolution par mois</h4><span class="note">Nombre d'incidents</span></header>${monthCols(L)}</section>
+ </div>
+ <div class="rp-grid g3">
+  <section class="card rp"><header><h4>Par type d'incident</h4></header>${bars(C,n,{dim:"cat"})}</section>
+  <section class="card rp"><header><h4>Par équipe</h4>${naT?`<span class="tag-na">${naT} à renseigner</span>`:""}</header>${bars(TM,n,{dim:"team",limit:8})}</section>
+  <section class="card rp"><header><h4>Par personne</h4>${naP?`<span class="tag-na">${naP} à renseigner</span>`:""}</header>${bars(PP,n,{dim:"person",limit:8})}</section>
+ </div>
+ <div class="rp-grid g12">
+  <section class="card rp"><header><h4>Applications les plus touchées</h4></header>${bars(A,n,{dim:"app",limit:8})}</section>
+  <section class="card rp"><header><h4>Grands incidents</h4><span class="note">Récurrents sur la même application, et majeurs</span></header>
+   <div class="bigs">${big.map(g=>`<button type="button" class="big" ${drill("kpi","grp:"+g.app+"||"+g.cat)}><span class="big-n">${g.list.length}<em>fois</em></span><span class="big-b"><b>${esc(g.app)}</b><span>${esc(g.cat)} · ${esc(g.outil)}</span><span class="big-d">${g.list.slice(0,6).map(t=>fmtD(t.date).slice(0,5)).join(" · ")}${g.list.length>6?" …":""}</span></span><span class="big-p">${fmtP(pct(g.list.length,n))}</span></button>`).join("")||`<p class="note">Aucun incident récurrent sur cette période.</p>`}</div>
+   ${maj?`<button type="button" class="btn rp-maj" ${drill("kpi","maj")}>${svgI("sec",2)}Voir les ${maj} incident${maj>1?"s":""} majeur${maj>1?"s":""}</button>`:""}
+  </section>
+ </div>
+ <p class="note rp-foot">Les doublons du fichier sont exclus. Un incident peut concerner plusieurs équipes ou personnes : leurs pourcentages peuvent dépasser 100 % au total.</p>`;
+ B.querySelectorAll("[data-dk]").forEach(b=>b.onclick=()=>openDrill(b.dataset.dk,b.dataset.dv));
+ B.querySelectorAll("[data-dall]").forEach(b=>b.onclick=()=>{const d=b.dataset.dall;const rows=countBy(L,DIM[d][1]);openModal({type:"rccdim",d,rows})});
+ B.querySelectorAll("[data-rt]").forEach(b=>b.onclick=()=>{RC.tab=b.dataset.rt;store.set("rcc-tab",RC.tab);renderRCC()});
  $("#rc-copy").onclick=e=>copyText(synthText(L),e.currentTarget);$("#rc-xls").onclick=()=>exportReport(L)}
 
 function renderTickets(B){const all=RC.tickets.filter(t=>RC.fe==="__all"||inPeriod(t)||!t.date);
@@ -176,10 +208,12 @@ function bindRccForm(t,isNew){const f=$("#rc-form");const sel={eq:new Set(t.equi
   const ch=[];[["statut","Statut"],["num","N° de ticket"],["plateforme","Envoyé sur"],["envoi","Date d'envoi"],["resolu","Date de résolution"],["resolution","Solution"],["date","Date"],["app","Application"]].forEach(([k,l])=>{if((t[k]||"")!==(n[k]||""))ch.push(`${l} : ${t[k]||"—"} → ${n[k]||"—"}`)});
   if(String(t.equipes||[])!==String(n.equipes))ch.push("Équipes : "+(n.equipes.join(", ")||"—"));if(String(t.personnes||[])!==String(n.personnes))ch.push("Personnes : "+(n.personnes.join(", ")||"—"));
   n.hist=[...(t.hist||[]),{d:new Date().toISOString(),q:isNew?"Création":"Mise à jour",t:isNew?"Incident créé dans l'application":ch.join(" · ")}];if(!isNew&&!ch.length&&String(t.desc)===desc&&t.majeur===n.majeur&&t.outil===n.outil&&t.cat===n.cat){closeModal();return}
-  try{await rccSaveTicket(n);closeModal();toast(isNew?"Incident ajouté":"Incident mis à jour")}catch(err){$("#rf-msg").textContent="Enregistrement refusé : votre accès est en lecture seule."}}}
+  try{await rccSaveTicket(n);if(mstack.length){mcur=mstack.pop();setTimeout(renderModal,RC.mode==="db"?400:0)}else closeModal();toast(isNew?"Incident ajouté":"Incident mis à jour")}catch(err){$("#rf-msg").textContent="Enregistrement refusé : votre accès est en lecture seule."}}}
 function renderModal(){$("#mback").hidden=!mstack.length;
  if(mcur.type==="rcc"){const isNew=!mcur.id;const t=isNew?{desc:"",date:iso(new Date()),statut:"Signalé",outil:"Réseau",cat:"Indisponibilité",app:"",equipes:[],personnes:[],hist:[]}:RC.tickets.find(x=>x._id===mcur.id);if(!t){closeModal();return}
   $("#mtitle").textContent="Incident";$("#mbody").innerHTML=rccEditHTML(t,isNew);bindRccForm(t,isNew);$("#mbox").scrollTop=0;return}
+ if(mcur.type==="rcclist"){$("#mtitle").textContent="Détail";$("#mbody").innerHTML=drillHTML(mcur.k,mcur.v);$("#mbody").querySelectorAll("[data-rid]").forEach(b=>b.onclick=()=>openRcc(b.dataset.rid));$("#mbox").scrollTop=0;return}
+ if(mcur.type==="rccdim"){const n=periodTickets().length;$("#mtitle").textContent="Détail";$("#mbody").innerHTML=`<div class="d-head banner" style="${bannerStyle("net")}"><div class="meta"><span class="pill glass">${esc(periodLabel())}</span></div><h3>${esc(DIM[mcur.d][0])} : toute la liste</h3></div><div class="g-wrap">${bars(mcur.rows,n,{dim:mcur.d})}</div>`;$("#mbody").querySelectorAll("[data-dk]").forEach(b=>b.onclick=()=>openDrill(b.dataset.dk,b.dataset.dv));$("#mbox").scrollTop=0;return}
  const p=mcur.type==="fiche"?byId(mcur.id):null;$("#mtitle").textContent=mcur.type==="err"?"Code d'erreur":p&&p.d==="guide"?"Guide":"Fiche de dépannage";
  if(mcur.type==="fiche")renderDetail("#mbody",mcur.id);else $("#mbody").innerHTML=errBody(ERR[mcur.i]);$("#mbox").scrollTop=0}
 
