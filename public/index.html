@@ -496,6 +496,26 @@ table.j.skill{min-width:0;table-layout:auto}.ac-grid{align-items:start}.sk-dot{d
 .pnode{gap:8px;width:240px}
 .plab{margin-top:6px}
 
+
+/* ---------- Correspondance exacte ---------- */
+.shot-wrap{position:relative;line-height:0}
+.diag-shot .shot-wrap img{width:100%;height:auto;max-height:none;object-fit:initial;border-radius:8px}
+.shot-boxes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.bx-main{fill:rgba(255,122,61,.18);stroke:var(--accent);animation:bxIn .5s ease}.bx-alt{fill:rgba(76,125,255,.12);stroke:#4c7dff;stroke-dasharray:6 4}
+@keyframes bxIn{from{opacity:0;transform:scale(1.04)}}
+.scanline{position:absolute;left:0;right:0;top:0;height:40%;background:linear-gradient(180deg,transparent,rgba(255,122,61,.25),rgba(255,122,61,.8));animation:beam 2.2s ease-in-out infinite;pointer-events:none;border-radius:8px}
+.match{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:13.5px;padding:7px 12px;border-radius:10px;justify-self:start}
+.match.exact{background:var(--min-bg);color:var(--min)}.match.forte{background:var(--maj-bg);color:var(--maj)}.match.ia{background:var(--info-bg);color:var(--info)}.match.none{background:var(--soft);color:var(--muted);border:1px solid var(--line)}
+.readout b{font-family:var(--f-body);font-size:15.5px}
+.mean h5,.rs-h{margin:4px 0 6px;font-family:var(--f-mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.mean p{margin:0;max-width:70ch}
+.res-card.sol{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 14px 30px rgba(217,72,15,.08)}
+.rsteps{list-style:none;margin:0;padding:0;display:grid;gap:8px;counter-reset:r}
+.rsteps li{counter-increment:r;display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;align-items:start;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.rsteps li::before{content:counter(r);width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);color:var(--accent);display:grid;place-items:center;font-weight:800;font-size:13px}
+.rsteps b{display:block;font-size:15px}.rsteps span{display:block;color:var(--muted);font-size:14px;margin-top:2px}
+.rs-go{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:4px}
+
 /* ---------- Cartes ---------- */
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px;margin-top:4px}
 .cards .item{height:100%}
@@ -2503,6 +2523,103 @@ function heroVisual(){const u=photo("hero",1000);if(!u)return heroArt();
 function domTile(k){const u=photo(DOMPH[k],600);return u?`<span class="dom-ph" style="background-image:linear-gradient(160deg,rgba(8,15,27,.15),rgba(8,15,27,.55)),url('${u}'),${domGrad(k)}"><span class="dom-badge" style="background:${domGrad(k)}">${svgI(k,2)}</span></span>`:domArt(k)}
 
 /* =========================================================
+   SIGNATURES — messages exacts affichés à l'écran → fiche
+   Chaque phrase est le texte que l'on voit sur la capture
+   (français et anglais). La fiche n'est proposée comme
+   « correspondance exacte » que si l'une de ses phrases
+   est lue sur la capture.
+   ========================================================= */
+const SIGS={
+ "W-02":["ne repond pas","not responding","le programme ne repond pas","fermer le programme","attendre la reponse du programme"],
+ "W-03":["votre pc a rencontre un probleme","votre pc a rencontre un probleme et doit redemarrer","your pc ran into a problem","code d'arret","stop code","nous collectons simplement des informations"],
+ "W-04":["preparation de la reparation automatique","reparation automatique","automatic repair","choisir une option","choose an option","diagnostic de votre pc","votre pc n'a pas demarre correctement"],
+ "W-05":["windows update","echec de l'installation","il y a eu des problemes lors de l'installation de certaines mises a jour","annulation des modifications","undoing changes","we couldn't complete the updates"],
+ "W-06":["espace disque insuffisant","low disk space","vous manquez d'espace disque","running out of disk space","pas assez d'espace"],
+ "W-07":["ecran noir"],
+ "W-08":["est introuvable","was not found","le programme ne peut pas demarrer car","is missing from your computer","manque sur votre ordinateur"],
+ "W-09":["bloque par votre administrateur","windows a protege votre ordinateur","windows protected your pc","cette application a ete bloquee","this app has been blocked","voulez-vous autoriser cette application"],
+ "W-10":["aucun peripherique de sortie audio","no audio output device","aucun peripherique d'entree","haut-parleurs desactives"],
+ "W-11":["touches remanentes","touches filtres","sticky keys","filter keys"],
+ "W-12":["aucun signal","no signal","pas de signal","cable non connecte"],
+ "W-13":["impossible de trouver cet element","could not find this item","fichier introuvable"],
+ "H-01":["aucun peripherique de demarrage","no bootable device"],
+ "H-02":["temperature","surchauffe"],
+ "H-03":["peripherique usb non reconnu","usb device not recognized","le dernier peripherique usb"],
+ "N-01":["aucun acces a internet","no internet access","pas d'internet","non connecte","aucun acces internet","no internet","vous n'etes pas connecte"],
+ "N-02":["impossible de se connecter a ce reseau","can't connect to this network","cle de securite reseau","aucun reseau disponible"],
+ "N-03":["ce site est inaccessible","this site can't be reached","impossible de trouver l'adresse ip du serveur","dns_probe_finished_nxdomain","err_name_not_resolved","err_connection_timed_out","hmm... impossible d'atteindre cette page"],
+ "N-04":["chemin d'acces reseau introuvable","the network path was not found","impossible d'acceder a","n'est pas accessible","lecteur reseau deconnecte"],
+ "N-05":["la connexion vpn a echoue","vpn connection failed","impossible de se connecter au vpn","echec de la connexion a","the remote connection was not made"],
+ "N-06":["lent","lenteur"],
+ "I-01":["erreur - impression","error - printing","erreur impression","document en attente","impression en cours"],
+ "I-02":["imprimante hors connexion","printer offline","utiliser l'imprimante hors connexion","hors connexion"],
+ "I-03":["ajouter une imprimante","add a printer","l'imprimante que je veux n'est pas repertoriee"],
+ "O-01":["impossible de demarrer microsoft outlook","cannot start microsoft outlook","chargement du profil","loading profile","impossible d'ouvrir la fenetre outlook","the set of folders cannot be opened","impossible d'ouvrir l'ensemble des dossiers"],
+ "O-02":["travail hors connexion","working offline","deconnecte","disconnected","boite d'envoi","tentative de connexion","envoi et reception"],
+ "O-03":["nous n'avons pas pu vous connecter","we couldn't sign you in","teams a rencontre un probleme","quelque chose s'est mal passe","something went wrong","vider le cache"],
+ "O-04":["le fichier est endommage","the file is corrupt","impossible d'ouvrir le fichier","recuperation de documents","ouvrir et reparer"],
+ "OL-01":["aucun resultat","no results","les resultats de recherche peuvent etre incomplets","search results may be incomplete","l'indexation est en cours"],
+ "OL-02":["votre boite aux lettres est pleine","your mailbox is full","boite aux lettres est presque pleine","mailbox is almost full","quota de la boite aux lettres"],
+ "OL-03":["besoin d'un mot de passe","need password","entrez votre mot de passe","enter your password","votre mot de passe a expire","informations d'identification"],
+ "OL-04":["boite aux lettres partagee","shared mailbox","vous n'avez pas l'autorisation","you don't have permission"],
+ "T-01":["vous etes en sourdine","you're muted","votre micro est desactive","your mic is muted","impossible d'acceder au micro","we can't access your mic","aucun micro","on ne vous entend pas"],
+ "T-02":["aucune camera","no camera","la camera n'est pas disponible","camera isn't available","impossible de demarrer la video","we can't start your video","camera utilisee par une autre application"],
+ "T-03":["absent","ne pas deranger","do not disturb","notifications desactivees","reinitialiser le statut"],
+ "B-01":["mise en page","page ne s'affiche pas correctement"],
+ "B-02":["votre ordinateur est infecte","your computer is infected","appelez immediatement","call microsoft support","virus detecte","alerte de securite microsoft"],
+ "C-01":["le mot de passe est incorrect","the password is incorrect","le compte reference est verrouille","the referenced account is currently locked","nom d'utilisateur ou mot de passe incorrect","mot de passe incorrect"],
+ "C-02":["profil temporaire","temporary profile","vous etes connecte avec un profil temporaire","we can't sign into your account"],
+ "S-01":["menaces trouvees","threats found","menace detectee","threat detected","protection contre les virus et menaces"],
+ "S-02":["vos fichiers ont ete chiffres","your files have been encrypted","rancon","ransom","bitcoin","decrypt","dechiffrer vos fichiers"],
+ "S-03":["verifiez votre compte","verify your account","votre compte sera suspendu","your account will be suspended","cliquez ici pour confirmer"],
+ "E-01":["une erreur s'est produite","an error has occurred","chargement en cours","impossible de charger","la page ne repond pas"],
+ "E-02":["telecharger le fichier journal","download log file","vous n'avez pas les privileges","you do not have","privilege","prvread","prvwrite","seclib","l'enregistrement n'existe pas","does not exist"],
+ "E-03":["appel entrant","incoming call","volet de communication","fiche client introuvable","aucune fiche trouvee"],
+ "E-04":["champ obligatoire","required field","des champs obligatoires sont vides","required fields must be filled in","veuillez renseigner","impossible d'enregistrer"],
+ "E-05":["doublons detectes","duplicate records found","doublon detecte","un enregistrement en double","duplicate detected"],
+ "E-06":["aucun enregistrement","no data available","aucune donnee disponible","mes dossiers actifs","my active cases"],
+ "AG-01":["non pret","not ready","reserve","reserved","impossible de passer a l'etat pret","unable to change state"],
+ "AG-02":["perte de connexion au serveur","connection to server lost","lost connection","la connexion au serveur a ete perdue","tentative de reconnexion","attempting to reconnect","finesse est hors service"],
+ "AG-03":["enregistrement","registering","configuration ip","configuring ip","recherche de service","telephone non enregistre","unprovisioned"],
+ "AG-04":["telephone non connecte","phone services are not connected","impossible de communiquer avec le serveur","cannot communicate with the server","les services telephoniques sont desactives"],
+ "AG-05":["aucun appel","no calls"],
+ "AG-06":["transfert impossible","transfer failed","echec du transfert","conference failed"],
+ "AU-01":["qualite d'appel","call quality","audio hache"],
+ "AU-04":["appel termine","call ended","appel coupe"],
+ "OP-01":["occupe","busy","service indisponible","service unavailable","toutes les lignes sont occupees"],
+ "SV-01":["certificat","certificate","votre connexion n'est pas privee","your connection is not private","net::err_cert"]
+};
+/* phrases que l'on tape en décrivant le problème */
+Object.entries({"O-01":["outlook ne s'ouvre pas","outlook ne demarre pas","outlook bloque au chargement"],"AU-02":["le client ne m'entend pas","je n'entends pas le client","audio a sens unique","le client ne m'entend plus"],"W-10":["pas de son","casque ne marche pas","je n'entends rien dans le casque"],"W-01":["pc lent","ordinateur lent","pc tres lent","tout rame"],"I-01":["imprimante n'imprime pas","l'imprimante n'imprime plus","impression bloquee"],"W-03":["ecran bleu"],"C-01":["mot de passe refuse","compte bloque"],"AG-01":["je reste en non pret","bloque en non pret","bloquee en non pret"],"AU-01":["son hache","voix robotique"],"AU-04":["appel coupe","les appels se coupent"],"T-01":["teams on ne m'entend pas","on ne m'entend pas en reunion"],"E-01":["engage est lent","crm lent","crm ne charge pas"],"E-03":["la fiche client ne s'ouvre pas"],"AG-03":["telephone bloque sur enregistrement"],"N-02":["wifi ne marche pas","pas de wifi"]}).forEach(([k,v])=>{SIGS[k]=[...(SIGS[k]||[]),...v]});
+/* signatures « faibles » : un seul mot courant, utilisées seulement avec le contexte de l'application */
+const WEAK=new Set(["deconnecte","disconnected","hors connexion","enregistrement","reserve","reserved","absent","occupe","busy","lent","lenteur","temperature","surchauffe","ecran noir","aucun appel","no calls","certificat","certificate","privilege","decrypt","ransom","bitcoin","rancon","no results","aucun resultat","mise en page"]);
+
+/* ---------- Comparaison tolérante aux erreurs de lecture ---------- */
+function lev(a,b){if(a===b)return 0;const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=Array.from({length:n+1},(_,j)=>j);for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
+function tokSim(a,b){if(a===b)return 1;if(a.length<4||b.length<4)return 0;return Math.max(0,1-lev(a,b)/Math.max(a.length,b.length))}
+const normS=s=>norm(s).replace(/[’`]/g,"'").replace(/[^a-z0-9'._:@ -]+/g," ").replace(/\s+/g," ").trim();
+function tokens(s){return normS(s).split(" ").map(t=>t.replace(/^[.:_'-]+|[.:_'-]+$/g,"")).filter(Boolean)}
+/* toks : [{t, w}] — t = mot normalisé, w = index du mot OCR (pour surligner) */
+function findPhrase(toks,phrase){const pt=tokens(phrase);if(!pt.length||toks.length<pt.length)return null;let best=null;
+ for(let i=0;i<=toks.length-pt.length;i++){let s=0;for(let j=0;j<pt.length;j++){const v=tokSim(pt[j],toks[i+j].t);if(v<.6){s=-1;break}s+=v}if(s<0)continue;s/=pt.length;if(!best||s>best.s)best={s,i,n:pt.length}}
+ if(!best)return null;const need=pt.length===1?1:pt.length===2?.9:.84;return best.s>=need?best:null}
+function sigMatch(toks,app){const out=[];
+ for(const[id,phr]of Object.entries(SIGS)){const f=byId(id);if(!f)continue;let top=null;
+  for(const p of phr){const m=findPhrase(toks,p);if(!m)continue;const weak=WEAK.has(p);if(weak&&app!==f.d)continue;
+   const len=tokens(p).length;const score=m.s*(weak?.62:len>=3?1:.9);if(!top||score>top.score)top={score,phrase:p,i:m.i,n:m.n}}
+  if(top)out.push({type:"fiche",id,...top})}
+ return out.sort((a,b)=>b.score-a.score)}
+/* repère les mots OCR qui contiennent un code d'erreur */
+function codeWords(words,e){const keys=(e.keys||[]).filter(x=>/\d/.test(x)||x.length>=8);const hits=[];words.forEach((w,i)=>{const k=ck2(w.text||"");if(k.length>=3&&keys.some(x=>x===k||(x.length>=5&&k.includes(x))))hits.push(i)});return hits}
+/* rapproche un code ou un message du dictionnaire avec ce qui est lu */
+const ERRAPP={bsod:"win",wu:"win",win:"win",net:"net",http:"web",office:"outlook",print:"print",crm:"crm",sip:"cisco",rc:"cisco",cph:"cisco"};
+function errOnShot(e,toks,words,app){const isCode=/\d/.test(e.c)||/^[A-Z_:.]{8,}$/.test(e.c);
+ if(isCode)return {ok:true,idx:words?codeWords(words,e):[],score:1.2};
+ let best=null;[e.c,...(e.a||[])].forEach(ph=>{const m=findPhrase(toks,ph);if(m&&(!best||m.s>best.s))best={...m,len:tokens(ph).length}});
+ if(!best)return {ok:false};const dom=ERRAPP[e.t];if(best.len<2&&app!==dom&&!(dom==="outlook"&&["outlook","teams","office"].includes(app)))return {ok:false};
+ return {ok:true,idx:toks.slice(best.i,best.i+best.n).map(t=>t.w).filter(w=>w>=0),score:best.len>=3?1.1:.95}}
+
+/* =========================================================
    DIAGNOSTIC — capture d'écran → erreur → solutions
    Trois moteurs, du plus fort au plus simple :
    1. Claude (dans claude.ai)  2. IA du serveur (Render + clé)
@@ -2548,7 +2665,7 @@ function withTimeout(p,ms){return Promise.race([p,new Promise((_,rej)=>setTimeou
 /* ---------- Reconnaissance de l'application ---------- */
 const APPS={
  cisco:{n:"Cisco (Finesse, téléphone IP)",k:["finesse","jabber","cucm","uccx","ucce","cisco","non pret","not ready","sip ","registering","tftp","agent desktop","bureau de l'agent","enregistrement..."]},
- crm:{n:"Microsoft Engage (CRM)",k:["dynamics","engage","crm","0x8004","fichier journal","log file","doublon","duplicate","dossier","seclib","privilege"]},
+ crm:{n:"Microsoft Engage (CRM)",k:["dynamics","engage","crm","0x8004","fichier journal","log file","doublon","duplicate","seclib","privilege","champ obligatoire"]},
  teams:{n:"Microsoft Teams",k:["teams","reunion","meeting","caa2","caa8","caa9","camera","participants"]},
  outlook:{n:"Outlook",k:["outlook","boite de reception","inbox","exchange",".pst",".ost","boite aux lettres","mailbox","0x800ccc"]},
  office:{n:"Word, Excel & Office",k:["word","excel","powerpoint","sans licence","unlicensed","office"]},
@@ -2559,21 +2676,32 @@ const APPS={
  win:{n:"Windows",k:["windows","votre pc","code d'arret","stop code","bsod","mise a jour","update","0x8007","0xc0","explorateur","bureau"]}
 };
 function detectApp(text){const t=norm(text);let best=null,bs=0;for(const[k,a]of Object.entries(APPS)){let s=0;a.k.forEach(w=>{if(t.includes(w))s+=w.length>5?2:1});if(s>bs){bs=s;best=k}}return bs?best:null}
-function fixOCR(t){return String(t||"").replace(/\b[O0][xX][0-9A-Za-z]{6,8}\b/g,m=>"0x"+m.slice(2).replace(/[oO]/g,"0").replace(/[iIl|]/g,"1").replace(/[sS](?=[0-9a-fA-F]*$)/g,s=>s))}
-function localDiag(text,desc){text=fixOCR(text);const all=(desc+"\n"+text).trim();const codes=errMatch(all,4);const app=detectApp(all);
- const ids=[];codes.forEach(e=>{if(e.ref&&byId(e.ref)&&!ids.includes(e.ref))ids.push(e.ref)});
- const loc=localMatch(all,8,FICHES);loc.filter(p=>!app||p.d===app).forEach(p=>{if(ids.length<4&&!ids.includes(p.id))ids.push(p.id)});
- if(ids.length<2&&!app)loc.forEach(p=>{if(ids.length<3&&!ids.includes(p.id))ids.push(p.id)});
- if(!ids.length&&app)FICHES.filter(p=>p.d===app).slice(0,3).forEach(p=>ids.push(p.id));
- const f0=ids[0]&&byId(ids[0]);
- const gestes=codes[0]?codes[0].fx.slice(0,4):f0?f0.st.slice(0,3).map(s=>s.t+(s.d?" : "+s.d:"")):[];
- const urg=codes[0]?{crit:"haute",maj:"moyenne",min:"faible"}[codes[0].s]:f0?{crit:"haute",maj:"moyenne",min:"faible"}[f0.s]:"";
- return {resume:codes[0]?codes[0].n:app?`Problème lié à : ${APPS[app].n}`:ids.length?"Voici les pistes les plus probables":"",app,urgence:urg,codes,fiches:ids,gestes,erreur_lue:"",explication_code:"",support_immediat:["S-02"].includes(ids[0])}}
+function fixOCR(t){return String(t||"").replace(/\b[O0][xX][0-9A-Za-z]{6,8}\b/g,m=>"0x"+m.slice(2).replace(/[oO]/g,"0").replace(/[iIl|]/g,"1"))}
+/* Construit la liste de mots (avec leur position sur la capture) */
+function buildToks(text,words){const toks=[];if(words&&words.length){words.forEach((w,wi)=>tokens(fixOCR(w.text)).forEach(t=>toks.push({t,w:wi})))}else tokens(fixOCR(text)).forEach(t=>toks.push({t,w:-1}));return toks}
+const URG={crit:"haute",maj:"moyenne",min:"faible"};
+/* Diagnostic local : n'affirme une solution que si le message de la capture est reconnu */
+function localDiag(text,desc,words){text=fixOCR(text);const all=(desc+"\n"+text).trim();const app=detectApp(all);
+ const codes=errMatch(all,3);
+ const toks=buildToks(text,words),dtoks=buildToks(desc,null);
+ const sigs=[...sigMatch(toks,app),...sigMatch(dtoks,app).map(s=>({...s,fromDesc:true,i:-1}))];
+ const byF={};sigs.forEach(s=>{if(!byF[s.id]||s.score>byF[s.id].score)byF[s.id]=s});
+ const cands=[];
+ codes.forEach(e=>{let m=errOnShot(e,toks,words,app);if(!m.ok){const md=errOnShot(e,dtoks,null,app);if(!md.ok)return;m={...md,idx:[],desc:true}}cands.push({type:"err",e,id:e.ref&&byId(e.ref)?e.ref:null,score:m.score,phrase:e.c,wordsIdx:m.idx,fromDesc:!!m.desc})});
+ cands.sort((a,b)=>b.score-a.score);
+ Object.values(byF).sort((a,b)=>b.score-a.score).forEach(s=>{const ex=cands.find(c=>c.id===s.id);if(ex){if(!ex.wordsIdx.length&&s.i>=0)ex.wordsIdx=toks.slice(s.i,s.i+s.n).map(t=>t.w).filter(w=>w>=0);return}cands.push({...s,wordsIdx:s.i>=0?toks.slice(s.i,s.i+s.n).map(t=>t.w).filter(w=>w>=0):[]})});
+ cands.sort((a,b)=>b.score-a.score);
+ const primary=cands[0]&&cands[0].score>=.8?cands[0]:null;
+ const level=!primary?"none":primary.score>=1?"exact":primary.score>=.9?"exact":"forte";
+ const others=cands.slice(1).filter(c=>c.score>=.6&&c.id!==(primary&&primary.id)).slice(0,3);
+ const f=primary&&primary.id?byId(primary.id):null;const e=primary&&primary.type==="err"?primary.e:null;
+ const resume=e?e.n:f?f.t:"";
+ return {src:"ocr",app:app||(f&&f.d)||null,level,primary,others,codes,resume,urgence:URG[(e||f||{}).s]||"",support_immediat:primary&&primary.id==="S-02",boxes:[primary,...others].filter(Boolean).map((c,k)=>({idx:c.wordsIdx||[],main:k===0})),descOnly:!String(text||"").trim()&&!!desc,pistes:!primary?(!String(text||"").trim()&&desc?localMatch(desc,4,FICHES).map(p=>p.id):app?FICHES.filter(p=>p.d===app).slice(0,3).map(p=>p.id):[]):[]}}
 
 /* ---------- Moteur OCR (navigateur) ---------- */
 let tessP=null;
 function loadTess(){if(window.Tesseract)return Promise.resolve();if(tessP)return tessP;tessP=new Promise((res,rej)=>{const s=document.createElement("script");s.src=localOCR?"/vendor/tesseract/tesseract.min.js":"https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js";s.onload=()=>window.Tesseract?res():rej({code:"ocr_load"});s.onerror=()=>{tessP=null;rej({code:"ocr_load"})};document.head.appendChild(s)});return tessP}
-async function ocr(file,onp){await withTimeout(loadTess(),20000);const opt=localOCR?{workerPath:"/vendor/tesseract/worker.min.js",corePath:"/vendor/core",langPath:"/vendor/lang"}:{};const r=await withTimeout(Tesseract.recognize(file,"fra+eng",{...opt,logger:m=>{if(m&&m.status==="recognizing text")onp(Math.round((m.progress||0)*100))}}),90000);return (r&&r.data&&r.data.text)||""}
+async function ocr(file,onp){await withTimeout(loadTess(),20000);const opt=localOCR?{workerPath:"/vendor/tesseract/worker.min.js",corePath:"/vendor/core",langPath:"/vendor/lang"}:{};const r=await withTimeout(Tesseract.recognize(file,"fra+eng",{...opt,logger:m=>{if(m&&m.status==="recognizing text")onp(Math.round((m.progress||0)*100))}}),90000);const d=(r&&r.data)||{};return {text:d.text||"",words:(d.words||[]).map(w=>({text:w.text,bbox:w.bbox}))}}
 
 /* ---------- Moteur IA (Claude ou serveur) ---------- */
 function buildPrompt(q,hasImg){const catalog=P.map(p=>`${p.id} | ${p.t}${p.sym?" | "+p.sym.join(" ; "):""}`).join("\n");
@@ -2587,8 +2715,8 @@ ${ERR.map(e=>e.c+" | "+e.n).join("\n")}
 ${hasImg?"Une capture d'écran est jointe : lis attentivement tous les messages, codes et titres de fenêtre affichés, et identifie l'application concernée.\n":""}Description de l'utilisateur : « ${q||"(aucune, utilise la capture)"} »
 
 Réponds UNIQUEMENT avec un objet JSON, sans texte autour :
-{"resume":"une phrase simple qui dit ce qui se passe","app":"cisco|crm|teams|outlook|office|win|net|print|web|acc|sec|hw|autre","erreur_lue":"le message ou code exact lu sur la capture, ou chaîne vide","urgence":"faible|moyenne|haute","codes":["codes du dictionnaire qui correspondent, copiés exactement, ou liste vide"],"explication_code":"si un code ou message d'erreur n'est pas dans le dictionnaire : son sens en deux phrases simples, sinon chaîne vide","gestes":["3 à 5 actions concrètes à faire tout de suite, dans l'ordre, phrases courtes avec les menus exacts"],"fiches":["1 à 3 id du catalogue, du plus probable au moins probable"],"support_immediat":false}
-Mets support_immediat à true seulement si la situation est dangereuse (virus, rançon, panne générale, données en jeu). Français simple, sans jargon.`}
+{"resume":"une phrase simple qui dit ce qui se passe","app":"cisco|crm|teams|outlook|office|win|net|print|web|acc|sec|hw|autre","erreur_lue":"le message ou code exact lu sur la capture, ou chaîne vide","urgence":"faible|moyenne|haute","codes":["codes du dictionnaire qui correspondent, copiés exactement, ou liste vide"],"explication_code":"si un code ou message d'erreur n'est pas dans le dictionnaire : son sens en deux phrases simples, sinon chaîne vide","gestes":["3 à 5 actions concrètes à faire tout de suite, dans l'ordre, phrases courtes avec les menus exacts"],"fiche_exacte":"id du catalogue qui traite EXACTEMENT ce message, ou chaîne vide si aucune fiche ne correspond exactement","etapes":["si fiche_exacte est vide : 4 à 7 étapes précises pour résoudre CE message précis, avec les menus exacts ; sinon liste vide"],"support_immediat":false}
+Règles : la solution doit correspondre exactement au message lu sur la capture. Ne propose pas une fiche qui traite un autre problème, même proche. Si la capture est illisible ou ne montre pas d'erreur, dis-le dans resume et laisse fiche_exacte vide. Mets support_immediat à true seulement si la situation est dangereuse (virus, rançon, panne générale, données en jeu). Français simple, sans jargon.`}
 async function aiDiag(q,sig){const hasImg=!!shot;let r;
  if(sample){const opts={signal:sig};if(hasImg&&sampleImages)opts.images=[await shrink(shot.file)];r=await sample.json(buildPrompt(q,hasImg&&sampleImages),opts);r.__src="claude"}
  else{const body={prompt:buildPrompt(q,hasImg)};if(hasImg){const b=await shrink(shot.file);body.image=await blobB64(b);body.mediaType=b.type||"image/jpeg"}const code=store.get("accesscode","");if(code)body.code=code;
@@ -2596,34 +2724,63 @@ async function aiDiag(q,sig){const hasImg=!!shot;let r;
   if(!res.ok)throw{code:j.error||"server"};r=parseJSON(j.text);r.__src="server"}
  const codes=(Array.isArray(r.codes)?r.codes:[]).map(c=>ERR.find(e=>e.c===String(c))).filter(Boolean);
  const extra=errMatch((r.erreur_lue||"")+" "+q,3).filter(e=>!codes.includes(e));
- return {resume:r.resume||"",app:DOM[r.app]?r.app:null,urgence:r.urgence||"",codes:[...codes,...extra].slice(0,4),fiches:(Array.isArray(r.fiches)?r.fiches:[]).map(String).filter(id=>byId(id)).slice(0,4),gestes:(Array.isArray(r.gestes)?r.gestes:[]).slice(0,5),erreur_lue:r.erreur_lue||"",explication_code:r.explication_code||"",support_immediat:!!r.support_immediat,src:r.__src}}
+ const allc=[...codes,...extra].slice(0,3);const loc=localDiag(r.erreur_lue||"",q,null);
+ const fx=byId(String(r.fiche_exacte||""))?String(r.fiche_exacte):null;
+ let primary=null;if(allc[0])primary={type:"err",e:allc[0],id:allc[0].ref&&byId(allc[0].ref)?allc[0].ref:null,score:1.2,phrase:allc[0].c};
+ else if(fx)primary={type:"fiche",id:fx,score:1,phrase:r.erreur_lue||""};else if(loc.primary)primary=loc.primary;
+ const etapes=(Array.isArray(r.etapes)?r.etapes:[]).slice(0,8);
+ return {src:r.__src,app:DOM[r.app]?r.app:(primary&&primary.id?byId(primary.id).d:null),level:primary?"exact":etapes.length?"ia":"none",primary,others:allc.slice(1).map(e=>({type:"err",e,id:e.ref,score:1})),codes:allc,resume:r.resume||"",urgence:r.urgence||"",etapes,erreur_lue:r.erreur_lue||"",explication_code:r.explication_code||"",support_immediat:!!r.support_immediat,boxes:[],pistes:[]}}
 
 /* ---------- Affichage ---------- */
 const SRC={claude:["info","Analyse par Claude"],server:["info","Analyse par IA"],ocr:["neutral","Lecture automatique de la capture"],local:["neutral","Recherche instantanée"]};
 function progressHTML(steps){return `<div class="prog">${steps.map(s=>`<div class="prog-s ${s[1]}"><span class="prog-i">${s[1]==="done"?"✓":s[1]==="run"?'<span class="spin"></span>':""}</span><span>${esc(s[0])}</span></div>`).join("")}</div>`}
 function renderProgress(steps,extra){$("#dmain").innerHTML=`<div class="res-card"><div class="res-head"><span class="pill info">Analyse en cours</span></div><h3 class="res-title">Je regarde votre problème…</h3>${progressHTML(steps)}${extra?`<p class="note">${extra}</p>`:""}</div>`}
-function renderResult(d,ocrText){lastDiag=d;const urg={faible:["min","Urgence faible"],moyenne:["maj","Urgence moyenne"],haute:["crit","Urgence haute"]}[d.urgence];
- const src=SRC[d.src]||SRC.local;const nothing=!d.codes.length&&!d.fiches.length&&!d.gestes.length;
- let h=`<div class="res-card"><div class="res-head"><span class="pill ${src[0]}">${src[1]}</span>${d.app&&DOM[d.app]?`<span class="pill neutral app-pill">${svgI(d.app)}${esc(DOM[d.app].n)}</span>`:""}${urg?`<span class="pill ${urg[0]}">${urg[1]}</span>`:""}</div>
- <h3 class="res-title">${esc(d.resume||(nothing?"Je n'ai pas reconnu l'erreur":"Voici ce que je propose"))}</h3>
- ${d.erreur_lue?`<div class="readout"><span class="mono">Lu sur la capture</span><b>${esc(d.erreur_lue)}</b></div>`:""}
+function stepsHTML(list){return `<ol class="rsteps">${list.map(s=>`<li><div><b>${esc(s.t)}</b>${s.d?`<span>${esc(s.d)}</span>`:""}${s.cmd?cmdHTML(s.cmd):""}</div></li>`).join("")}</ol>`}
+function drawBoxes(d,words){const svg=$("#dbox"),img=$("#dimg");if(!svg||!img||!words||!words.length||!d.boxes.length)return;
+ const go=()=>{const W=img.naturalWidth,H=img.naturalHeight;if(!W)return;svg.setAttribute("viewBox",`0 0 ${W} ${H}`);let h="";const pad=Math.max(4,W/160);
+  d.boxes.forEach(b=>{const ws=b.idx.map(i=>words[i]).filter(w=>w&&w.bbox);if(!ws.length)return;
+   const x0=Math.min(...ws.map(w=>w.bbox.x0))-pad,y0=Math.min(...ws.map(w=>w.bbox.y0))-pad,x1=Math.max(...ws.map(w=>w.bbox.x1))+pad,y1=Math.max(...ws.map(w=>w.bbox.y1))+pad;
+   h+=`<rect x="${x0}" y="${y0}" width="${x1-x0}" height="${y1-y0}" rx="${pad}" class="${b.main?"bx-main":"bx-alt"}" style="stroke-width:${Math.max(2,W/260)}"/>`});
+  svg.innerHTML=h;if(h)$("#dcap").textContent="Le message reconnu est entouré sur votre capture"};
+ img.complete?go():img.addEventListener("load",go,{once:true})}
+function renderResult(d,ocrText,words){lastDiag=d;$("#answer .scanline")?.remove();
+ const urg={faible:["min","Urgence faible"],moyenne:["maj","Urgence moyenne"],haute:["crit","Urgence haute"]}[d.urgence];
+ const src=SRC[d.src]||SRC.local;const P0=d.primary;const f=P0&&P0.id?byId(P0.id):null;const e=P0&&P0.type==="err"?P0.e:null;
+ const LV={exact:["min","✓ Correspondance exacte avec votre capture"],forte:["maj","Correspondance forte avec votre capture"],ia:["info","Solution rédigée pour votre capture"],none:["neutral",d.descOnly?"Recherche par description":"Message non reconnu"]}[d.level];
+ const seen=P0&&P0.wordsIdx&&P0.wordsIdx.length&&words?P0.wordsIdx.map(i=>words[i]&&words[i].text).filter(Boolean).join(" "):(d.erreur_lue||(P0&&!P0.fromDesc?P0.phrase:""));
+ let h=`<div class="res-card"><div class="res-head"><span class="pill ${src[0]}">${src[1]}</span>${d.app&&DOM[d.app]?`<span class="pill neutral app-pill">${svgI(d.app)}${esc(DOM[d.app].n)}</span>`:""}${urg&&d.level!=="none"?`<span class="pill ${urg[0]}">${urg[1]}</span>`:""}</div>
+ <div class="match ${d.level}">${esc(LV[1])}</div>
+ <h3 class="res-title">${esc(d.level==="none"?(d.descOnly&&d.pistes.length?"Voici les fiches les plus proches de votre description":d.unread?"Je n'ai pas pu lire de texte sur la capture":"Je ne reconnais pas exactement ce message"):(d.resume||"Voici la solution"))}</h3>
+ ${seen?`<div class="readout"><span class="mono">${P0&&P0.fromDesc?"Dans votre description":"Votre capture affiche"}</span><b>« ${esc(seen)} »</b></div>`:""}
  ${d.support_immediat?alertHTML("crit","<b>Prévenez le support tout de suite.</b> N'essayez pas de réparer seul, et ne redémarrez pas le poste."):""}
- ${d.explication_code?alertHTML("info",`<b>Ce que veut dire l'erreur :</b> ${esc(d.explication_code)}`):""}
- ${nothing?`<p class="note" style="margin:0">Ajoutez une phrase pour décrire ce que vous faisiez (ex. « en ouvrant Outlook »), ou une capture plus nette où le message est bien lisible, puis relancez l'analyse.</p>`:""}</div>`;
- if(d.gestes.length)h+=`<div class="res-card"><h4 class="res-sub">À faire tout de suite</h4><ol class="todo">${d.gestes.map(g=>`<li><span>${esc(g)}</span></li>`).join("")}</ol></div>`;
- if(d.codes.length)h+=`<div class="res-card"><h4 class="res-sub">${d.codes.length>1?"Codes d'erreur reconnus":"Code d'erreur reconnu"}</h4><p class="note" style="margin:-4px 0 10px">Cliquez pour l'explication complète.</p><div class="errs">${d.codes.map(e=>errHTML(e)).join("")}</div></div>`;
- if(d.fiches.length)h+=`<div class="res-card"><h4 class="res-sub">Résolution pas à pas</h4><p class="note" style="margin:-4px 0 10px">Ouvrez la fiche et suivez les étapes illustrées.</p>${ficheCards(d.fiches)}</div>`;
- if(ocrText&&ocrText.trim())h+=`<details class="res-card ocr"><summary>Texte lu sur la capture</summary><pre>${esc(ocrText.trim().slice(0,3000))}</pre></details>`;
+ ${e?`<div class="mean"><h5>Ce que veut dire ce message</h5><p>${esc(e.m)}</p></div>`:f&&d.level!=="none"?`<div class="mean"><h5>Ce qui se passe</h5><p>${esc(f.t)}.${f.cau&&f.cau.length?" Causes les plus fréquentes : "+esc(f.cau.slice(0,3).join(", ").toLowerCase())+".":""}</p></div>`:""}
+ ${d.explication_code&&!e?`<div class="mean"><h5>Ce que veut dire ce message</h5><p>${esc(d.explication_code)}</p></div>`:""}</div>`;
+ if(d.level!=="none"){
+  let body="";
+  if(e&&e.fx&&e.fx.length)body+=`<h5 class="rs-h">À faire tout de suite</h5><ol class="todo">${e.fx.map(x=>`<li><span>${esc(x)}</span></li>`).join("")}</ol>`;
+  if(f&&f.st)body+=`<h5 class="rs-h">${e?"Résolution complète":"Étapes de résolution"} · fiche ${f.id}</h5>${stepsHTML(f.st)}<div class="rs-go"><button class="btn primary big" data-open="${f.id}">${svgI("pannes",2.2)}Résoudre pas à pas, avec les écrans</button><span class="note">${f.st.length} étapes · ${esc(f.tm)} · ${LVL[f.lvl]}</span></div>`;
+  else if(d.etapes&&d.etapes.length)body+=`<h5 class="rs-h">Étapes de résolution</h5>${stepsHTML(d.etapes.map(t=>({t})))}`;
+  if(e&&e.who)body+=alertHTML("info",`<b>Qui prévenir si ça ne suffit pas :</b> ${esc(e.who)}.`);
+  else if(f&&f.esc)body+=alertHTML("info",`<b>Si ça ne suffit pas :</b> ${esc(f.esc)}`);
+  h+=`<div class="res-card sol"><h4 class="res-sub">Résolution pour ${seen?"ce message":"votre problème"}</h4>${body}</div>`;
+  if(d.others&&d.others.length)h+=`<div class="res-card"><h4 class="res-sub">Autres messages reconnus sur la capture</h4><div class="errs">${d.others.map(o=>o.type==="err"?errHTML(o.e):itemHTML(byId(o.id),false)).join("")}</div></div>`;
+ }else if(d.descOnly&&d.pistes.length){
+  h+=`<div class="res-card"><h4 class="res-sub">Fiches qui correspondent à votre description</h4><p class="note" style="margin:-4px 0 10px">Pour une solution exacte, collez une capture de l'erreur ou recopiez le message affiché.</p>${ficheCards(d.pistes)}</div>`;
+ }else{
+  h+=`<div class="res-card"><h4 class="res-sub">Pour ne pas vous donner une mauvaise solution</h4><p style="margin:0">Je ne propose une résolution que lorsque le message affiché est reconnu. Pour y arriver :</p><ol class="todo"><li><span>Faites une capture où le message d'erreur est bien lisible (Win + Maj + S, puis sélectionnez juste la fenêtre d'erreur).</span></li><li><span>Ou recopiez le message ou le code exact dans la case de description, puis relancez l'analyse.</span></li><li><span>Ou cherchez le code dans le Dictionnaire des erreurs.</span></li></ol>${d.ocrFail?alertHTML("warn","La lecture automatique n'a pas pu démarrer : vérifiez la connexion internet."):""}</div>`;
+  if(d.pistes&&d.pistes.length)h+=`<div class="res-card"><h4 class="res-sub">Pistes à vérifier (non certaines)</h4><p class="note" style="margin:-4px 0 10px">La capture semble concerner : ${esc(DOM[d.app].n)}. Ces fiches ne correspondent pas forcément à votre message.</p>${ficheCards(d.pistes)}</div>`;
+ }
+ if(ocrText&&ocrText.trim())h+=`<details class="res-card ocr" ${d.level==="none"?"open":""}><summary>Texte lu sur la capture</summary><pre>${esc(ocrText.trim().slice(0,3000))}</pre></details>`;
  h+=`<div class="res-actions"><button class="btn" id="dlog">Noter dans le journal</button><button class="btn" id="dnew">Nouvelle analyse</button></div>`;
- $("#dmain").innerHTML=h;bindCards($("#dmain"));
- $("#dlog").onclick=()=>{const f=d.fiches[0]&&byId(d.fiches[0]);prefill({t:d.resume||$("#ask").value.trim()||"Incident analysé depuis une capture",d:d.app||f?.d||"win",s:urg?urg[0]:"maj",id:f?.id||"",err:d.erreur_lue||(d.codes[0]?.c||"")});location.hash="journal"};
+ $("#dmain").innerHTML=h;bindCards($("#dmain"));drawBoxes(d,words);
+ $("#dlog").onclick=()=>{prefill({t:d.resume||$("#ask").value.trim()||"Incident analysé depuis une capture",d:d.app||f?.d||"win",s:urg?urg[0]:"maj",id:f?.id||"",err:seen||(e?e.c:"")});location.hash="journal"};
  $("#dnew").onclick=()=>{if(shot){URL.revokeObjectURL(shot.url);shot=null;$("#shotin").value="";renderShot()}$("#ask").value="";$("#answer").innerHTML="";window.scrollTo({top:0,behavior:"smooth"});$("#ask").focus()}}
 
 /* ---------- Lancement de l'analyse ---------- */
 async function runDiag(){const q=$("#ask").value.trim();const ans=$("#answer");
  if(!q&&!shot){ans.innerHTML=alertHTML("info","Collez ou déposez une capture d'écran de l'erreur, ou décrivez le problème en une phrase.");return}
  diagCtl?.abort();diagCtl=new AbortController();const sig=diagCtl.signal;const btn=$("#askbtn");btn.disabled=true;
- ans.innerHTML=`<div class="diag">${shot?`<figure class="diag-shot"><img src="${shot.url}" alt="Capture analysée"><figcaption>Votre capture</figcaption></figure>`:""}<div class="diag-main" id="dmain"></div></div>`;
+ ans.innerHTML=`<div class="diag">${shot?`<figure class="diag-shot"><div class="shot-wrap"><img id="dimg" src="${shot.url}" alt="Capture analysée"><svg id="dbox" class="shot-boxes" aria-hidden="true"></svg><span class="scanline"></span></div><figcaption id="dcap">Votre capture</figcaption></figure>`:""}<div class="diag-main" id="dmain"></div></div>`;
  setTimeout(()=>ans.scrollIntoView({behavior:"smooth",block:"start"}),50);
  const S=shot?["Lecture de la capture","Identification de l'erreur","Recherche des solutions"]:["Compréhension du problème","Recherche des solutions"];
  const st=(i)=>S.map((s,j)=>[s,j<i?"done":j===i?"run":"wait"]);
@@ -2635,13 +2792,11 @@ async function runDiag(){const q=$("#ask").value.trim();const ans=$("#answer");
    catch(e){if(sig.aborted||e?.name==="AbortError")return;if(e?.code==="bad_code"){$("#accesswrap").hidden=false;toast("Code d'accès de l'équipe requis pour l'analyse IA")}
     else if(e?.code==="rate_limited")toast("Trop d'analyses rapprochées : lecture automatique utilisée")}
   }
-  let text="";
-  if(shot){try{text=await ocr(shot.file,p=>{if(!sig.aborted)renderProgress(st(0),`Lecture du texte de la capture : ${p} %`)})}catch(e){text=""}}
+  let o={text:"",words:[]},ocrFail=false;
+  if(shot){try{o=await ocr(shot.file,p=>{if(!sig.aborted)renderProgress(st(0),`Lecture du texte de la capture : ${p} %`)})}catch(e){ocrFail=true}}
   if(sig.aborted)return;renderProgress(st(1));
-  const d=localDiag(text,q);d.src=shot&&text?"ocr":"local";
-  if(shot&&!text&&!q){d.resume="Je n'ai pas pu lire le texte de la capture";d.explication_code="";}
-  if(text){const first=errMatch(fixOCR(text),1)[0];if(first)d.erreur_lue=first.c}
-  renderResult(d,text);
+  const d=localDiag(o.text,q,o.words);d.src=shot&&o.text.trim()?"ocr":"local";d.ocrFail=ocrFail&&!!shot;d.unread=!!shot&&!o.text.trim()&&!q;
+  renderResult(d,o.text,o.words);
  }finally{btn.disabled=false}}
 
 /* ---------- Journal hors claude.ai (enregistré sur l'appareil) ---------- */
