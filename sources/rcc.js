@@ -15,8 +15,8 @@ function setPeriod(from,to){RC.from=from;RC.to=to;store.set("rcc-period",[from,t
 function rccLocalSave(){store.set("rcc-v1",{tickets:RC.tickets,people:RC.people})}
 async function rccInit(){if(RC.mode)return;
  if(IN_CLAUDE&&db){RC.mode="db";try{
-  RC.unsub.push(db.collection("rcc").onSnapshot(s=>{RC.tickets=s.docs.map(d=>({...d.data(),_id:d.id}));RC.ready=true;renderRCC();if(!$("#modal").hidden&&mcur&&/^rcc(list|dim)$/.test(mcur.type))renderModal()},()=>{RC.ready=true;renderRCC()}));
-  RC.unsub.push(db.doc("rccmeta/people").onSnapshot(s=>{RC.people=(s.exists&&s.data().list)||[];renderRCC()},()=>{}));
+  RC.unsub.push(db.collection("rcc").onSnapshot(s=>{RC.tickets=s.docs.map(d=>({...d.data(),_id:d.id}));RC.ready=true;renderRCC();if(!$("#modal").hidden&&mcur&&/^rcc(list|dim|person)$/.test(mcur.type))renderModal()},()=>{RC.ready=true;renderRCC()}));
+  RC.unsub.push(db.doc("rccmeta/people").onSnapshot(s=>{RC.people=(s.exists&&s.data().list)||[];renderRCC();if(!$("#modal").hidden&&mcur&&/^rcc(person|list)$/.test(mcur.type))renderModal()},()=>{}));
   setTimeout(()=>{if(!RC.ready){RC.ready=true;renderRCC()}},10000)}catch(e){RC.mode=""}}
  if(!RC.mode){RC.mode="local";const v=store.get("rcc-v1",{tickets:[],people:[]});RC.tickets=v.tickets||[];RC.people=v.people||[];RC.ready=true}
  renderRCC()}
@@ -84,7 +84,7 @@ function drillHTML(k,v){const L=filterDrill(periodTickets(),k,v).sort((a,b)=>(b.
  return `<div class="d-head banner" style="${bannerStyle(OUT2DOM[k==="outil"?v:o]||"net")}"><div class="meta"><span class="pill glass">${esc(periodLabel())}</span></div><h3>${esc(title)}</h3><p>${L.length} incident${L.length>1?"s":""} · ${fmtP(pct(L.length,all))} des incidents de la période</p></div>
  <div class="g-wrap"><div class="dr-k"><div><b>${L.length}</b><span>incidents</span></div><div><b>${maj}</b><span>majeurs</span></div><div><b>${tk}</b><span>avec ticket</span></div><div><b>${res}</b><span>résolus</span></div></div>
  ${k!=="app"&&apps.length>1?`<div class="dr-apps">${apps.map(([a,c])=>`<span class="pill neutral">${esc(a)} · ${c}</span>`).join("")}</div>`:""}
- <div class="dr-list">${L.map(t=>`<button type="button" class="dr-i" data-rid="${t._id}"><span class="dr-d"><b>${t.date?t.date.slice(8,10):"—"}</b><span>${t.date?MOISF[+t.date.slice(5,7)-1]:""}</span></span><span class="dr-b"><b>${esc(t.desc)}</b><span>${esc(t.app)} · ${esc(t.cat)}${t.num?` · ticket ${esc(t.num)}`:""}</span></span><span class="dr-s">${t.majeur?`<span class="pill crit">Majeur</span>`:""}<span class="pill ${RCSTAT[t.statut]||"neutral"}">${esc(t.statut)}</span></span></button>`).join("")||`<p class="empty">Aucun incident.</p>`}</div>
+ <div class="dr-list">${L.map(t=>`<button type="button" class="dr-i" data-rid="${t._id}"><span class="dr-d"><b>${t.date?t.date.slice(8,10):"—"}</b><span>${t.date?MOISF[+t.date.slice(5,7)-1]:""}</span></span><span class="dr-b"><b>${esc(t.desc)}</b><span>${esc(t.app)} · ${esc(t.cat)}${t.num?` · ticket ${esc(t.num)}`:""}</span></span><span class="dr-s">${(t.personnes||[]).length?avStack(t.personnes,3):""}${t.majeur?`<span class="pill crit">Majeur</span>`:""}<span class="pill ${RCSTAT[t.statut]||"neutral"}">${esc(t.statut)}</span></span></button>`).join("")||`<p class="empty">Aucun incident.</p>`}</div>
  <p class="note">Cliquez sur un incident pour le compléter (statut, résolution, équipes, personnes). Le bouton Retour ramène à cette liste.</p></div>`}
 function renderReport(B){const L=periodTickets();const n=L.length;
  if(!n){B.innerHTML=`<div class="card rcc-empty"><h3>Aucun incident sur ${esc(periodLabel())}</h3><p>Choisissez une autre période ci-dessus.</p></div>`;return}
@@ -128,43 +128,7 @@ function renderReport(B){const L=periodTickets();const n=L.length;
  B.querySelectorAll("[data-rt]").forEach(b=>b.onclick=()=>{RC.tab=b.dataset.rt;store.set("rcc-tab",RC.tab);renderRCC()});
  $("#rc-copy").onclick=e=>copyText(synthText(L),e.currentTarget);$("#rc-xls").onclick=()=>exportReport(L)}
 
-function renderTickets(B){const all=RC.tickets.filter(t=>RC.fe==="__all"||inPeriod(t)||!t.date);
- const q=norm(RC.q);let L=all.filter(t=>(!RC.fo||t.outil===RC.fo)&&(!RC.fs||t.statut===RC.fs)&&(!RC.fe||RC.fe==="__all"||teamsOf(t).includes(RC.fe))&&(!q||norm([t.num,t.desc,t.app,t.outil,...(t.personnes||[])].join(" ")).includes(q))).sort((a,b)=>(b.date||"").localeCompare(a.date||""));
- const outils=[...new Set(RC.tickets.map(t=>t.outil))].sort();const teams=[...new Set([...RCC_TEAMS,...RC.people.map(p=>p.equipe).filter(Boolean)])];
- B.innerHTML=`<div class="filters"><div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="rc-q" type="search" value="${esc(RC.q)}" placeholder="N° de ticket, application, description, alias…" aria-label="Rechercher un incident"></div>
-  <select class="f" id="rc-fo" style="width:auto" aria-label="Outil"><option value="">Tous les outils</option>${outils.map(o=>`<option ${o===RC.fo?"selected":""}>${esc(o)}</option>`).join("")}</select>
-  <select class="f" id="rc-fs" style="width:auto" aria-label="Statut"><option value="">Tous les statuts</option>${RCC_STATUS.map(o=>`<option ${o===RC.fs?"selected":""}>${o}</option>`).join("")}</select>
-  <select class="f" id="rc-fe" style="width:auto" aria-label="Équipe"><option value="">Toutes les équipes</option>${teams.map(o=>`<option ${o===RC.fe?"selected":""}>${esc(o)}</option>`).join("")}</select>
-  <button class="btn primary" id="rc-new">+ Nouvel incident</button></div>
-  <p class="note" style="margin:0 0 10px">${L.length} ligne${L.length>1?"s":""}${L.filter(t=>t.doublon).length?` (dont ${L.filter(t=>t.doublon).length} doublon${L.filter(t=>t.doublon).length>1?"s":""}, grisés)`:""} · ${esc(periodLabel())} · cliquez sur une ligne pour suivre ou compléter l'incident</p>
-  <div class="tbl-wrap"><table class="j rcc-t"><thead><tr><th>Date</th><th>Ticket</th><th>Incident</th><th>Outil · application</th><th>Équipes · personnes</th><th>Statut</th></tr></thead><tbody>
-  ${L.map(t=>`<tr data-rid="${t._id}" class="${t.doublon?"dbl":""}"><td class="num">${fmtD(t.date)}${t.fin&&t.fin!==t.date?`<div class="sub">→ ${fmtD(t.fin)}</div>`:""}</td><td class="num">${t.num?esc(t.num):`<span class="sub">sans ticket</span>`}</td>
-   <td style="min-width:240px"><b>${esc(t.desc)}</b>${t.majeur?` <span class="pill crit">Majeur</span>`:""}${t.doublon?` <span class="pill neutral">Doublon</span>`:""}${t.notes&&t.notes.length&&!t.doublon?`<div class="sub warn">⚠ ${esc(t.notes[0])}${t.notes.length>1?` (+${t.notes.length-1})`:""}</div>`:""}</td>
-   <td><b>${esc(t.outil)}</b><div class="sub">${esc(t.app)}${t.appDeduite?" (déduite)":""}</div></td>
-   <td>${teamsOf(t).map(e=>`<span class="pill neutral">${esc(e)}</span>`).join(" ")||`<span class="sub">à renseigner</span>`}${(t.personnes||[]).length?`<div class="sub">${t.personnes.map(esc).join(", ")}</div>`:""}</td>
-   <td><span class="pill ${RCSTAT[t.statut]||"neutral"}">${esc(t.statut)}</span>${t.resolu?`<div class="sub">le ${fmtD(t.resolu)}</div>`:""}</td></tr>`).join("")||`<tr><td colspan="6" class="empty">Aucun incident ne correspond aux filtres.</td></tr>`}
-  </tbody></table></div>`;
- const rq=$("#rc-q");rq.oninput=()=>{RC.q=rq.value;clearTimeout(rq._t);rq._t=setTimeout(()=>{renderTickets(B);const n=$("#rc-q");n.focus();n.setSelectionRange(n.value.length,n.value.length)},250)};
- $("#rc-fo").onchange=e=>{RC.fo=e.target.value;renderTickets(B)};$("#rc-fs").onchange=e=>{RC.fs=e.target.value;renderTickets(B)};$("#rc-fe").onchange=e=>{RC.fe=e.target.value;renderTickets(B)};
- $("#rc-new").onclick=()=>openRcc(null);B.querySelectorAll("tr[data-rid]").forEach(r=>r.onclick=()=>openRcc(r.dataset.rid))}
-
 function aliasFor(nom){const p=norm(nom).replace(/[^a-z\s-]/g,"").trim().split(/\s+/);if(!p[0])return"";let a=(p.length>1?p[0][0]+p[p.length-1]:p[0]).slice(0,12);let k=a,i=2;while(RC.people.some(x=>x.alias===k))k=a+i++;return k}
-function renderPeople(B){const cnt=a=>RC.tickets.filter(t=>!t.doublon&&(t.personnes||[]).includes(a)).length;
- B.innerHTML=`<div class="rcc-grid two"><div class="card"><h4 class="res-sub">Personnes concernées</h4><p class="note">Chaque personne a un alias court, utilisé dans les tickets et dans le rapport.</p>
-  <div class="tbl-wrap" style="margin-top:10px"><table class="j"><thead><tr><th>Alias</th><th>Nom</th><th>Équipe</th><th>Incidents</th><th></th></tr></thead><tbody>
-  ${RC.people.map((p,i)=>`<tr><td class="num"><b>${esc(p.alias)}</b></td><td>${esc(p.nom)}</td><td>${esc(p.equipe||"—")}</td><td class="num">${cnt(p.alias)}</td><td><button class="link" data-pdel="${i}">Retirer</button></td></tr>`).join("")||`<tr><td colspan="5" class="empty">Aucune personne pour l'instant. Ajoutez-en avec le formulaire.</td></tr>`}
-  </tbody></table></div></div>
-  <form class="card form" id="rc-pf" novalidate><h4 class="res-sub">Ajouter une personne</h4>
-   <label>Nom complet<input class="f" id="rc-pn" placeholder="Ex. Aïcha Traoré" autocomplete="off"></label>
-   <label>Alias<input class="f" id="rc-pa" placeholder="Créé automatiquement" autocomplete="off"></label>
-   <label>Équipe<select class="f" id="rc-pe">${RCC_TEAMS.map(e=>`<option>${e}</option>`).join("")}</select></label>
-   <button class="btn primary" type="submit">Ajouter</button><p class="note" id="rc-pm"></p></form></div>`;
- $("#rc-pn").oninput=()=>{if(!$("#rc-pa").dataset.edit)$("#rc-pa").value=aliasFor($("#rc-pn").value)};$("#rc-pa").oninput=()=>{$("#rc-pa").dataset.edit="1"};
- $("#rc-pf").onsubmit=async e=>{e.preventDefault();const nom=$("#rc-pn").value.trim(),alias=($("#rc-pa").value.trim()||aliasFor(nom)).replace(/\s+/g,"");if(!nom){$("#rc-pm").textContent="Saisissez le nom de la personne.";return}
-  if(RC.people.some(p=>p.alias===alias)){$("#rc-pm").textContent=`L'alias « ${alias} » existe déjà : choisissez-en un autre.`;return}
-  RC.people.push({alias,nom,equipe:$("#rc-pe").value});try{await rccSavePeople();toast(`${nom} ajouté(e) : alias ${alias}`)}catch(err){RC.people.pop();toast("Enregistrement refusé : accès en lecture seule")}renderPeople(B)};
- B.querySelectorAll("[data-pdel]").forEach(b=>b.onclick=async()=>{const i=+b.dataset.pdel;if(!b.dataset.c){b.dataset.c=1;b.textContent="Confirmer";return}RC.people.splice(i,1);await rccSavePeople().catch(()=>{});renderPeople(B)})}
-
 /* ---------- Fiche d'un incident (fenêtre) ---------- */
 function openRcc(id){openModal({type:"rcc",id:id||""})}
 function rccEditHTML(t,isNew){const chip=(arr,v,attr)=>`<button type="button" class="tchip ${arr.includes(v)?"on":""}" data-${attr}="${esc(v)}">${esc(v)}</button>`;
@@ -191,7 +155,7 @@ function rccEditHTML(t,isNew){const chip=(arr,v,attr)=>`<button type="button" cl
    <label class="wide">Solution apportée / commentaire<textarea class="f" id="rf-sol" rows="2" placeholder="Ce qui a été fait, par qui, résultat">${esc(t.resolution||"")}</textarea></label>
   </div></div>
   <div class="rf-box"><h5>Équipes concernées</h5><div class="tchips" id="rf-eq">${[...new Set([...RCC_TEAMS,...(t.equipes||[])])].map(e=>chip(t.equipes||[],e,"eq")).join("")}</div>
-   <h5 style="margin-top:14px">Personnes concernées</h5><div class="tchips" id="rf-pp">${RC.people.map(p=>chip(t.personnes||[],p.alias,"pp")).join("")||`<span class="note">Aucune personne enregistrée.</span>`}</div>
+   <h5 style="margin-top:14px">Agents concernés</h5><div class="tchips" id="rf-pp">${RC.people.map(p=>`<button type="button" class="tchip av-chip ${(t.personnes||[]).includes(p.alias)?"on":""}" data-pp="${esc(p.alias)}">${avHTML(p)}${esc(p.nom)}</button>`).join("")||`<span class="note">Aucune personne enregistrée.</span>`}</div>
    <div class="rf-add"><input class="f" id="rf-nn" placeholder="Ajouter une personne : nom complet" autocomplete="off"><select class="f" id="rf-ne" style="width:auto">${RCC_TEAMS.map(e=>`<option>${e}</option>`).join("")}</select><button type="button" class="btn" id="rf-nb">Ajouter</button></div></div>
   ${(t.hist||[]).length?`<div class="rf-box"><h5>Historique</h5><ol class="hist">${t.hist.slice().reverse().map(h=>`<li><span class="mono">${new Date(h.d).toLocaleString("fr-FR",{dateStyle:"short",timeStyle:"short"})}</span><b>${esc(h.q)}</b>${h.t?` — ${esc(h.t)}`:""}</li>`).join("")}</ol></div>`:""}
   <div class="g-nav"><span>${isNew?"":`<button type="button" class="btn" id="rf-del">Supprimer</button>`}</span><button class="btn primary big" type="submit">Enregistrer</button></div><p class="note" id="rf-msg"></p>
@@ -212,6 +176,8 @@ function bindRccForm(t,isNew){const f=$("#rc-form");const sel={eq:new Set(t.equi
 function renderModal(){$("#mback").hidden=!mstack.length;
  if(mcur.type==="rcc"){const isNew=!mcur.id;const t=isNew?{desc:"",date:iso(new Date()),statut:"Signalé",outil:"Réseau",cat:"Indisponibilité",app:"",equipes:[],personnes:[],hist:[]}:RC.tickets.find(x=>x._id===mcur.id);if(!t){closeModal();return}
   $("#mtitle").textContent="Incident";$("#mbody").innerHTML=rccEditHTML(t,isNew);bindRccForm(t,isNew);$("#mbox").scrollTop=0;return}
+ if(mcur.type==="rccpick"){const t=RC.tickets.find(x=>x._id===mcur.id);if(!t){closeModal();return}$("#mtitle").textContent="Agents concernés";const sel=mcur.sel||(mcur.sel={eq:new Set(t.equipes||[]),pp:new Set(t.personnes||[]),q:"",photo:""});$("#mbody").innerHTML=pickHTML(t,sel);bindPick(t,sel);return}
+ if(mcur.type==="rccperson"){const p=RC.people.find(x=>x.alias===mcur.a);if(!p){closeModal();return}$("#mtitle").textContent="Agent";$("#mbody").innerHTML=personHTML(p);bindPerson(p);return}
  if(mcur.type==="rcclist"){$("#mtitle").textContent="Détail";$("#mbody").innerHTML=drillHTML(mcur.k,mcur.v);$("#mbody").querySelectorAll("[data-rid]").forEach(b=>b.onclick=()=>openRcc(b.dataset.rid));$("#mbox").scrollTop=0;return}
  if(mcur.type==="rccdim"){const n=periodTickets().length;$("#mtitle").textContent="Détail";$("#mbody").innerHTML=`<div class="d-head banner" style="${bannerStyle("net")}"><div class="meta"><span class="pill glass">${esc(periodLabel())}</span></div><h3>${esc(DIM[mcur.d][0])} : toute la liste</h3></div><div class="g-wrap">${bars(mcur.rows,n,{dim:mcur.d})}</div>`;$("#mbody").querySelectorAll("[data-dk]").forEach(b=>b.onclick=()=>openDrill(b.dataset.dk,b.dataset.dv));$("#mbox").scrollTop=0;return}
  const p=mcur.type==="fiche"?byId(mcur.id):null;$("#mtitle").textContent=mcur.type==="err"?"Code d'erreur":p&&p.d==="guide"?"Guide":"Fiche de dépannage";
