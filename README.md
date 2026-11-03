@@ -28,7 +28,9 @@ Variables d'environnement facultatives :
 
 | Variable | Rôle |
 |---|---|
-| `ANTHROPIC_API_KEY` | Active l'analyse IA des captures |
+| `ANTHROPIC_API_KEY` | Active l'analyse IA des captures avec Claude |
+| `GEMINI_API_KEY` | Option gratuite : active l'analyse IA avec Google Gemini (clé gratuite sur aistudio.google.com) |
+| `GEMINI_MODEL` | Modèle Gemini utilisé (défaut : `gemini-flash-latest`) |
 | `ACCESS_CODE` | Code que l'équipe saisit pour utiliser l'analyse IA (évite qu'un inconnu consomme la clé) |
 | `ANTHROPIC_MODEL` | Modèle utilisé (défaut : `claude-sonnet-5-5`) |
 | `ANALYSES_PER_HOUR` | Limite d'analyses IA par adresse et par heure (défaut : 40) |

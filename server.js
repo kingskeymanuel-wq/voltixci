@@ -8,6 +8,8 @@ const path = require("path");
 
 const PORT = process.env.PORT || 10000;
 const KEY = process.env.ANTHROPIC_API_KEY || "";
+const GKEY = process.env.GEMINI_API_KEY || "";
+const GMODEL = process.env.GEMINI_MODEL || "gemini-flash-latest";
 const MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-5-5";
 const ACCESS = process.env.ACCESS_CODE || "";
 const LIMIT = Number(process.env.ANALYSES_PER_HOUR || 40);
@@ -66,8 +68,23 @@ function inside(base, p) {
   return f.startsWith(base) ? f : null;
 }
 
+async function gemini(body) {
+  const parts = [];
+  if (body.image && /^image\/(png|jpeg|gif|webp)$/.test(body.mediaType || "")) parts.push({ inline_data: { mime_type: body.mediaType, data: String(body.image) } });
+  parts.push({ text: String(body.prompt || "").slice(0, 60000) });
+  const payload = JSON.stringify({ system_instruction: { parts: [{ text: SYSTEM }] }, contents: [{ role: "user", parts }], generationConfig: { responseMimeType: "application/json", temperature: 0.2, maxOutputTokens: 2048 } });
+  for (const model of [GMODEL, "gemini-flash-lite-latest"]) {
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, { method: "POST", headers: { "x-goog-api-key": GKEY, "content-type": "application/json" }, body: payload });
+    const d = await r.json().catch(() => ({}));
+    if (r.ok) return { text: ((d.candidates || [])[0]?.content?.parts || []).map((p) => p.text || "").join("") };
+    if (r.status === 429) return { error: "rate_limited", status: 429 };
+    if (r.status !== 404) return { error: "api", status: 502, detail: d.error && d.error.message };
+  }
+  return { error: "api", status: 502, detail: "modèle Gemini introuvable" };
+}
+
 async function analyze(req, res) {
-  if (!KEY) return json(res, 503, { error: "ai_off" });
+  if (!KEY && !GKEY) return json(res, 503, { error: "ai_off" });
   const ip = String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "").split(",")[0].trim();
   let size = 0;
   const chunks = [];
@@ -80,6 +97,10 @@ async function analyze(req, res) {
   try { body = JSON.parse(Buffer.concat(chunks).toString("utf8")); } catch { return json(res, 400, { error: "bad_json" }); }
   if (ACCESS && body.code !== ACCESS) return json(res, 401, { error: "bad_code" });
   if (limited(ip)) return json(res, 429, { error: "rate_limited" });
+  if (!KEY) {
+    try { const g = await gemini(body); return g.error ? json(res, g.status || 502, { error: g.error, detail: g.detail }) : json(res, 200, { text: g.text }); }
+    catch (e) { return json(res, 502, { error: "network" }); }
+  }
   const content = [];
   if (body.image && /^image\/(png|jpeg|gif|webp)$/.test(body.mediaType || "")) {
     content.push({ type: "image", source: { type: "base64", media_type: body.mediaType, data: String(body.image) } });
@@ -103,7 +124,7 @@ async function analyze(req, res) {
 http.createServer((req, res) => {
   const u = new URL(req.url, "http://localhost");
   const p = decodeURIComponent(u.pathname);
-  if (p === "/api/status") return json(res, 200, { ai: !!KEY, code: !!ACCESS, ocr: OCR_OK });
+  if (p === "/api/status") return json(res, 200, { ai: !!(KEY || GKEY), engine: KEY ? "claude" : GKEY ? "gemini" : "", code: !!ACCESS, ocr: OCR_OK });
   if (p === "/api/analyze" && req.method === "POST") return analyze(req, res);
   if (p === "/healthz") return json(res, 200, { ok: true });
   for (const [prefix, target] of Object.entries(VENDOR)) {
@@ -116,4 +137,4 @@ http.createServer((req, res) => {
   const f = inside(PUB, p === "/" ? "index.html" : p);
   if (!f) return notFound(res);
   serveFile(res, f, f.endsWith(".html") ? "no-cache" : undefined);
-}).listen(PORT, () => console.log(`Atelier Dépannage IT en ligne sur le port ${PORT} — IA ${KEY ? "activée" : "désactivée"}, OCR ${OCR_OK ? "prêt" : "absent"}`));
+}).listen(PORT, () => console.log(`Atelier Dépannage IT en ligne sur le port ${PORT} — IA ${KEY ? "Claude" : GKEY ? "Gemini" : "désactivée"}, OCR ${OCR_OK ? "prêt" : "absent"}`));
