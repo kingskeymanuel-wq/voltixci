@@ -9,6 +9,7 @@
   "dependencies": {
     "@tesseract.js-data/eng": "1.0.0",
     "@tesseract.js-data/fra": "1.0.0",
-    "tesseract.js": "5.1.1"
+    "tesseract.js": "5.1.1",
+    "xlsx": "0.18.5"
   }
 }

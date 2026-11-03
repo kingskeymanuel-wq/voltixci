@@ -186,7 +186,7 @@ function dlFile(name,text,type){try{const a=document.createElement("a");a.href=U
 async function initWeb(){
  if(IN_CLAUDE){$("#aimode").textContent="Analyse par Claude";return}
  jlocal=true;rows=store.get("journal-local",[]);dbLoading=false;$("#jcsv").hidden=false;$("#scdl").hidden=false;$("#scdl").textContent="Télécharger reparation.bat";
- $("#jmode").hidden=false;renderJournal();
+ $("#jmode").hidden=false;renderJournal();rccInit();
  $("#aimode").textContent="Lecture automatique des captures";
  if(!/^https?:/.test(location.protocol))return;
  try{const r=await withTimeout(fetch("/api/status",{cache:"no-store"}),5000);if(r.ok){const j=await r.json();serverAI=!!j.ai;serverCode=!!j.code;localOCR=!!j.ocr;if(serverAI)$("#aimode").textContent="Analyse IA activée";if(serverAI&&serverCode&&!store.get("accesscode",""))$("#accesswrap").hidden=false}}catch(e){}}

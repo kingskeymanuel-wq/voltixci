@@ -18,6 +18,7 @@ const NM = path.join(__dirname, "node_modules");
 
 const VENDOR = {
   "/vendor/tesseract/": path.join(NM, "tesseract.js", "dist"),
+  "/vendor/xlsx/": path.join(NM, "xlsx", "dist"),
   "/vendor/core/": path.join(NM, "tesseract.js-core"),
   "/vendor/lang/fra.traineddata.gz": path.join(NM, "@tesseract.js-data", "fra", "4.0.0_best_int", "fra.traineddata.gz"),
   "/vendor/lang/eng.traineddata.gz": path.join(NM, "@tesseract.js-data", "eng", "4.0.0_best_int", "eng.traineddata.gz"),

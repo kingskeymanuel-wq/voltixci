@@ -6,6 +6,8 @@ Application web de dépannage pour centre d'appels, pensée pour les débutants.
 
 ## Ce que contient l'application
 
+- **Incidents RCC** : import du fichier Excel d'incidents, traçabilité de chaque ticket (signalé, envoyé, en cours, résolu), équipes et personnes concernées (alias), rapport par trimestre ou période avec pourcentages par outil, type, équipe, personne et application, export Excel
+
 - **Académie** : 8 parcours façon application d'apprentissage (leçons, formations sur les réparations, exercices, missions de dépannage avec des collègues fictifs), XP, séries, badges et tableau de progression
 - **Fiches en mode pas à pas** : une étape à la fois, avec l'écran à cliquer
 

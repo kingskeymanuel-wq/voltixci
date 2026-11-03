@@ -155,11 +155,11 @@ function ill(o){try{return ILL[o.k](o)}catch(e){return ""}}
 /* =========================================================
    NAVIGATION
    ========================================================= */
-const VIEWS=[["accueil","Diagnostic"],["academie","Académie"],["pannes","Pannes"],["erreurs","Codes d'erreur"],["guides","Guides Windows"],["scripts","Boîte à scripts"],["commandes","Commandes"],["journal","Journal"],["check","Check du matin"]];
-$("#nav").innerHTML=VIEWS.map(([k,n],i)=>`${i===1?'<div class="nav-label">Apprendre</div>':i===2?'<div class="nav-label">Dépanner</div>':i===6?'<div class="nav-label">Outils</div>':""}<button data-v="${k}">${svgI(k)}<span>${n}</span>${k==="journal"?'<span class="count" id="jcount" hidden>0</span>':""}</button>`).join("");
+const VIEWS=[["accueil","Diagnostic"],["rcc","Incidents RCC"],["academie","Académie"],["pannes","Pannes"],["erreurs","Codes d'erreur"],["guides","Guides Windows"],["scripts","Boîte à scripts"],["commandes","Commandes"],["journal","Journal"],["check","Check du matin"]];
+$("#nav").innerHTML=VIEWS.map(([k,n],i)=>`${({rcc:"Pilotage",academie:"Apprendre",pannes:"Dépanner",scripts:"Outils"})[k]?`<div class="nav-label">${({rcc:"Pilotage",academie:"Apprendre",pannes:"Dépanner",scripts:"Outils"})[k]}</div>`:""}<button data-v="${k}">${svgI(k)}<span>${n}</span>${k==="journal"?'<span class="count" id="jcount" hidden>0</span>':""}</button>`).join("");
 $("#nav").querySelectorAll("button").forEach(b=>b.onclick=()=>{location.hash=b.dataset.v});
 function show(v){if(!VIEWS.some(x=>x[0]===v))v="accueil";document.querySelectorAll("[data-view]").forEach(s=>s.hidden=s.id!=="v-"+v);
- document.querySelectorAll("#nav button").forEach(t=>{if(t.dataset.v===v)t.setAttribute("aria-current","page");else t.removeAttribute("aria-current")});window.scrollTo(0,0);if(v==="academie"&&typeof renderAcad==="function")renderAcad()}
+ document.querySelectorAll("#nav button").forEach(t=>{if(t.dataset.v===v)t.setAttribute("aria-current","page");else t.removeAttribute("aria-current")});window.scrollTo(0,0);if(v==="academie"&&typeof renderAcad==="function")renderAcad();if(v==="rcc"&&typeof renderRCC==="function")renderRCC()}
 addEventListener("hashchange",()=>show(location.hash.slice(1)));
 /* ---------- Fenêtre modale ---------- */
 let mcur=null,mstack=[],mlast=null;
@@ -348,7 +348,7 @@ async function initCaps(){
  claude.use("sample").then(async s=>{sample=s;if(!s){$("#aimode").textContent="Recherche instantanée";return}try{const lim=await s.limits();sampleImages=!!(lim&&lim.images)}catch(_){}}).catch(()=>{});
  claude.use("downloads").then(d=>{downloads=d;if(d){$("#jcsv").hidden=false;$("#scdl").hidden=false}}).catch(()=>{});
  try{[db,user]=await Promise.all([claude.use("db"),claude.use("user")])}catch(e){db=null}
- dbLoading=false;if(typeof acadSync==="function")acadSync();
+ dbLoading=false;if(typeof acadSync==="function")acadSync();if(typeof rccInit==="function")rccInit();
  if(user&&user.can){try{const c=await user.can("data.write");if(c===false){canWrite=false;$("#j-submit").disabled=true;const m=$("#j-msg");m.hidden=false;m.textContent="Accès en lecture seule : vous pouvez consulter le journal mais pas y écrire."}}catch(_){}}
  renderJournal();if(!db)return;
  const timer=setTimeout(()=>{if(!rows.length)$("#jbody").innerHTML=`<tr><td colspan="6" class="empty">Le journal ne répond pas encore. Les données s'afficheront dès que la connexion sera rétablie.</td></tr>`},10000);
